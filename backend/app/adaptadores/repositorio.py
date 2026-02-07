@@ -56,7 +56,7 @@ class RepositorioJSON(RepositorioPortfolio):
         diretorio_dados: Caminho para pasta com arquivos JSON.
     """
 
-    def __init__(self, diretorio_dados: str | Path = "backend/dados"):
+    def __init__(self, diretorio_dados: str | Path = "dados"):
         """
         Inicializa repositório JSON.
 
