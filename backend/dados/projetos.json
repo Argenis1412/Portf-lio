@@ -1,0 +1,92 @@
+[
+  {
+    "id": "portfolio-api",
+    "nome": "Portfolio API",
+    "descricao_curta": "API REST com FastAPI e Clean Architecture demonstrando boas práticas de desenvolvimento backend",
+    "descricao_completa": "API REST desenvolvida com FastAPI seguindo princípios de Clean Architecture. Implementa separação clara de responsabilidades com Controllers, Use Cases, Entities e Adapters. Inclui validação com Pydantic V2, documentação automática OpenAPI, testes automatizados com pytest e cobertura acima de 70%. Demonstra habilidades em arquitetura de software, código limpo e desenvolvimento orientado a testes.",
+    "tecnologias": ["Python", "FastAPI", "Pydantic", "Pytest", "Clean Architecture", "REST API"],
+    "funcionalidades": [
+      "Endpoints de informações pessoais e profissionais",
+      "Listagem e detalhamento de projetos",
+      "Stack tecnológico organizado por categorias",
+      "Timeline de experiências profissionais",
+      "Formulário de contato com integração Formspree",
+      "Validação automática de dados com Pydantic",
+      "Documentação interativa com Swagger/OpenAPI",
+      "Tratamento de erros HTTP adequado"
+    ],
+    "aprendizados": [
+      "Implementação de Clean Architecture em Python",
+      "Separação de lógica de negócio e frameworks",
+      "Injeção de dependências manual",
+      "Testes unitários com mocks",
+      "Validação de dados com Pydantic V2",
+      "Documentação técnica completa",
+      "Type hints e mypy strict",
+      "Código 100% em português"
+    ],
+    "repositorio": "https://github.com/argenis972/Portf-lio",
+    "demo": null,
+    "destaque": true
+  },
+  {
+    "id": "sistema-financeiro",
+    "nome": "Sistema Financeiro API",
+    "descricao_curta": "API para gestão financeira com SQLAlchemy, transações e regras de negócio complexas",
+    "descricao_completa": "Sistema de gestão financeira desenvolvido com FastAPI e SQLAlchemy. Implementa operações bancárias com transações ACID, validações de saldo, histórico de movimentações e relatórios. Utiliza PostgreSQL para persistência, migrations com Alembic e testes de integração. Demonstra conhecimento em modelagem de dados, integridade transacional e regras de negócio financeiras.",
+    "tecnologias": ["Python", "FastAPI", "SQLAlchemy", "PostgreSQL", "Alembic", "Docker"],
+    "funcionalidades": [
+      "CRUD de contas bancárias",
+      "Transações financeiras com validação de saldo",
+      "Histórico de movimentações",
+      "Relatórios de receitas e despesas",
+      "Categorização de transações",
+      "API RESTful com paginação",
+      "Autenticação JWT",
+      "Testes de integração com banco de dados"
+    ],
+    "aprendizados": [
+      "Modelagem de dados relacionais",
+      "Transações e ACID no PostgreSQL",
+      "ORM com SQLAlchemy 2.0",
+      "Migrations com Alembic",
+      "Testes de integração",
+      "Docker Compose para desenvolvimento",
+      "Regras de negócio financeiras",
+      "Validações complexas"
+    ],
+    "repositorio": null,
+    "demo": null,
+    "destaque": false
+  },
+  {
+    "id": "api-catalogo-produtos",
+    "nome": "API Catálogo de Produtos",
+    "descricao_curta": "E-commerce API com MongoDB, Redis cache e busca otimizada",
+    "descricao_completa": "API de catálogo de produtos para e-commerce desenvolvida com FastAPI. Utiliza MongoDB para armazenamento de documentos flexíveis, Redis para cache de consultas frequentes e busca por texto. Implementa paginação, filtros avançados, ordenação e agregações. Demonstra conhecimento em bancos NoSQL, estratégias de cache e otimização de performance.",
+    "tecnologias": ["Python", "FastAPI", "MongoDB", "Redis", "Motor", "Docker"],
+    "funcionalidades": [
+      "CRUD de produtos e categorias",
+      "Busca full-text em produtos",
+      "Filtros avançados (preço, categoria, estoque)",
+      "Ordenação por diferentes critérios",
+      "Paginação cursor-based",
+      "Cache de consultas com Redis",
+      "Agregações de estatísticas",
+      "Containerização com Docker"
+    ],
+    "aprendizados": [
+      "Modelagem de dados NoSQL",
+      "Motor (MongoDB async driver)",
+      "Estratégias de cache com Redis",
+      "Otimização de consultas",
+      "Busca full-text",
+      "Paginação eficiente",
+      "Agregações no MongoDB",
+      "Performance em APIs"
+    ],
+    "repositorio": null,
+    "demo": null,
+    "destaque": false
+  }
+]
