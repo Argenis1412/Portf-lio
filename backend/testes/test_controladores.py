@@ -87,7 +87,12 @@ def test_listar_experiencias_retorna_200():
 
 
 def test_enviar_contato_com_dados_validos_retorna_200():
-    """Testa POST /api/contato com dados válidos (sem form_id real)."""
+    """Testa POST /api/contato com dados válidos (sem form_id real).
+    
+    Nota: Como não há FORMSPREE_FORM_ID configurado no ambiente de testes,
+    o endpoint retorna 500 (falha ao enviar). Em produção com form_id válido,
+    retornaria 200 com sucesso=true.
+    """
     payload = {
         "nome": "Maria Silva",
         "email": "maria@example.com",

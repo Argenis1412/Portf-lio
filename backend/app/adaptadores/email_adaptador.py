@@ -65,7 +65,7 @@ class FormspreeEmailAdaptador(EmailAdaptador):
             Não levanta exceções - captura erros e retorna False.
         """
         if not self.url_endpoint or "//" in self.url_endpoint[-2:]:
-            # Form ID vazio - retorna False sem tentar
+            # Form ID vazio - URL termina com "//" ao invés de "/form_id"
             return False
 
         try:

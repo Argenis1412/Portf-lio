@@ -53,13 +53,13 @@ class ExperienciaProfissional:
             ...     empresa="Tech",
             ...     localizacao="Remoto",
             ...     data_inicio=date(2023, 1, 1),
-            ...     data_fim=date(2023, 6, 1),
+            ...     data_fim=date(2023, 7, 1),
             ...     descricao="...",
             ...     tecnologias=["Python"],
             ...     atual=False
             ... )
             >>> exp.duracao_meses
-            5
+            6
         """
         data_final = self.data_fim if self.data_fim else date.today()
         diferenca = relativedelta(data_final, self.data_inicio)
