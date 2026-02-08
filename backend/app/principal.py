@@ -15,7 +15,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.configuracao import configuracoes
-from app.controladores import roteador_saude, roteador_api
+from app.controladores import roteador_saude, roteador_api, roteador_contato
 
 
 def criar_aplicacao() -> FastAPI:
@@ -76,6 +76,7 @@ def _registrar_rotas(aplicacao: FastAPI) -> None:
     """
     aplicacao.include_router(roteador_saude)
     aplicacao.include_router(roteador_api, prefix="/api")
+    aplicacao.include_router(roteador_contato, prefix="/api")
 
 
 # Instância global da aplicação (usada pelo uvicorn)

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "exp-001",
+    "cargo": "Backend Developer Freelancer",
+    "empresa": "Autônomo",
+    "localizacao": "Remoto",
+    "data_inicio": "2023-06-01",
+    "data_fim": null,
+    "descricao": "Desenvolvimento de APIs REST com Python e FastAPI para diversos clientes. Implementação de arquitetura limpa, testes automatizados, integração com bancos de dados relacionais e NoSQL. Experiência com validação de dados, documentação de APIs, deploy em cloud e CI/CD. Foco em código limpo, manutenível e bem testado.",
+    "tecnologias": ["Python", "FastAPI", "PostgreSQL", "MongoDB", "Docker", "Git", "Pytest"],
+    "atual": true
+  },
+  {
+    "id": "exp-002",
+    "cargo": "Estudante de Tecnologia Autodidata",
+    "empresa": "Estudo Próprio",
+    "localizacao": "Curitiba, PR",
+    "data_inicio": "2022-01-01",
+    "data_fim": "2023-05-31",
+    "descricao": "Período dedicado ao aprendizado intensivo de desenvolvimento backend. Estudos focados em Python, desenvolvimento web, bancos de dados, arquitetura de software e boas práticas. Realização de diversos projetos práticos para consolidar conhecimentos. Participação em comunidades de desenvolvedores e consumo de conteúdo técnico de qualidade.",
+    "tecnologias": ["Python", "FastAPI", "SQL", "Git", "Linux", "Docker"],
+    "atual": false
+  }
+]
