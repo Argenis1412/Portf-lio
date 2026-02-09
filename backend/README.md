@@ -478,5 +478,3 @@ Backend Developer | Python | FastAPI | Clean Architecture
 Este projeto é open source e está disponível para fins educacionais e demonstração de habilidades técnicas.
 
 ---
-
-**Desenvolvido com ❤️ e Clean Architecture**
