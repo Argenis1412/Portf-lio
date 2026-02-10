@@ -11,7 +11,7 @@ Este repositório contém um sistema de portfólio full-stack construído com as
 
 ---
 // este es un comentario
-// esta es otra linea de comentario
+// kalsjas
 ## 📋 Índice
 
 - [Visão Geral](#-visão-geral)
