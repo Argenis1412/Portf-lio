@@ -61,7 +61,9 @@ def test_obter_projeto_inexistente_retorna_404():
     
     assert response.status_code == 404
     data = response.json()
-    assert "detail" in data
+    assert "erro" in data
+    assert data["erro"]["codigo"] == "PROJETO_NAO_ENCONTRADO"
+    assert "mensagem" in data["erro"]
 
 
 def test_obter_stack_retorna_200():
@@ -119,4 +121,6 @@ def test_enviar_contato_com_dados_invalidos_retorna_422():
     
     assert response.status_code == 422
     data = response.json()
-    assert "detail" in data
+    assert "erro" in data
+    assert data["erro"]["codigo"] == "ERRO_VALIDACAO_ENTRADA"
+    assert "detalhes" in data["erro"]  # Lista de erros de validação

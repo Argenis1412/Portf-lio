@@ -14,6 +14,9 @@ class RespostaSaude(BaseModel):
     Attributes:
         status: Status da API ("ok" ou "erro").
         mensagem: Descrição legível do status.
+        versao_api: Versão da API.
+        ambiente: Ambiente de execução.
+        uptime_segundos: Tempo desde inicialização (opcional).
     """
 
     status: str = Field(
@@ -25,4 +28,19 @@ class RespostaSaude(BaseModel):
         ...,
         examples=["API funcionando normalmente"],
         description="Mensagem descritiva do status",
+    )
+    versao_api: str = Field(
+        ...,
+        examples=["1.0.0"],
+        description="Versão da API",
+    )
+    ambiente: str = Field(
+        ...,
+        examples=["local", "staging", "production"],
+        description="Ambiente de execução",
+    )
+    uptime_segundos: int | None = Field(
+        default=None,
+        examples=[3600],
+        description="Tempo desde inicialização em segundos",
     )

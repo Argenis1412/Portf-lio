@@ -9,7 +9,7 @@ Endpoints:
 - GET /api/experiencias
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 from app.esquemas.sobre import RespostaSobre
 from app.esquemas.projetos import ProjetoResumo, ProjetoDetalhado, RespostaProjetos
@@ -23,6 +23,7 @@ from app.casos_uso import (
     ObterExperienciasUseCase,
 )
 from app.adaptadores import RepositorioJSON
+from app.core.excecoes import ErroRecursoNaoEncontrado
 
 # Dependency injection manual
 _repositorio = RepositorioJSON()
@@ -108,7 +109,38 @@ def listar_projetos() -> RespostaProjetos:
     summary="Detalhes de um projeto",
     description="Retorna informações completas de um projeto específico.",
     responses={
-        404: {"description": "Projeto não encontrado"},
+        200: {
+            "description": "Projeto encontrado",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "id": "portfolio-api",
+                        "nome": "Portfolio API",
+                        "descricao_curta": "API REST profissional",
+                        "descricao_completa": "Descrição detalhada...",
+                        "tecnologias": ["Python", "FastAPI"],
+                        "funcionalidades": ["CRUD", "Validação"],
+                        "aprendizados": ["Clean Architecture"],
+                        "repositorio": "https://github.com/...",
+                        "demo": None,
+                        "destaque": True,
+                    }
+                }
+            },
+        },
+        404: {
+            "description": "Projeto não encontrado",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "erro": {
+                            "codigo": "PROJETO_NAO_ENCONTRADO",
+                            "mensagem": "Projeto 'xyz' não encontrado",
+                        }
+                    }
+                }
+            },
+        },
     },
 )
 def obter_projeto(projeto_id: str) -> ProjetoDetalhado:
@@ -122,7 +154,7 @@ def obter_projeto(projeto_id: str) -> ProjetoDetalhado:
         ProjetoDetalhado: Informações completas do projeto.
 
     Raises:
-        HTTPException 404: Se projeto não existe.
+        ErroRecursoNaoEncontrado: Se projeto não existe.
 
     Example:
         GET /api/projetos/portfolio-api
@@ -135,9 +167,9 @@ def obter_projeto(projeto_id: str) -> ProjetoDetalhado:
     projeto = _obter_projeto_por_id_uc.executar(projeto_id)
     
     if not projeto:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Projeto '{projeto_id}' não encontrado",
+        raise ErroRecursoNaoEncontrado(
+            mensagem=f"Projeto '{projeto_id}' não encontrado",
+            codigo="PROJETO_NAO_ENCONTRADO",
         )
     
     return ProjetoDetalhado(
