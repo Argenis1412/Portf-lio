@@ -10,7 +10,7 @@
 Este repositório contém um sistema de portfólio full-stack construído com as melhores práticas de arquitetura limpa, separação de responsabilidades e preparado para produção.
 
 ---
-
+// este es un comentario
 ## 📋 Índice
 
 - [Visão Geral](#-visão-geral)
