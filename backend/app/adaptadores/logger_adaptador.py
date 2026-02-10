@@ -26,7 +26,6 @@ def configurar_structlog() -> None:
         processors=[
             structlog.contextvars.merge_contextvars,
             structlog.stdlib.add_log_level,
-            structlog.stdlib.add_logger_name,
             structlog.processors.TimeStamper(fmt="iso"),
             structlog.processors.StackInfoRenderer(),
             structlog.processors.format_exc_info,
@@ -36,7 +35,7 @@ def configurar_structlog() -> None:
             if sys.stderr.isatty()
             else structlog.processors.JSONRenderer(),
         ],
-        wrapper_class=structlog.make_filtering_bound_logger(logging_level=20),  # INFO
+        wrapper_class=structlog.make_filtering_bound_logger(20),  # INFO
         context_class=dict,
         logger_factory=structlog.PrintLoggerFactory(),
         cache_logger_on_first_use=True,
