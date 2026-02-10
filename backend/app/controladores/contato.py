@@ -9,7 +9,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.esquemas.contato import RequisicaoContato, RespostaContato
 from app.casos_uso import EnviarContatoUseCase
-from app.adaptadores import FormspreeEmailAdaptador, LoggerPadrao
+from app.adaptadores import FormspreeEmailAdaptador, LoggerEstruturado
 from app.configuracao import configuracoes
 
 # Dependency injection manual
@@ -17,7 +17,7 @@ _email_adaptador = FormspreeEmailAdaptador(
     configuracoes.formspree_url,
     configuracoes.formspree_form_id,
 )
-_logger = LoggerPadrao()
+_logger = LoggerEstruturado()
 _enviar_contato_uc = EnviarContatoUseCase(_email_adaptador, _logger)
 
 roteador = APIRouter(tags=["Contato"])

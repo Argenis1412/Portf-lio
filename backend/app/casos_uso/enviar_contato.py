@@ -60,7 +60,7 @@ class EnviarContatoUseCase:
 
         Example:
             >>> email_adaptador = FormspreeEmailAdaptador(url, form_id)
-            >>> logger = LoggerPadrao()
+            >>> logger = LoggerEstruturado()
             >>> uc = EnviarContatoUseCase(email_adaptador, logger)
             >>> sucesso = await uc.executar(
             ...     "Maria",

@@ -1,6 +1,126 @@
 # 🚀 Backend Preparado para Producción - Resumen de Cambios
 
-## ✅ Archivos Creados
+## 🆕 Versión 2.0 - Logs Estruturados, CI/CD e Deploy (Febrero 2026)
+
+### ✅ Nuevas Funcionalidades
+
+#### 1. Logging Estruturado com Structlog
+
+**Archivos modificados**:
+- **`app/adaptadores/logger_adaptador.py`**: 
+  - Implementado `LoggerEstruturado` usando structlog
+  - Configuración automática de processadores (JSON/Console)
+  - Context vars para rastreamento de request_id
+  - Timestamps ISO 8601
+  - Stack traces formatados
+
+- **`app/core/middleware.py`**:
+  - Integrado structlog com contextvars
+  - Request ID adicionado automaticamente ao contexto
+  - Logs estructurados: `requisicao_recebida`, `resposta_enviada`
+  - Removido logging padrão em favor de structlog
+
+- **`requirements.txt`**:
+  - Adicionado `structlog==24.1.0`
+
+**Benefícios**:
+- ✅ Logs parseáveis em JSON (produção)
+- ✅ Logs legíveis em Console (desenvolvimento)
+- ✅ Fácil integração com Datadog, Elastic, Grafana
+- ✅ Rastreamento automático via request_id
+
+#### 2. CI/CD com GitHub Actions
+
+**Archivos existentes actualizados**:
+- **`.github/workflows/backend-ci.yml`**:
+  - ✅ Tests automáticos em push/PR
+  - ✅ Cobertura com Codecov
+  - ✅ Lint com Ruff
+  - ✅ Type checking com MyPy
+  - ✅ Security audit com pip-audit
+  - ✅ Build Docker image
+  - ✅ Deploy automático para Railway
+
+**Benefícios**:
+- ✅ Qualidade de código garantida
+- ✅ Deploy automático após testes
+- ✅ Feedback imediato em PRs
+
+#### 3. Configuração para Deploy
+
+**Archivos creados**:
+- **`railway.toml`**: Configuração declarativa para Railway
+  - Health check automático em `/saude`
+  - Variáveis de ambiente definidas
+  - Build com Dockerfile
+  - Restart policy configurado
+
+- **`render.yaml`**: Blueprint para Render
+  - Deploy automático via Blueprint
+  - Free tier configurado
+  - Environment variables template
+  - Auto-deploy habilitado
+
+- **`backend/DEPLOY.md`**: Guia completo de deploy
+  - Instruções para Railway
+  - Instruções para Render
+  - Deploy genérico com Docker
+  - Troubleshooting comum
+  - Checklist de deploy
+
+**Platforms suportadas**:
+- ✅ Railway (recomendado)
+- ✅ Render
+- ✅ Docker genérico
+- ✅ Qualquer plataforma com Dockerfile
+
+#### 4. Documentação Atualizada
+
+**Archivos actualizados**:
+- **`backend/README.md`**:
+  - ✅ Seção de logging estruturado atualizada
+  - ✅ Dependências com structlog
+  - ✅ Roadmap atualizado (items completados)
+  - ✅ Decisões técnicas sobre structlog
+
+- **`README.md` (raíz)**:
+  - ✅ Seção de deploy em produção
+  - ✅ Funcionalidades atualizadas
+  - ✅ Links para documentação de deploy
+  - ✅ Badges de CI/CD
+
+### 🔧 Refactorings
+
+- Migrado de `LoggerPadrao` para `LoggerEstruturado` em todos os arquivos
+- Removido `configurar_logging()` do middleware
+- Configuração automática de structlog via import
+
+### 📋 Migration Guide
+
+Para actualizar código existente:
+
+```python
+# Antes
+from app.adaptadores import LoggerPadrao
+logger = LoggerPadrao()
+
+# Depois
+from app.adaptadores import LoggerEstruturado
+logger = LoggerEstruturado()
+```
+
+Logs agora são estruturados:
+```python
+# Antes
+logger.info(f"Usuário {user_id} criou projeto", extra={"projeto_id": projeto_id})
+
+# Depois
+logger.info("usuario_criou_projeto", user_id=user_id, projeto_id=projeto_id)
+```
+
+---
+
+## ✅ Versión 1.0 - Archivos Creados (Original)
 
 ### 1. Core (Infraestructura Transversal)
 

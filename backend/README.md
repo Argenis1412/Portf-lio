@@ -736,6 +736,7 @@ pytest-asyncio==0.24.0    # Testes async
 pytest-cov==6.0.0         # Cobertura de testes
 python-dotenv==1.0.1      # Variáveis de ambiente
 python-dateutil==2.9.0    # Manipulação de datas
+structlog==24.1.0         # Logging estruturado
 ```
 
 ---
@@ -835,14 +836,28 @@ ErroInfraestrutura (500)
 ### 8. Logging Estruturado
 
 **Por quê?**
-- ✅ **Parsing automático**: Fácil integrar com Datadog/Elastic/Grafana
-- ✅ **Campos extras**: request_id, método, path, status, duração
+- ✅ **Parsing struturados**: request_id, método, path, status, duração
 - ✅ **Filtragem**: Buscar logs por request_id específico
 - ✅ **Debugging produção**: Rastrear requisição problemática
+- ✅ **JSON em produção**: Logs parseáveis por ferramentas
+- ✅ **Console em dev**: Formato legível para humanos
+
+**Implementação com structlog**:
+- Processadores configuráveis (JSON/Console)
+- Context vars para request_id
+- Timestamps ISO 8601
+- Stack traces formatados
 
 **Formato**:
-```
-2026-02-09 15:30:45 | INFO     | app.core.middleware | Requisição recebida | 550e8400-...
+```json
+{
+  "event": "requisicao_recebida",
+  "timestamp": "2026-02-10T10:30:00.000000Z",
+  "level": "info",
+  "request_id": "550e8400-e29b-41d4-a716-446655440000",
+  "metodo": "GET",
+  "path": "/api/v1/projetos"
+}
 2026-02-09 15:30:45 | INFO     | app.core.middleware | Resposta enviada | 550e8400-... | duracao_ms=45.23
 ```
 
@@ -881,9 +896,9 @@ ErroInfraestrutura (500)
 - [x] ~~Error handling global~~
 - [x] ~~Middleware com request_id~~
 - [x] ~~Health check profissional~~
-- [ ] Deploy em Railway/Render
-- [ ] CI/CD com GitHub Actions
-- [ ] Logs estruturados com structlog
+- [x] ~~Deploy em Railway/Render~~
+- [x] ~~CI/CD com GitHub Actions~~
+- [x] ~~Logs estruturados com structlog~~
 
 ### Médio Prazo
 

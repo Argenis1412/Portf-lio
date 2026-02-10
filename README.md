@@ -42,7 +42,10 @@ Sistema de portfólio profissional desenvolvido para demonstrar habilidades em:
 ✅ **Sistema de contato** com envio de e-mail  
 ✅ **Health check** com métricas de uptime  
 ✅ **Tratamento de erros padronizado** com códigos customizados  
-✅ **Middleware de observabilidade** (Request ID, logging, performance)  
+✅ **Middleware de observabilidade** (Request ID, logging estruturado, performance)  
+✅ **Logs estruturados** com structlog (JSON em produção, Console em dev)  
+✅ **CI/CD com GitHub Actions** (tests, lint, deploy)  
+✅ **Configuração para deploy** em Railway/Render  
 ⏳ **Frontend em React + TypeScript** (em desenvolvimento)  
 
 ---
@@ -176,7 +179,7 @@ portafolio/
 ### 1️⃣ Clone o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/portafolio.git
+git clone https://github.com/argenis972/Portf-lio.git
 cd portafolio
 ```
 
@@ -256,6 +259,52 @@ Contribuições são bem-vindas! Este é um projeto pessoal de portfólio, mas s
 
 ---
 
+##  Deploy em Produção
+
+### Backend
+
+O backend está pronto para deploy em múltiplas plataformas:
+
+#### Railway (Recomendado)
+```bash
+# Via Dashboard
+1. Acesse railway.app
+2. New Project → Deploy from GitHub
+3. Selecione o repositório
+4. Configure variáveis de ambiente
+```
+
+#### Render
+```bash
+# Via Blueprint
+1. Acesse render.com
+2. New → Blueprint
+3. Conecte o repositório
+4. render.yaml será detectado automaticamente
+```
+
+**Documentação completa**: [backend/DEPLOY.md](backend/DEPLOY.md)
+
+### Frontend (Em Desenvolvimento)
+
+Plataformas suportadas:
+- Vercel (Recomendado para React/Next.js)
+- Netlify
+- Cloudflare Pages
+
+### CI/CD Automático
+
+✅ **GitHub Actions** configurado:
+- Tests automáticos em push
+- Build da imagem Docker
+- Deploy automático (configurar secrets)
+
+**Workflows**:
+- [`.github/workflows/backend-ci.yml`](.github/workflows/backend-ci.yml)
+- [`.github/workflows/frontend-ci.yml`](.github/workflows/frontend-ci.yml)
+
+---
+
 ## 📄 Licença
 
 Este projeto está licenciado sob a **Licença MIT** - veja o arquivo [LICENSE](LICENSE) para detalhes.
@@ -263,21 +312,21 @@ Este projeto está licenciado sob a **Licença MIT** - veja o arquivo [LICENSE](
 ```
 MIT License
 
-Copyright (c) 2025 [Seu Nome]
+Copyright (c) 2025 Argenis Mauricio Lopez Salazar
 
 Permission is hereby granted, free of charge, to any person obtaining a copy...
 ```
 
 ---
 
-## 👤 Autor
+## 👨‍💻 Autor
 
-**[Seu Nome]**
+**Argenis Lopez**
 
-- 🌐 Website: [seu-portfolio.com](https://seu-portfolio.com)
-- 💼 LinkedIn: [linkedin.com/in/seu-perfil](https://linkedin.com/in/seu-perfil)
-- 📧 Email: seuemail@exemplo.com
-- 🐱 GitHub: [@seu-usuario](https://github.com/seu-usuario)
+- 🌐 Website: (em breve)
+- 💼 LinkedIn: [LinkedIn](https://www.linkedin.com/in/argenis972/)
+- 📧 Email: [Email](mailto:argenislopez28708256@gmail.com)
+- 🐙 GitHub: [argenis972](https://github.com/argenis972)
 
 ---
 
@@ -293,6 +342,6 @@ Permission is hereby granted, free of charge, to any person obtaining a copy...
 
 **⭐ Se este projeto foi útil, considere dar uma estrela!**
 
-[![GitHub stars](https://img.shields.io/github/stars/seu-usuario/portafolio?style=social)](https://github.com/seu-usuario/portafolio/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/argenis972/Portf-lio?style=social)](https://github.com/argenis972/Portf-lio/stargazers)
 
 </div>

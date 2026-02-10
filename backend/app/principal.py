@@ -20,7 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.configuracao import configuracoes
 from app.controladores import roteador_saude, roteador_api, roteador_contato
 from app.controladores.v1 import roteador_v1
-from app.core.middleware import MiddlewareRequisicao, configurar_logging
+from app.core.middleware import MiddlewareRequisicao
 from app.core.handlers import registrar_handlers_excecao
 
 
@@ -40,7 +40,7 @@ def criar_aplicacao() -> FastAPI:
         - Logging estruturado
     """
     # Configurar logging antes de criar app
-    configurar_logging()
+    # Logging estruturado configurado automaticamente via middleware
     
     aplicacao = FastAPI(
         title=configuracoes.nome_app,
