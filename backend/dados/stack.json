@@ -1,24 +1,18 @@
 [
   {
-    "nome": "Python",
+    "nome": "Python 3",
     "categoria": "backend",
-    "nivel": 4,
+    "nivel": 3,
     "icone": "python"
   },
   {
     "nome": "FastAPI",
     "categoria": "backend",
-    "nivel": 4,
+    "nivel": 3,
     "icone": "fastapi"
   },
   {
     "nome": "Pydantic",
-    "categoria": "backend",
-    "nivel": 4,
-    "icone": null
-  },
-  {
-    "nome": "SQLAlchemy",
     "categoria": "backend",
     "nivel": 3,
     "icone": null
@@ -26,7 +20,7 @@
   {
     "nome": "Pytest",
     "categoria": "backend",
-    "nivel": 4,
+    "nivel": 3,
     "icone": "pytest"
   },
   {
@@ -36,81 +30,51 @@
     "icone": "postgresql"
   },
   {
-    "nome": "MongoDB",
+    "nome": "SQLAlchemy ORM",
     "categoria": "banco_dados",
     "nivel": 3,
-    "icone": "mongodb"
+    "icone": null
   },
   {
-    "nome": "Redis",
+    "nome": "Alembic",
     "categoria": "banco_dados",
-    "nivel": 3,
-    "icone": "redis"
-  },
-  {
-    "nome": "SQLite",
-    "categoria": "banco_dados",
-    "nivel": 4,
+    "nivel": 2,
     "icone": null
   },
   {
     "nome": "React",
     "categoria": "frontend",
-    "nivel": 3,
+    "nivel": 2,
     "icone": "react"
   },
   {
     "nome": "TypeScript",
     "categoria": "frontend",
-    "nivel": 3,
+    "nivel": 2,
     "icone": "typescript"
+  },
+  {
+    "nome": "Fetch API",
+    "categoria": "frontend",
+    "nivel": 2,
+    "icone": null
   },
   {
     "nome": "Tailwind CSS",
     "categoria": "frontend",
-    "nivel": 3,
+    "nivel": 2,
     "icone": "tailwindcss"
   },
   {
-    "nome": "Docker",
+    "nome": "Git/GitHub",
     "categoria": "devops",
     "nivel": 3,
-    "icone": "docker"
-  },
-  {
-    "nome": "Git",
-    "categoria": "devops",
-    "nivel": 4,
     "icone": "git"
   },
   {
     "nome": "GitHub Actions",
     "categoria": "devops",
-    "nivel": 3,
+    "nivel": 2,
     "icone": "github"
-  },
-  {
-    "nome": "Linux",
-    "categoria": "devops",
-    "nivel": 3,
-    "icone": "linux"
-  },
-  {
-    "nome": "VS Code",
-    "categoria": "ferramentas",
-    "nivel": 4,
-    "icone": "vscode"
-  },
-  {
-    "nome": "Postman",
-    "categoria": "ferramentas",
-    "nivel": 4,
-    "icone": "postman"
-  },
-  {
-    "nome": "DBeaver",
-    "categoria": "ferramentas",
-    "nivel": 3,
-    "icone": null
   }
 ]

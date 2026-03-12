@@ -23,7 +23,7 @@ def repositorio_mock() -> RepositorioPortfolio:
     Returns:
         Mock configurado com dados de exemplo.
     """
-    mock = MagicMock(spec=RepositorioPortfolio)
+    mock = AsyncMock(spec=RepositorioPortfolio)
     
     # Mock obter_sobre
     mock.obter_sobre.return_value = {

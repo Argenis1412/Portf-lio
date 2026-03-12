@@ -30,7 +30,7 @@ class ObterProjetosUseCase:
         """
         self.repositorio = repositorio
 
-    def executar(self) -> list[Projeto]:
+    async def executar(self) -> list[Projeto]:
         """
         Executa caso de uso.
 
@@ -44,11 +44,11 @@ class ObterProjetosUseCase:
         Example:
             >>> repo = RepositorioJSON()
             >>> uc = ObterProjetosUseCase(repo)
-            >>> projetos = uc.executar()
+            >>> projetos = await uc.executar()
             >>> projetos[0].destaque
             True
         """
-        projetos = self.repositorio.obter_projetos()
+        projetos = await self.repositorio.obter_projetos()
         return sorted(projetos, key=lambda p: (not p.destaque, p.nome))
 
 
@@ -73,7 +73,7 @@ class ObterProjetoPorIdUseCase:
         """
         self.repositorio = repositorio
 
-    def executar(self, projeto_id: str) -> Projeto | None:
+    async def executar(self, projeto_id: str) -> Projeto | None:
         """
         Executa caso de uso.
 
@@ -86,8 +86,8 @@ class ObterProjetoPorIdUseCase:
         Example:
             >>> repo = RepositorioJSON()
             >>> uc = ObterProjetoPorIdUseCase(repo)
-            >>> projeto = uc.executar("portfolio-api")
+            >>> projeto = await uc.executar("portfolio-api")
             >>> projeto.nome if projeto else None
             'Portfolio API'
         """
-        return self.repositorio.obter_projeto_por_id(projeto_id)
+        return await self.repositorio.obter_projeto_por_id(projeto_id)

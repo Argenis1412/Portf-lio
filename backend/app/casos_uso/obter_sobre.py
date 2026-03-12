@@ -28,7 +28,7 @@ class ObterSobreUseCase:
         """
         self.repositorio = repositorio
 
-    def executar(self) -> dict:
+    async def executar(self) -> dict:
         """
         Executa caso de uso.
 
@@ -38,8 +38,8 @@ class ObterSobreUseCase:
         Example:
             >>> repo = RepositorioJSON()
             >>> uc = ObterSobreUseCase(repo)
-            >>> dados = uc.executar()
+            >>> dados = await uc.executar()
             >>> dados["nome"]
             'Argenis Lopez'
         """
-        return self.repositorio.obter_sobre()
+        return await self.repositorio.obter_sobre()

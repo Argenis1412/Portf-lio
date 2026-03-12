@@ -29,7 +29,7 @@ class ObterStackUseCase:
         """
         self.repositorio = repositorio
 
-    def executar(self) -> dict[str, list[dict]]:
+    async def executar(self) -> dict[str, list[dict]]:
         """
         Executa caso de uso.
 
@@ -40,13 +40,13 @@ class ObterStackUseCase:
         Example:
             >>> repo = RepositorioJSON()
             >>> uc = ObterStackUseCase(repo)
-            >>> resultado = uc.executar()
+            >>> resultado = await uc.executar()
             >>> "backend" in resultado
             True
             >>> len(resultado["backend"]) > 0
             True
         """
-        stack = self.repositorio.obter_stack()
+        stack = await self.repositorio.obter_stack()
         
         # Agrupar por categoria
         por_categoria: dict[str, list[dict]] = {}

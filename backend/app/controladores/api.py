@@ -42,7 +42,7 @@ roteador = APIRouter(tags=["API"])
     summary="Informações pessoais",
     description="Retorna informações da seção 'Sobre Mim'.",
 )
-def obter_sobre() -> RespostaSobre:
+async def obter_sobre() -> RespostaSobre:
     """
     Obtém informações pessoais do desenvolvedor.
 
@@ -57,7 +57,7 @@ def obter_sobre() -> RespostaSobre:
             ...
         }
     """
-    dados = _obter_sobre_uc.executar()
+    dados = await _obter_sobre_uc.executar()
     return RespostaSobre(**dados)
 
 
@@ -67,7 +67,7 @@ def obter_sobre() -> RespostaSobre:
     summary="Listar projetos",
     description="Retorna lista de projetos ordenada (destacados primeiro).",
 )
-def listar_projetos() -> RespostaProjetos:
+async def listar_projetos() -> RespostaProjetos:
     """
     Lista todos os projetos do portfólio.
 
@@ -84,7 +84,7 @@ def listar_projetos() -> RespostaProjetos:
             "total": 3
         }
     """
-    projetos = _obter_projetos_uc.executar()
+    projetos = await _obter_projetos_uc.executar()
     
     projetos_resumo = [
         ProjetoResumo(
@@ -143,7 +143,7 @@ def listar_projetos() -> RespostaProjetos:
         },
     },
 )
-def obter_projeto(projeto_id: str) -> ProjetoDetalhado:
+async def obter_projeto(projeto_id: str) -> ProjetoDetalhado:
     """
     Obtém detalhes completos de um projeto.
 
@@ -164,7 +164,7 @@ def obter_projeto(projeto_id: str) -> ProjetoDetalhado:
             ...
         }
     """
-    projeto = _obter_projeto_por_id_uc.executar(projeto_id)
+    projeto = await _obter_projeto_por_id_uc.executar(projeto_id)
     
     if not projeto:
         raise ErroRecursoNaoEncontrado(
@@ -192,7 +192,7 @@ def obter_projeto(projeto_id: str) -> ProjetoDetalhado:
     summary="Stack tecnológico",
     description="Retorna tecnologias organizadas por categoria.",
 )
-def obter_stack() -> RespostaStack:
+async def obter_stack() -> RespostaStack:
     """
     Obtém stack tecnológico organizado.
 
@@ -209,7 +209,7 @@ def obter_stack() -> RespostaStack:
             }
         }
     """
-    por_categoria = _obter_stack_uc.executar()
+    por_categoria = await _obter_stack_uc.executar()
     
     # Converter para ItemStack
     stack_completo = []
@@ -232,7 +232,7 @@ def obter_stack() -> RespostaStack:
     summary="Experiências profissionais",
     description="Retorna lista de experiências ordenadas cronologicamente.",
 )
-def listar_experiencias() -> RespostaExperiencias:
+async def listar_experiencias() -> RespostaExperiencias:
     """
     Lista experiências profissionais.
 
@@ -249,7 +249,7 @@ def listar_experiencias() -> RespostaExperiencias:
             "total": 2
         }
     """
-    experiencias = _obter_experiencias_uc.executar()
+    experiencias = await _obter_experiencias_uc.executar()
     
     experiencias_schema = [
         Experiencia(

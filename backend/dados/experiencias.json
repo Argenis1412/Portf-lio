@@ -1,24 +1,46 @@
 [
   {
     "id": "exp-001",
-    "cargo": "Backend Developer Freelancer",
-    "empresa": "Autônomo",
+    "cargo": "Backend Developer",
+    "empresa": "Loja App (Projeto Pessoal)",
     "localizacao": "Remoto",
-    "data_inicio": "2023-06-01",
+    "data_inicio": "2025-12-20",
     "data_fim": null,
-    "descricao": "Desenvolvimento de APIs REST com Python e FastAPI para diversos clientes. Implementação de arquitetura limpa, testes automatizados, integração com bancos de dados relacionais e NoSQL. Experiência com validação de dados, documentação de APIs, deploy em cloud e CI/CD. Foco em código limpo, manutenível e bem testado.",
-    "tecnologias": ["Python", "FastAPI", "PostgreSQL", "MongoDB", "Docker", "Git", "Pytest"],
+    "descricao": "API REST com FastAPI para sistema de pagamentos com regras de negócio financeiras (cálculo de juros, descontos, parcelamentos). Arquitetura Hexagonal: separação clara entre domínio, casos de uso, adaptadores e infraestrutura. Validação de dados com Pydantic, documentação automática com Swagger UI/OpenAPI. Suite de testes unitários e de integração com pytest executados em CI com GitHub Actions. Persistência com PostgreSQL + SQLAlchemy ORM + Alembic para versionamento de schema. Frontend consumidor: React + TypeScript com Tailwind CSS.",
+    "tecnologias": ["Python", "FastAPI", "Pydantic", "PostgreSQL", "SQLAlchemy ORM", "Alembic", "Pytest", "React", "TypeScript", "Tailwind CSS", "GitHub Actions"],
     "atual": true
   },
   {
     "id": "exp-002",
-    "cargo": "Estudante de Tecnologia Autodidata",
+    "cargo": "Consultor de Negócios",
+    "empresa": "Ademicon",
+    "localizacao": "Curitiba, PR",
+    "data_inicio": "2025-06-01",
+    "data_fim": "2025-10-31",
+    "descricao": "Análise de perfis financeiros e elaboração de propostas consultivas. Operação de sistemas internos e organização de documentação de clientes. Desenvolvimento de habilidades: comunicação, negociação, responsabilidade com dados.",
+    "tecnologias": [],
+    "atual": false
+  },
+  {
+    "id": "exp-003",
+    "cargo": "Estudante em Análise e Desenvolvimento de Sistemas - Foco em Backend",
     "empresa": "Estudo Próprio",
     "localizacao": "Curitiba, PR",
-    "data_inicio": "2022-01-01",
-    "data_fim": "2023-05-31",
-    "descricao": "Período dedicado ao aprendizado intensivo de desenvolvimento backend. Estudos focados em Python, desenvolvimento web, bancos de dados, arquitetura de software e boas práticas. Realização de diversos projetos práticos para consolidar conhecimentos. Participação em comunidades de desenvolvedores e consumo de conteúdo técnico de qualidade.",
-    "tecnologias": ["Python", "FastAPI", "SQL", "Git", "Linux", "Docker"],
+    "data_inicio": "2026-02-20",
+    "data_fim": "2029-03-06",
+    "descricao": "Período dedicado ao aprendizado intensivo de desenvolvimento backend. Estudos focados em Python, desenvolvimento web, bancos de dados, arquitetura de software e boas práticas. Realização de diversos projetos práticos para consolidar conhecimentos.",
+    "tecnologias": ["Python", "FastAPI", "SQL", "Git"],
     "atual": false
+  },
+  {
+    "id": "exp-004",
+    "cargo": "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+    "empresa": "UFPR",
+    "localizacao": "Curitiba, PR",
+    "data_inicio": "2026-02-01",
+    "data_fim": null,
+    "descricao": "Curso superior de Tecnologia em Análise e Desenvolvimento de Sistemas na Universidade Federal do Paraná (UFPR). Em curso.",
+    "tecnologias": [],
+    "atual": true
   }
 ]

@@ -30,7 +30,7 @@ class ObterExperienciasUseCase:
         """
         self.repositorio = repositorio
 
-    def executar(self) -> list[ExperienciaProfissional]:
+    async def executar(self) -> list[ExperienciaProfissional]:
         """
         Executa caso de uso.
 
@@ -44,11 +44,11 @@ class ObterExperienciasUseCase:
         Example:
             >>> repo = RepositorioJSON()
             >>> uc = ObterExperienciasUseCase(repo)
-            >>> experiencias = uc.executar()
+            >>> experiencias = await uc.executar()
             >>> experiencias[0].atual
             True
         """
-        experiencias = self.repositorio.obter_experiencias()
+        experiencias = await self.repositorio.obter_experiencias()
         return sorted(
             experiencias,
             key=lambda e: (not e.atual, -e.data_inicio.toordinal())

@@ -49,6 +49,7 @@ class FormspreeEmailAdaptador(EmailAdaptador):
             formspree_url: URL base do Formspree (ex: "https://formspree.io/f").
             form_id: ID do formulário Formspree.
         """
+        self._configurado = bool(form_id and form_id.strip())
         self.url_endpoint = f"{formspree_url}/{form_id}"
 
     async def enviar_mensagem(self, mensagem: Mensagem) -> bool:
@@ -64,8 +65,7 @@ class FormspreeEmailAdaptador(EmailAdaptador):
         Raises:
             Não levanta exceções - captura erros e retorna False.
         """
-        if not self.url_endpoint or "//" in self.url_endpoint[-2:]:
-            # Form ID vazio - URL termina com "//" ao invés de "/form_id"
+        if not self._configurado:
             return False
 
         try:

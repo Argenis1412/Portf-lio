@@ -23,6 +23,10 @@ from app.controladores.v1 import roteador_v1
 from app.core.middleware import MiddlewareRequisicao
 from app.core.handlers import registrar_handlers_excecao
 
+from app.core.limite import limiter
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+
 
 def criar_aplicacao() -> FastAPI:
     """
@@ -38,6 +42,7 @@ def criar_aplicacao() -> FastAPI:
         - Handlers de exceções
         - Rotas versionadas e legadas
         - Logging estruturado
+        - Rate limiting
     """
     # Configurar logging antes de criar app
     # Logging estruturado configurado automaticamente via middleware
@@ -54,6 +59,7 @@ def criar_aplicacao() -> FastAPI:
     _configurar_cors(aplicacao)
     _configurar_middleware(aplicacao)
     _registrar_handlers(aplicacao)
+    _registrar_limiter(aplicacao)
     _registrar_rotas(aplicacao)
 
     return aplicacao
@@ -171,6 +177,17 @@ def _registrar_handlers(aplicacao: FastAPI) -> None:
         aplicacao: Instância FastAPI.
     """
     registrar_handlers_excecao(aplicacao)
+
+
+def _registrar_limiter(aplicacao: FastAPI) -> None:
+    """
+    Configura o rate limiter na aplicação.
+
+    Args:
+        aplicacao: Instância FastAPI.
+    """
+    aplicacao.state.limiter = limiter
+    aplicacao.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 def _registrar_rotas(aplicacao: FastAPI) -> None:

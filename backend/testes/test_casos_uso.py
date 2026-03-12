@@ -17,22 +17,24 @@ from app.casos_uso import (
 )
 
 
-def test_obter_sobre_retorna_dados_corretos(repositorio_mock):
+@pytest.mark.asyncio
+async def test_obter_sobre_retorna_dados_corretos(repositorio_mock):
     """Testa que ObterSobreUseCase retorna dados do repositório."""
     uc = ObterSobreUseCase(repositorio_mock)
     
-    resultado = uc.executar()
+    resultado = await uc.executar()
     
     assert resultado["nome"] == "Teste Silva"
     assert resultado["email"] == "teste@example.com"
     repositorio_mock.obter_sobre.assert_called_once()
 
 
-def test_obter_projetos_ordena_por_destaque(repositorio_mock):
+@pytest.mark.asyncio
+async def test_obter_projetos_ordena_por_destaque(repositorio_mock):
     """Testa que projetos destacados aparecem primeiro."""
     uc = ObterProjetosUseCase(repositorio_mock)
     
-    projetos = uc.executar()
+    projetos = await uc.executar()
     
     assert len(projetos) == 2
     assert projetos[0].destaque is True  # Destacado primeiro
@@ -40,31 +42,34 @@ def test_obter_projetos_ordena_por_destaque(repositorio_mock):
     repositorio_mock.obter_projetos.assert_called_once()
 
 
-def test_obter_projeto_por_id_encontrado(repositorio_mock):
+@pytest.mark.asyncio
+async def test_obter_projeto_por_id_encontrado(repositorio_mock):
     """Testa busca de projeto existente por ID."""
     uc = ObterProjetoPorIdUseCase(repositorio_mock)
     
-    projeto = uc.executar("projeto-1")
+    projeto = await uc.executar("projeto-1")
     
     assert projeto is not None
     assert projeto.id == "projeto-1"
     assert projeto.nome == "Projeto A"
 
 
-def test_obter_projeto_por_id_nao_encontrado(repositorio_mock):
+@pytest.mark.asyncio
+async def test_obter_projeto_por_id_nao_encontrado(repositorio_mock):
     """Testa busca de projeto inexistente retorna None."""
     uc = ObterProjetoPorIdUseCase(repositorio_mock)
     
-    projeto = uc.executar("projeto-inexistente")
+    projeto = await uc.executar("projeto-inexistente")
     
     assert projeto is None
 
 
-def test_obter_stack_agrupa_por_categoria(repositorio_mock):
+@pytest.mark.asyncio
+async def test_obter_stack_agrupa_por_categoria(repositorio_mock):
     """Testa que stack é agrupado por categoria."""
     uc = ObterStackUseCase(repositorio_mock)
     
-    resultado = uc.executar()
+    resultado = await uc.executar()
     
     assert "backend" in resultado
     assert "frontend" in resultado
@@ -73,11 +78,12 @@ def test_obter_stack_agrupa_por_categoria(repositorio_mock):
     repositorio_mock.obter_stack.assert_called_once()
 
 
-def test_obter_experiencias_ordena_cronologicamente(repositorio_mock):
+@pytest.mark.asyncio
+async def test_obter_experiencias_ordena_cronologicamente(repositorio_mock):
     """Testa que experiências são ordenadas (atual primeiro)."""
     uc = ObterExperienciasUseCase(repositorio_mock)
     
-    experiencias = uc.executar()
+    experiencias = await uc.executar()
     
     assert len(experiencias) == 2
     assert experiencias[0].atual is True  # Atual primeiro

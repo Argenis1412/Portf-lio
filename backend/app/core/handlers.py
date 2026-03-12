@@ -5,7 +5,7 @@ Converte exceções customizadas em respostas HTTP padronizadas.
 Registrado automaticamente no startup da aplicação.
 """
 
-import logging
+import structlog
 from typing import Any
 
 from fastapi import FastAPI, Request, status
@@ -20,7 +20,7 @@ from app.core.excecoes import (
     ErroRecursoNaoEncontrado,
 )
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 
 def criar_resposta_erro(
@@ -72,8 +72,10 @@ async def handler_erro_dominio(
         JSONResponse: HTTP 400 com detalhes do erro.
     """
     logger.warning(
-        f"Erro de domínio: {exc.mensagem}",
-        extra={"codigo": exc.codigo, "path": request.url.path},
+        "erro_dominio",
+        mensagem=exc.mensagem,
+        codigo=exc.codigo,
+        path=request.url.path,
     )
     
     return criar_resposta_erro(
@@ -98,8 +100,10 @@ async def handler_erro_validacao(
         JSONResponse: HTTP 422 com detalhes do erro.
     """
     logger.warning(
-        f"Erro de validação: {exc.mensagem}",
-        extra={"codigo": exc.codigo, "path": request.url.path},
+        "erro_validacao_negocio",
+        mensagem=exc.mensagem,
+        codigo=exc.codigo,
+        path=request.url.path,
     )
     
     return criar_resposta_erro(
@@ -124,12 +128,11 @@ async def handler_erro_infraestrutura(
         JSONResponse: HTTP 500 com mensagem genérica.
     """
     logger.error(
-        f"Erro de infraestrutura: {exc.mensagem}",
-        extra={
-            "codigo": exc.codigo,
-            "origem": exc.origem,
-            "path": request.url.path,
-        },
+        "erro_infraestrutura",
+        mensagem=exc.mensagem,
+        codigo=exc.codigo,
+        origem=exc.origem,
+        path=request.url.path,
         exc_info=True,
     )
     
@@ -156,8 +159,10 @@ async def handler_recurso_nao_encontrado(
         JSONResponse: HTTP 404 com mensagem.
     """
     logger.info(
-        f"Recurso não encontrado: {exc.mensagem}",
-        extra={"codigo": exc.codigo, "path": request.url.path},
+        "recurso_nao_encontrado",
+        mensagem=exc.mensagem,
+        codigo=exc.codigo,
+        path=request.url.path,
     )
     
     return criar_resposta_erro(
@@ -192,8 +197,10 @@ async def handler_validacao_pydantic(
         })
     
     logger.warning(
-        f"Erro de validação Pydantic: {len(erros_formatados)} campos inválidos",
-        extra={"path": request.url.path, "erros": erros_formatados},
+        "erro_validacao_pydantic",
+        total_campos_invalidos=len(erros_formatados),
+        path=request.url.path,
+        erros=erros_formatados,
     )
     
     return criar_resposta_erro(
@@ -219,8 +226,10 @@ async def handler_generico(
         JSONResponse: HTTP 500 genérico.
     """
     logger.error(
-        f"Exceção não tratada: {type(exc).__name__}: {str(exc)}",
-        extra={"path": request.url.path},
+        "excecao_nao_tratada",
+        tipo_erro=type(exc).__name__,
+        erro=str(exc),
+        path=request.url.path,
         exc_info=True,
     )
     

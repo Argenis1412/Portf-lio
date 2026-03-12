@@ -8,6 +8,9 @@ from abc import ABC, abstractmethod
 import json
 from pathlib import Path
 from datetime import date
+from typing import Any
+
+import anyio
 
 from app.entidades.projeto import Projeto
 from app.entidades.experiencia import ExperienciaProfissional
@@ -21,27 +24,27 @@ class RepositorioPortfolio(ABC):
     """
 
     @abstractmethod
-    def obter_sobre(self) -> dict:
+    async def obter_sobre(self) -> dict:
         """Retorna informações da seção Sobre."""
         pass
 
     @abstractmethod
-    def obter_projetos(self) -> list[Projeto]:
+    async def obter_projetos(self) -> list[Projeto]:
         """Retorna lista de projetos."""
         pass
 
     @abstractmethod
-    def obter_projeto_por_id(self, projeto_id: str) -> Projeto | None:
+    async def obter_projeto_por_id(self, projeto_id: str) -> Projeto | None:
         """Retorna um projeto específico ou None se não encontrado."""
         pass
 
     @abstractmethod
-    def obter_stack(self) -> list[dict]:
+    async def obter_stack(self) -> list[dict]:
         """Retorna lista de tecnologias do stack."""
         pass
 
     @abstractmethod
-    def obter_experiencias(self) -> list[ExperienciaProfissional]:
+    async def obter_experiencias(self) -> list[ExperienciaProfissional]:
         """Retorna lista de experiências profissionais."""
         pass
 
@@ -65,41 +68,41 @@ class RepositorioJSON(RepositorioPortfolio):
         """
         self.diretorio_dados = Path(diretorio_dados)
 
-    def _ler_json(self, nome_arquivo: str) -> dict | list:
+    async def _ler_json(self, nome_arquivo: str) -> Any:
         """
-        Lê arquivo JSON do diretório de dados.
+        Lê arquivo JSON do diretório de dados de forma assíncrona.
 
         Args:
             nome_arquivo: Nome do arquivo (ex: "sobre.json").
 
         Returns:
             Conteúdo do JSON parseado.
-
-        Raises:
-            FileNotFoundError: Se arquivo não existe.
-            json.JSONDecodeError: Se JSON é inválido.
         """
         caminho = self.diretorio_dados / nome_arquivo
-        with open(caminho, "r", encoding="utf-8") as arquivo:
-            return json.load(arquivo)
 
-    def obter_sobre(self) -> dict:
+        def _ler_arquivo():
+            with open(caminho, "r", encoding="utf-8") as arquivo:
+                return json.load(arquivo)
+
+        return await anyio.to_thread.run_sync(_ler_arquivo)
+
+    async def obter_sobre(self) -> dict:
         """
         Obtém informações da seção Sobre.
 
         Returns:
             dict: Dados do arquivo sobre.json.
         """
-        return self._ler_json("sobre.json")
+        return await self._ler_json("sobre.json")
 
-    def obter_projetos(self) -> list[Projeto]:
+    async def obter_projetos(self) -> list[Projeto]:
         """
         Obtém lista de projetos.
 
         Returns:
             list[Projeto]: Lista de entidades Projeto.
         """
-        dados = self._ler_json("projetos.json")
+        dados = await self._ler_json("projetos.json")
         return [
             Projeto(
                 id=p["id"],
@@ -116,7 +119,7 @@ class RepositorioJSON(RepositorioPortfolio):
             for p in dados
         ]
 
-    def obter_projeto_por_id(self, projeto_id: str) -> Projeto | None:
+    async def obter_projeto_por_id(self, projeto_id: str) -> Projeto | None:
         """
         Obtém projeto específico por ID.
 
@@ -126,29 +129,29 @@ class RepositorioJSON(RepositorioPortfolio):
         Returns:
             Projeto | None: Projeto encontrado ou None.
         """
-        projetos = self.obter_projetos()
+        projetos = await self.obter_projetos()
         for projeto in projetos:
             if projeto.id == projeto_id:
                 return projeto
         return None
 
-    def obter_stack(self) -> list[dict]:
+    async def obter_stack(self) -> list[dict]:
         """
         Obtém lista de tecnologias do stack.
 
         Returns:
             list[dict]: Lista de tecnologias.
         """
-        return self._ler_json("stack.json")
+        return await self._ler_json("stack.json")
 
-    def obter_experiencias(self) -> list[ExperienciaProfissional]:
+    async def obter_experiencias(self) -> list[ExperienciaProfissional]:
         """
         Obtém lista de experiências profissionais.
 
         Returns:
             list[ExperienciaProfissional]: Lista de entidades ExperienciaProfissional.
         """
-        dados = self._ler_json("experiencias.json")
+        dados = await self._ler_json("experiencias.json")
         return [
             ExperienciaProfissional(
                 id=e["id"],

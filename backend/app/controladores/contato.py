@@ -5,12 +5,14 @@ Endpoint:
 - POST /api/contato
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Request
 
 from app.esquemas.contato import RequisicaoContato, RespostaContato
 from app.casos_uso import EnviarContatoUseCase
 from app.adaptadores import FormspreeEmailAdaptador, LoggerEstruturado
 from app.configuracao import configuracoes
+from app.core.excecoes import ErroInfraestrutura
+from app.core.limite import limiter
 
 # Dependency injection manual
 _email_adaptador = FormspreeEmailAdaptador(
@@ -30,9 +32,14 @@ roteador = APIRouter(tags=["Contato"])
     description="Envia mensagem do formulário de contato via Formspree.",
     responses={
         500: {"description": "Erro ao enviar mensagem"},
+        429: {"description": "Muitas requisições"},
     },
 )
-async def enviar_contato(requisicao: RequisicaoContato) -> RespostaContato:
+@limiter.limit("5/minute")
+async def enviar_contato(
+    request: Request,
+    requisicao: RequisicaoContato,
+) -> RespostaContato:
     """
     Envia mensagem de contato.
 
@@ -43,7 +50,7 @@ async def enviar_contato(requisicao: RequisicaoContato) -> RespostaContato:
         RespostaContato: Resultado do envio.
 
     Raises:
-        HTTPException 500: Se falha ao enviar.
+        ErroInfraestrutura: Se falha ao enviar.
 
     Example:
         POST /api/contato
@@ -66,9 +73,10 @@ async def enviar_contato(requisicao: RequisicaoContato) -> RespostaContato:
     )
     
     if not sucesso:
-        raise HTTPException(
-            status_code=500,
-            detail="Erro ao enviar mensagem. Tente novamente mais tarde.",
+        raise ErroInfraestrutura(
+            mensagem="Falha ao enviar mensagem de contato",
+            codigo="ERRO_ENVIO_CONTATO",
+            origem="formspree",
         )
     
     return RespostaContato(
