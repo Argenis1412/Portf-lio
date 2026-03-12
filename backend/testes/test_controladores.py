@@ -5,6 +5,7 @@ Testa integração entre rotas FastAPI e casos de uso.
 """
 
 import pytest
+from unittest.mock import patch
 from fastapi.testclient import TestClient
 
 from app.principal import app
@@ -89,11 +90,7 @@ def test_listar_experiencias_retorna_200():
 
 
 def test_enviar_contato_com_dados_validos_retorna_200():
-    """Testa POST /api/contato com dados válidos (sem form_id real).
-    
-    Nota: Como não há FORMSPREE_FORM_ID configurado no ambiente de testes,
-    o endpoint retorna 500 (falha ao enviar). Em produção com form_id válido,
-    retornaria 200 com sucesso=true.
+    """Testa POST /api/contato com dados válidos usando Mock.
     """
     payload = {
         "nome": "Maria Silva",
@@ -102,10 +99,14 @@ def test_enviar_contato_com_dados_validos_retorna_200():
         "mensagem": "Esta é uma mensagem de teste com mais de 10 caracteres.",
     }
     
-    response = client.post("/api/contato", json=payload)
+    with patch("app.controladores.contato._email_adaptador.enviar_mensagem") as mock_enviar:
+        mock_enviar.return_value = True
+        response = client.post("/api/contato", json=payload)
     
-    # Como não há form_id configurado, deve retornar 500
-    assert response.status_code == 500
+    assert response.status_code == 200
+    data = response.json()
+    assert data["sucesso"] is True
+    assert "mensagem" in data
 
 
 def test_enviar_contato_com_dados_invalidos_retorna_422():
@@ -114,7 +115,7 @@ def test_enviar_contato_com_dados_invalidos_retorna_422():
         "nome": "M",  # Muito curto
         "email": "email-invalido",
         "assunto": "Abc",  # Muito curto
-        "mensagem": "Curta",  # Muito curta
+        "mensagem": "123",  # Muito curta (agora o limite é 5)
     }
     
     response = client.post("/api/contato", json=payload)

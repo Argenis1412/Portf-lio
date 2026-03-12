@@ -66,6 +66,7 @@ class FormspreeEmailAdaptador(EmailAdaptador):
             Não levanta exceções - captura erros e retorna False.
         """
         if not self._configurado:
+            print("AVISO: Adaptador Formspree não configurado (FORMSPREE_FORM_ID vazio)")
             return False
 
         try:
@@ -80,6 +81,8 @@ class FormspreeEmailAdaptador(EmailAdaptador):
                     },
                     timeout=10.0,
                 )
+                print(f"DEBUG: Resposta Formspree status={resposta.status_code}")
                 return resposta.status_code in range(200, 300)
-        except Exception:
+        except Exception as e:
+            print(f"ERRO: Exception no adaptador Formspree: {str(e)}")
             return False
