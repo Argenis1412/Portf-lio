@@ -38,7 +38,7 @@ class RequisicaoContato(BaseModel):
     )
     mensagem: str = Field(
         ...,
-        min_length=5,
+        min_length=10,
         max_length=2000,
         examples=["Olá, vi seu portfólio e gostaria de conversar..."],
         description="Conteúdo da mensagem",

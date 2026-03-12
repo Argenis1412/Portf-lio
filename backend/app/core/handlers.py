@@ -11,7 +11,6 @@ from typing import Any
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
-from pydantic import ValidationError
 
 from app.core.excecoes import (
     ErroDominio,

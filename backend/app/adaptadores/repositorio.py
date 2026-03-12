@@ -49,6 +49,10 @@ class RepositorioPortfolio(ABC):
         pass
 
 
+# Caminho relativo ao projeto para os dados JSON
+DEFAULT_DADOS_PATH = Path(__file__).parent.parent.parent / "dados"
+
+
 class RepositorioJSON(RepositorioPortfolio):
     """
     Implementação de RepositorioPortfolio usando arquivos JSON.
@@ -59,7 +63,7 @@ class RepositorioJSON(RepositorioPortfolio):
         diretorio_dados: Caminho para pasta com arquivos JSON.
     """
 
-    def __init__(self, diretorio_dados: str | Path = "dados"):
+    def __init__(self, diretorio_dados: str | Path = DEFAULT_DADOS_PATH):
         """
         Inicializa repositório JSON.
 
