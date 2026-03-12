@@ -9,29 +9,29 @@ Endpoints:
 - GET /api/experiencias
 """
 
-from fastapi import APIRouter
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
 
 from app.esquemas.sobre import RespostaSobre
 from app.esquemas.projetos import ProjetoResumo, ProjetoDetalhado, RespostaProjetos
 from app.esquemas.stack import ItemStack, RespostaStack
 from app.esquemas.experiencias import Experiencia, RespostaExperiencias
 from app.casos_uso import (
-    ObterSobreUseCase,
-    ObterProjetosUseCase,
-    ObterProjetoPorIdUseCase,
-    ObterStackUseCase,
     ObterExperienciasUseCase,
+    ObterProjetoPorIdUseCase,
+    ObterProjetosUseCase,
+    ObterSobreUseCase,
+    ObterStackUseCase,
 )
-from app.adaptadores import RepositorioJSON
+from app.controladores.dependencias import (
+    obter_obter_experiencias_use_case,
+    obter_obter_projeto_por_id_use_case,
+    obter_obter_projetos_use_case,
+    obter_obter_sobre_use_case,
+    obter_obter_stack_use_case,
+)
 from app.core.excecoes import ErroRecursoNaoEncontrado
-
-# Dependency injection manual
-_repositorio = RepositorioJSON()
-_obter_sobre_uc = ObterSobreUseCase(_repositorio)
-_obter_projetos_uc = ObterProjetosUseCase(_repositorio)
-_obter_projeto_por_id_uc = ObterProjetoPorIdUseCase(_repositorio)
-_obter_stack_uc = ObterStackUseCase(_repositorio)
-_obter_experiencias_uc = ObterExperienciasUseCase(_repositorio)
 
 roteador = APIRouter(tags=["API"])
 
@@ -42,7 +42,12 @@ roteador = APIRouter(tags=["API"])
     summary="Informações pessoais",
     description="Retorna informações da seção 'Sobre Mim'.",
 )
-async def obter_sobre() -> RespostaSobre:
+async def obter_sobre(
+    obter_sobre_uc: Annotated[
+        ObterSobreUseCase,
+        Depends(obter_obter_sobre_use_case),
+    ],
+) -> RespostaSobre:
     """
     Obtém informações pessoais do desenvolvedor.
 
@@ -57,7 +62,7 @@ async def obter_sobre() -> RespostaSobre:
             ...
         }
     """
-    dados = await _obter_sobre_uc.executar()
+    dados = await obter_sobre_uc.executar()
     return RespostaSobre(**dados)
 
 
@@ -67,7 +72,12 @@ async def obter_sobre() -> RespostaSobre:
     summary="Listar projetos",
     description="Retorna lista de projetos ordenada (destacados primeiro).",
 )
-async def listar_projetos() -> RespostaProjetos:
+async def listar_projetos(
+    obter_projetos_uc: Annotated[
+        ObterProjetosUseCase,
+        Depends(obter_obter_projetos_use_case),
+    ],
+) -> RespostaProjetos:
     """
     Lista todos os projetos do portfólio.
 
@@ -84,7 +94,7 @@ async def listar_projetos() -> RespostaProjetos:
             "total": 3
         }
     """
-    projetos = await _obter_projetos_uc.executar()
+    projetos = await obter_projetos_uc.executar()
     
     projetos_resumo = [
         ProjetoResumo(
@@ -143,7 +153,13 @@ async def listar_projetos() -> RespostaProjetos:
         },
     },
 )
-async def obter_projeto(projeto_id: str) -> ProjetoDetalhado:
+async def obter_projeto(
+    projeto_id: str,
+    obter_projeto_por_id_uc: Annotated[
+        ObterProjetoPorIdUseCase,
+        Depends(obter_obter_projeto_por_id_use_case),
+    ],
+) -> ProjetoDetalhado:
     """
     Obtém detalhes completos de um projeto.
 
@@ -164,7 +180,7 @@ async def obter_projeto(projeto_id: str) -> ProjetoDetalhado:
             ...
         }
     """
-    projeto = await _obter_projeto_por_id_uc.executar(projeto_id)
+    projeto = await obter_projeto_por_id_uc.executar(projeto_id)
     
     if not projeto:
         raise ErroRecursoNaoEncontrado(
@@ -192,7 +208,12 @@ async def obter_projeto(projeto_id: str) -> ProjetoDetalhado:
     summary="Stack tecnológico",
     description="Retorna tecnologias organizadas por categoria.",
 )
-async def obter_stack() -> RespostaStack:
+async def obter_stack(
+    obter_stack_uc: Annotated[
+        ObterStackUseCase,
+        Depends(obter_obter_stack_use_case),
+    ],
+) -> RespostaStack:
     """
     Obtém stack tecnológico organizado.
 
@@ -209,7 +230,7 @@ async def obter_stack() -> RespostaStack:
             }
         }
     """
-    por_categoria = await _obter_stack_uc.executar()
+    por_categoria = await obter_stack_uc.executar()
     
     # Converter para ItemStack
     stack_completo = []
@@ -232,7 +253,12 @@ async def obter_stack() -> RespostaStack:
     summary="Experiências profissionais",
     description="Retorna lista de experiências ordenadas cronologicamente.",
 )
-async def listar_experiencias() -> RespostaExperiencias:
+async def listar_experiencias(
+    obter_experiencias_uc: Annotated[
+        ObterExperienciasUseCase,
+        Depends(obter_obter_experiencias_use_case),
+    ],
+) -> RespostaExperiencias:
     """
     Lista experiências profissionais.
 
@@ -249,7 +275,7 @@ async def listar_experiencias() -> RespostaExperiencias:
             "total": 2
         }
     """
-    experiencias = await _obter_experiencias_uc.executar()
+    experiencias = await obter_experiencias_uc.executar()
     
     experiencias_schema = [
         Experiencia(

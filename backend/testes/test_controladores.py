@@ -5,10 +5,11 @@ Testa integração entre rotas FastAPI e casos de uso.
 """
 
 import pytest
-from unittest.mock import patch
+from unittest.mock import AsyncMock
 from fastapi.testclient import TestClient
 
 from app.principal import app
+from app.controladores.dependencias import obter_enviar_contato_use_case
 
 client = TestClient(app)
 
@@ -99,14 +100,20 @@ def test_enviar_contato_com_dados_validos_retorna_200():
         "mensagem": "Esta é uma mensagem de teste com mais de 10 caracteres.",
     }
     
-    with patch("app.controladores.contato._email_adaptador.enviar_mensagem") as mock_enviar:
-        mock_enviar.return_value = True
+    mock_uc = AsyncMock()
+    mock_uc.executar.return_value = True
+
+    app.dependency_overrides[obter_enviar_contato_use_case] = lambda: mock_uc
+    try:
         response = client.post("/api/contato", json=payload)
+    finally:
+        app.dependency_overrides.pop(obter_enviar_contato_use_case, None)
     
     assert response.status_code == 200
     data = response.json()
     assert data["sucesso"] is True
     assert "mensagem" in data
+    mock_uc.executar.assert_awaited_once()
 
 
 def test_enviar_contato_com_dados_invalidos_retorna_422():

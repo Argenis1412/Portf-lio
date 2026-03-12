@@ -1,0 +1,66 @@
+"""
+Provedores de dependencias para os controladores HTTP.
+
+Centraliza a composicao de adaptadores e casos de uso para usar com FastAPI Depends.
+"""
+
+from functools import lru_cache
+
+from app.adaptadores import FormspreeEmailAdaptador, LoggerEstruturado, RepositorioJSON
+from app.adaptadores.repositorio import RepositorioPortfolio
+from app.casos_uso import (
+    EnviarContatoUseCase,
+    ObterExperienciasUseCase,
+    ObterProjetoPorIdUseCase,
+    ObterProjetosUseCase,
+    ObterSobreUseCase,
+    ObterStackUseCase,
+)
+from app.configuracao import configuracoes
+
+
+@lru_cache
+def obter_repositorio() -> RepositorioPortfolio:
+    """Retorna repositorio de dados compartilhado para leitura de portfolio."""
+    return RepositorioJSON()
+
+
+@lru_cache
+def obter_obter_sobre_use_case() -> ObterSobreUseCase:
+    """Retorna caso de uso para secao sobre."""
+    return ObterSobreUseCase(obter_repositorio())
+
+
+@lru_cache
+def obter_obter_projetos_use_case() -> ObterProjetosUseCase:
+    """Retorna caso de uso para listagem de projetos."""
+    return ObterProjetosUseCase(obter_repositorio())
+
+
+@lru_cache
+def obter_obter_projeto_por_id_use_case() -> ObterProjetoPorIdUseCase:
+    """Retorna caso de uso para detalhes de projeto."""
+    return ObterProjetoPorIdUseCase(obter_repositorio())
+
+
+@lru_cache
+def obter_obter_stack_use_case() -> ObterStackUseCase:
+    """Retorna caso de uso para stack tecnico."""
+    return ObterStackUseCase(obter_repositorio())
+
+
+@lru_cache
+def obter_obter_experiencias_use_case() -> ObterExperienciasUseCase:
+    """Retorna caso de uso para experiencias profissionais."""
+    return ObterExperienciasUseCase(obter_repositorio())
+
+
+@lru_cache
+def obter_enviar_contato_use_case() -> EnviarContatoUseCase:
+    """Retorna caso de uso para envio de contato."""
+    email_adaptador = FormspreeEmailAdaptador(
+        configuracoes.formspree_url,
+        configuracoes.formspree_form_id,
+    )
+    logger = LoggerEstruturado()
+    return EnviarContatoUseCase(email_adaptador, logger)

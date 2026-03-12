@@ -5,22 +5,15 @@ Endpoint:
 - POST /api/contato
 """
 
-from fastapi import APIRouter, Request
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Request
 
 from app.esquemas.contato import RequisicaoContato, RespostaContato
 from app.casos_uso import EnviarContatoUseCase
-from app.adaptadores import FormspreeEmailAdaptador, LoggerEstruturado
-from app.configuracao import configuracoes
+from app.controladores.dependencias import obter_enviar_contato_use_case
 from app.core.excecoes import ErroInfraestrutura
 from app.core.limite import limiter
-
-# Dependency injection manual
-_email_adaptador = FormspreeEmailAdaptador(
-    configuracoes.formspree_url,
-    configuracoes.formspree_form_id,
-)
-_logger = LoggerEstruturado()
-_enviar_contato_uc = EnviarContatoUseCase(_email_adaptador, _logger)
 
 roteador = APIRouter(tags=["Contato"])
 
@@ -39,6 +32,10 @@ roteador = APIRouter(tags=["Contato"])
 async def enviar_contato(
     request: Request,
     requisicao: RequisicaoContato,
+    enviar_contato_uc: Annotated[
+        EnviarContatoUseCase,
+        Depends(obter_enviar_contato_use_case),
+    ],
 ) -> RespostaContato:
     """
     Envia mensagem de contato.
@@ -65,7 +62,7 @@ async def enviar_contato(
             "mensagem": "Mensagem enviada com sucesso!"
         }
     """
-    sucesso = await _enviar_contato_uc.executar(
+    sucesso = await enviar_contato_uc.executar(
         nome=requisicao.nome,
         email=requisicao.email,
         assunto=requisicao.assunto,

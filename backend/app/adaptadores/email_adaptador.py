@@ -6,7 +6,11 @@ Interface abstrata + implementação com Formspree.
 
 from abc import ABC, abstractmethod
 import httpx
+import structlog
+
 from app.entidades.mensagem import Mensagem
+
+logger = structlog.get_logger(__name__)
 
 
 class EmailAdaptador(ABC):
@@ -66,7 +70,10 @@ class FormspreeEmailAdaptador(EmailAdaptador):
             Não levanta exceções - captura erros e retorna False.
         """
         if not self._configurado:
-            print("AVISO: Adaptador Formspree não configurado (FORMSPREE_FORM_ID vazio)")
+            logger.warning(
+                "formspree_nao_configurado",
+                motivo="FORMSPREE_FORM_ID vazio",
+            )
             return False
 
         try:
@@ -81,8 +88,21 @@ class FormspreeEmailAdaptador(EmailAdaptador):
                     },
                     timeout=10.0,
                 )
-                print(f"DEBUG: Resposta Formspree status={resposta.status_code}")
-                return resposta.status_code in range(200, 300)
-        except Exception as e:
-            print(f"ERRO: Exception no adaptador Formspree: {str(e)}")
+                sucesso = resposta.status_code in range(200, 300)
+                if sucesso:
+                    logger.info(
+                        "formspree_envio_sucesso",
+                        status_code=resposta.status_code,
+                    )
+                else:
+                    logger.warning(
+                        "formspree_envio_falha_status",
+                        status_code=resposta.status_code,
+                    )
+                return sucesso
+        except httpx.TimeoutException:
+            logger.error("formspree_timeout", exc_info=True)
+            return False
+        except httpx.HTTPError:
+            logger.error("formspree_http_error", exc_info=True)
             return False
