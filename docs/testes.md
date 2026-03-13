@@ -7,10 +7,14 @@
 ## 📋 Testing Structure
 
 ```
-backend/testes/
-├── conftest.py              # Shared fixtures
-├── test_casos_uso.py        # Business logic tests
-└── test_controladores.py    # HTTP endpoint tests
+backend/
+├── .venv/                   # Virtual Environment
+├── test.ps1                 # Shortcut (Windows PowerShell)
+├── test.bat                 # Shortcut (Windows CMD)
+├── test.sh                  # Shortcut (Linux/Mac)
+├── testes/                  # Test directory
+│   ├── conftest.py          # Shared fixtures
+│   └── test_casos_uso.py    # Business logic tests
 ```
 
 ---
@@ -19,35 +23,44 @@ backend/testes/
 
 ### All tests with coverage
 
+> [!IMPORTANT]
+> To run `pytest` directly, you must first activate the virtual environment (`.venv\Scripts\activate`).
+> Alternatively, use the **shortcut** below (Windows only).
+
 ```bash
 cd backend
+
+# Standard (needs venv)
 pytest
+
+# Quick (no venv needed)
+.\test
 ```
 
 ### Specific tests
 
 ```bash
 # A specific file
-pytest testes/test_casos_uso.py
+.\test testes/test_casos_uso.py
 
 # A specific test
-pytest testes/test_casos_uso.py::test_get_about_returns_correct_data
+.\test testes/test_casos_uso.py::test_get_about_returns_correct_data
 
 # Verbose mode
-pytest -v
+.\test -v
 
 # With print output
-pytest -s
+.\test -s
 ```
 
 ### Coverage report
 
 ```bash
 # Terminal
-pytest --cov=app --cov-report=term-missing
+.\test --cov=app --cov-report=term-missing
 
 # HTML (opens htmlcov/index.html)
-pytest --cov=app --cov-report=html
+.\test --cov=app --cov-report=html
 ```
 
 ---
@@ -57,7 +70,7 @@ pytest --cov=app --cov-report=html
 | Metric | Value | Status |
 |---------|-------|--------|
 | **Total Tests** | 17 | ✅ |
-| **Coverage** | 93.05% | ✅ |
+| **Coverage** | >=85% | ✅ |
 | **Minimum Goal** | 70% | ✅ |
 | **Tested Lines** | 482/518 | ✅ |
 
@@ -121,12 +134,17 @@ async def client():
 
 ```bash
 # Identify uncovered lines
-pytest --cov=app --cov-report=term-missing
-
-# Output example:
-# app/core/excecoes.py    71%   39, 62-65
-#                                ^^ add tests for these lines
+.\test --cov=app --cov-report=term-missing
 ```
+
+**Output example:**
+```text
+Name                     Stmts   Miss  Cover   Missing
+------------------------------------------------------
+app/core/excecoes.py        14      4    71%   39, 62-65
+```
+> [!TIP]
+> The "Missing" column shows exactly which lines need more tests!
 
 ---
 
@@ -136,13 +154,13 @@ pytest --cov=app --cov-report=term-missing
 
 ```bash
 # View full output
-pytest -vv -s
+.\test -vv -s
 
 # Stop at first error
-pytest -x
+.\test -x
 
 # Debug mode (pdb)
-pytest --pdb
+.\test --pdb
 ```
 
 ### Common error: AsyncIO
@@ -163,8 +181,8 @@ async def test_async():
 
 Before opening Pull Request:
 
-- [ ] All tests pass: `pytest`
-- [ ] Coverage >= 70%: `pytest --cov-fail-under=70`
+- [ ] All tests pass: `.\test`
+- [ ] Coverage >= 70%: `.\test --cov-fail-under=70`
 - [ ] New features have tests
 - [ ] Tests pass without warnings
 - [ ] Tests documented with docstrings

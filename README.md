@@ -1,13 +1,13 @@
-# 🚀 Professional Portfolio
+# 🚀 Professional Portfolio Backend
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](.)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **Complete professional portfolio system with FastAPI backend and modern frontend.**
+> **Professional REST API system built with FastAPI, focusing on Clean Architecture and production-ready backend standards.**
 
-This repository contains a full-stack portfolio system built with Clean Architecture best practices, separation of concerns, and production-ready configuration.
+This repository serves as a robust backend foundation for a developer portfolio, demonstrating advanced Python patterns and scalable architecture.
 
 ---
 
@@ -29,11 +29,11 @@ This repository contains a full-stack portfolio system built with Clean Architec
 
 Professional portfolio system developed to demonstrate skills in:
 
-- **Backend**: REST API with FastAPI, Clean Architecture, robust validation.
-- **Quality**: Automated tests (93%+ coverage), linting, standardization.
-- **Production**: Structured logging, monitoring, error handling.
-- **Documentation**: Interactive OpenAPI/Swagger, detailed READMEs.
-- **DevOps**: Containerization (Docker), CI/CD.
+- **Core**: Professional REST API with FastAPI, Clean Architecture, and robust validation.
+- **Quality**: Automated tests (>=85% coverage), strict typing, and standardized patterns.
+- **Production**: Structured logging, health monitoring, and performance middleware.
+- **Documentation**: Interactive OpenAPI/Swagger and detailed implementation guides.
+- **DevOps**: Docker integration and automated CI/CD pipelines.
 
 ### 🌟 Key Features
 
@@ -47,7 +47,7 @@ Professional portfolio system developed to demonstrate skills in:
 ✅ **Structured Logs** with structlog (JSON in production, Console in dev)  
 ✅ **CI/CD with GitHub Actions** (tests, lint, build)  
 ✅ **Deployment Ready** for platforms like Railway/Render  
-⏳ **Frontend in React + TypeScript** (in development)
+🎨 **Frontend Component**: React + TypeScript client included as an API consumer (in development)
 
 ---
 
@@ -191,7 +191,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Run tests
+# (Standard needs venv active)
 pytest
+# (Quick Windows shortcut)
+.\test
 
 # Start the server
 uvicorn app.principal:app --reload

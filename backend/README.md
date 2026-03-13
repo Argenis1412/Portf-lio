@@ -130,11 +130,22 @@ cp .env.exemplo .env
 
 ### 4. Execute
 ```bash
-# Development (with hot reload)
+# Start the server
 uvicorn app.principal:app --reload --port 8000
+```
 
-# Production
-uvicorn app.principal:app --host 0.0.0.0 --port 8000
+### 5. Running Tests (Quickly)
+On Windows, you can run tests without activating the virtual environment:
+```powershell
+# PowerShell
+.\test
+
+# CMD
+test
+
+# Linux/Mac
+chmod +x test.sh
+./test.sh
 ```
 
 ---
@@ -161,15 +172,23 @@ Returns API status and basic metrics.
 
 ### Run all tests
 ```bash
+# Standard way (with venv active)
 pytest
+
+# Quick way (Windows, no activation needed)
+.\test
 ```
 
 ### With Coverage
 ```bash
+# Standard way
 pytest --cov=app --cov-report=html
+
+# Quick way
+.\test --cov=app --cov-report=html
 ```
 
-**Current Coverage: 90.65%**
+**Current Coverage: >=85%**
 
 ---
 
