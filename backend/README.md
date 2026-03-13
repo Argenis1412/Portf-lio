@@ -113,7 +113,7 @@ cd Portf-lio/backend
 py -3.12 -m venv .venv  # Windows (recommended)
 # or: python -m venv .venv
 source .venv/bin/activate  # Linux/Mac
-# .venv\Scripts\activate   # Windows
+.venv\Scripts\activate     # Windows
 
 # Install dependencies
 pip install -r requirements.txt
@@ -169,7 +169,7 @@ pytest
 pytest --cov=app --cov-report=html
 ```
 
-**Current Coverage: 93.71%**
+**Current Coverage: 90.65%**
 
 ---
 
