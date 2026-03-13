@@ -25,8 +25,8 @@ def test_saude_retorna_ok():
 
 
 def test_obter_sobre_retorna_200():
-    """Testa endpoint GET /api/sobre retorna 200."""
-    response = client.get("/api/sobre")
+    """Testa endpoint GET /api/v1/sobre retorna 200."""
+    response = client.get("/api/v1/sobre")
     
     assert response.status_code == 200
     data = response.json()
@@ -36,8 +36,8 @@ def test_obter_sobre_retorna_200():
 
 
 def test_listar_projetos_retorna_200():
-    """Testa endpoint GET /api/projetos retorna lista."""
-    response = client.get("/api/projetos")
+    """Testa endpoint GET /api/v1/projetos retorna lista."""
+    response = client.get("/api/v1/projetos")
     
     assert response.status_code == 200
     data = response.json()
@@ -47,8 +47,8 @@ def test_listar_projetos_retorna_200():
 
 
 def test_obter_projeto_existente_retorna_200():
-    """Testa GET /api/projetos/{id} com projeto existente."""
-    response = client.get("/api/projetos/portfolio-api")
+    """Testa GET /api/v1/projetos/{id} com projeto existente."""
+    response = client.get("/api/v1/projetos/portfolio-api")
     
     assert response.status_code == 200
     data = response.json()
@@ -58,8 +58,8 @@ def test_obter_projeto_existente_retorna_200():
 
 
 def test_obter_projeto_inexistente_retorna_404():
-    """Testa GET /api/projetos/{id} com projeto inexistente."""
-    response = client.get("/api/projetos/projeto-inexistente")
+    """Testa GET /api/v1/projetos/{id} com projeto inexistente."""
+    response = client.get("/api/v1/projetos/projeto-inexistente")
     
     assert response.status_code == 404
     data = response.json()
@@ -69,8 +69,8 @@ def test_obter_projeto_inexistente_retorna_404():
 
 
 def test_obter_stack_retorna_200():
-    """Testa endpoint GET /api/stack retorna tecnologias."""
-    response = client.get("/api/stack")
+    """Testa endpoint GET /api/v1/stack retorna tecnologias."""
+    response = client.get("/api/v1/stack")
     
     assert response.status_code == 200
     data = response.json()
@@ -80,8 +80,8 @@ def test_obter_stack_retorna_200():
 
 
 def test_listar_experiencias_retorna_200():
-    """Testa endpoint GET /api/experiencias retorna lista."""
-    response = client.get("/api/experiencias")
+    """Testa endpoint GET /api/v1/experiencias retorna lista."""
+    response = client.get("/api/v1/experiencias")
     
     assert response.status_code == 200
     data = response.json()
@@ -105,7 +105,7 @@ def test_enviar_contato_com_dados_validos_retorna_200():
 
     app.dependency_overrides[obter_enviar_contato_use_case] = lambda: mock_uc
     try:
-        response = client.post("/api/contato", json=payload)
+        response = client.post("/api/v1/contato", json=payload)
     finally:
         app.dependency_overrides.pop(obter_enviar_contato_use_case, None)
     
@@ -125,7 +125,7 @@ def test_enviar_contato_com_dados_invalidos_retorna_422():
         "mensagem": "123",  # Muito curta (agora o limite é 5)
     }
     
-    response = client.post("/api/contato", json=payload)
+    response = client.post("/api/v1/contato", json=payload)
     
     assert response.status_code == 422
     data = response.json()
