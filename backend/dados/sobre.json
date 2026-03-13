@@ -6,6 +6,14 @@
   "telefone": "(41) 9 9510-3364",
   "github": "https://github.com/Argenis1412",
   "linkedin": "https://linkedin.com/in/argenis972",
-  "descricao": "Backend Developer com foco em Python e FastAPI, experiência prática na construção de APIs REST com arquitetura limpa, regras de negócio financeiras, testes automatizados e CI. Desenvolveu projeto API-first com persistência real em PostgreSQL e integração com frontend tipado em React.",
-  "disponibilidade": "Remoto, híbrido ou presencial"
+  "descricao": {
+    "pt": "Backend Developer com foco em Python e FastAPI, experiência prática na construção de APIs REST com arquitetura limpa, regras de negócio financeiras, testes automatizados e CI. Desenvolveu projeto API-first com persistência real em PostgreSQL e integração com frontend tipado em React.",
+    "en": "Backend Developer focused on Python and FastAPI, with hands-on experience building REST APIs with clean architecture, financial business rules, automated tests, and CI. Developed an API-first project with real PostgreSQL persistence and a typed React frontend.",
+    "es": "Backend Developer enfocado en Python y FastAPI, con experiencia práctica construyendo APIs REST con arquitectura limpia, reglas de negocio financieras, pruebas automatizadas y CI. Desarrolló un proyecto API-first con persistencia real en PostgreSQL e integración con frontend tipado en React."
+  },
+  "disponibilidade": {
+    "pt": "Remoto, híbrido ou presencial",
+    "en": "Remote, hybrid, or on-site",
+    "es": "Remoto, híbrido o presencial"
+  }
 }

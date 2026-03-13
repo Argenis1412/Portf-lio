@@ -6,6 +6,8 @@ Define o contrato de resposta com informações pessoais do desenvolvedor.
 
 from pydantic import BaseModel, Field, EmailStr, HttpUrl
 
+from app.esquemas.tipos_base import TextoLocalizado
+
 
 class RespostaSobre(BaseModel):
     """
@@ -13,14 +15,14 @@ class RespostaSobre(BaseModel):
 
     Attributes:
         nome: Nome completo do desenvolvedor.
-        titulo: Título profissional (ex: "Backend Developer | Python").
+        titulo: Título profissional.
         localizacao: Cidade e estado.
         email: Email de contato.
         telefone: Telefone de contato.
         github: URL do perfil GitHub.
         linkedin: URL do perfil LinkedIn.
-        descricao: Resumo profissional.
-        disponibilidade: Disponibilidade para trabalho.
+        descricao: Resumo profissional (internacionalizado).
+        disponibilidade: Disponibilidade para trabalho (internacionalizado).
     """
 
     nome: str = Field(
@@ -28,50 +30,46 @@ class RespostaSobre(BaseModel):
         min_length=2,
         max_length=100,
         examples=["Argenis Lopez"],
-        description="Nome completo",
+        description="Full name",
     )
     titulo: str = Field(
         ...,
         max_length=200,
         examples=["Backend Developer | Python | FastAPI"],
-        description="Título profissional",
+        description="Professional title",
     )
     localizacao: str = Field(
         ...,
         max_length=100,
         examples=["Curitiba, PR"],
-        description="Localização atual",
+        description="Current location",
     )
     email: EmailStr = Field(
         ...,
         examples=["argenislopez28708256@gmail.com"],
-        description="Email de contato",
+        description="Contact email",
     )
     telefone: str = Field(
         ...,
         max_length=20,
         examples=["(41) 9 9510-3364"],
-        description="Telefone de contato",
+        description="Contact phone",
     )
     github: HttpUrl = Field(
         ...,
         examples=["https://github.com/Argenis1412"],
-        description="URL do perfil GitHub",
+        description="GitHub profile URL",
     )
     linkedin: HttpUrl = Field(
         ...,
         examples=["https://linkedin.com/in/argenis972"],
-        description="URL do perfil LinkedIn",
+        description="LinkedIn profile URL",
     )
-    descricao: str = Field(
+    descricao: TextoLocalizado = Field(
         ...,
-        max_length=1000,
-        examples=["Backend Developer com foco em Python e FastAPI..."],
-        description="Resumo profissional",
+        description="Professional summary in PT, EN and ES",
     )
-    disponibilidade: str = Field(
+    disponibilidade: TextoLocalizado = Field(
         ...,
-        max_length=100,
-        examples=["Remoto, híbrido ou presencial"],
-        description="Disponibilidade para trabalho",
+        description="Work availability preference in PT, EN and ES",
     )

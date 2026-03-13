@@ -39,8 +39,11 @@ roteador = APIRouter(tags=["API"])
 @roteador.get(
     "/sobre",
     response_model=RespostaSobre,
-    summary="Informações pessoais",
-    description="Retorna informações da seção 'Sobre Mim'.",
+    summary="Developer information",
+    description="Returns 'About Me' section data with multi-language text fields.",
+    responses={
+        200: {"description": "Personal information returned successfully"},
+    },
 )
 async def obter_sobre(
     obter_sobre_uc: Annotated[
@@ -53,14 +56,6 @@ async def obter_sobre(
 
     Returns:
         RespostaSobre: Dados pessoais validados.
-
-    Example:
-        GET /api/sobre
-        → {
-            "nome": "Argenis Lopez",
-            "titulo": "Backend Developer | Python | FastAPI",
-            ...
-        }
     """
     dados = await obter_sobre_uc.executar()
     return RespostaSobre(**dados)
@@ -69,8 +64,11 @@ async def obter_sobre(
 @roteador.get(
     "/projetos",
     response_model=RespostaProjetos,
-    summary="Listar projetos",
-    description="Retorna lista de projetos ordenada (destacados primeiro).",
+    summary="List projects",
+    description="Returns list of projects ordered by highlight status (featured first).",
+    responses={
+        200: {"description": "Projects list returned successfully"},
+    },
 )
 async def listar_projetos(
     obter_projetos_uc: Annotated[
@@ -86,16 +84,9 @@ async def listar_projetos(
 
     Ordenação:
         Projetos em destaque aparecem primeiro, depois ordem alfabética.
-
-    Example:
-        GET /api/projetos
-        → {
-            "projetos": [...],
-            "total": 3
-        }
     """
     projetos = await obter_projetos_uc.executar()
-    
+
     projetos_resumo = [
         ProjetoResumo(
             id=p.id,
@@ -103,10 +94,11 @@ async def listar_projetos(
             descricao_curta=p.descricao_curta,
             tecnologias=p.tecnologias,
             destaque=p.destaque,
+            imagem=p.imagem,
         )
         for p in projetos
     ]
-    
+
     return RespostaProjetos(
         projetos=projetos_resumo,
         total=len(projetos_resumo),
@@ -116,36 +108,37 @@ async def listar_projetos(
 @roteador.get(
     "/projetos/{projeto_id}",
     response_model=ProjetoDetalhado,
-    summary="Detalhes de um projeto",
-    description="Retorna informações completas de um projeto específico.",
+    summary="Project details",
+    description="Returns full details of a specific project by its ID.",
     responses={
         200: {
-            "description": "Projeto encontrado",
+            "description": "Project found",
             "content": {
                 "application/json": {
                     "example": {
                         "id": "portfolio-api",
                         "nome": "Portfolio API",
-                        "descricao_curta": "API REST profissional",
-                        "descricao_completa": "Descrição detalhada...",
+                        "descricao_curta": {"pt": "...", "en": "...", "es": "..."},
+                        "descricao_completa": {"pt": "...", "en": "...", "es": "..."},
                         "tecnologias": ["Python", "FastAPI"],
-                        "funcionalidades": ["CRUD", "Validação"],
+                        "funcionalidades": ["CRUD", "Validation"],
                         "aprendizados": ["Clean Architecture"],
                         "repositorio": "https://github.com/...",
                         "demo": None,
                         "destaque": True,
+                        "imagem": None,
                     }
                 }
             },
         },
         404: {
-            "description": "Projeto não encontrado",
+            "description": "Project not found",
             "content": {
                 "application/json": {
                     "example": {
                         "erro": {
                             "codigo": "PROJETO_NAO_ENCONTRADO",
-                            "mensagem": "Projeto 'xyz' não encontrado",
+                            "mensagem": "Project 'xyz' not found",
                         }
                     }
                 }
@@ -171,23 +164,15 @@ async def obter_projeto(
 
     Raises:
         ErroRecursoNaoEncontrado: Se projeto não existe.
-
-    Example:
-        GET /api/projetos/portfolio-api
-        → {
-            "id": "portfolio-api",
-            "nome": "Portfolio API",
-            ...
-        }
     """
     projeto = await obter_projeto_por_id_uc.executar(projeto_id)
-    
+
     if not projeto:
         raise ErroRecursoNaoEncontrado(
             mensagem=f"Projeto '{projeto_id}' não encontrado",
             codigo="PROJETO_NAO_ENCONTRADO",
         )
-    
+
     return ProjetoDetalhado(
         id=projeto.id,
         nome=projeto.nome,
@@ -199,14 +184,18 @@ async def obter_projeto(
         repositorio=projeto.repositorio,
         demo=projeto.demo,
         destaque=projeto.destaque,
+        imagem=projeto.imagem,
     )
 
 
 @roteador.get(
     "/stack",
     response_model=RespostaStack,
-    summary="Stack tecnológico",
-    description="Retorna tecnologias organizadas por categoria.",
+    summary="Tech stack",
+    description="Returns technologies organized by category.",
+    responses={
+        200: {"description": "Tech stack returned successfully"},
+    },
 )
 async def obter_stack(
     obter_stack_uc: Annotated[
@@ -219,28 +208,18 @@ async def obter_stack(
 
     Returns:
         RespostaStack: Tecnologias agrupadas por categoria.
-
-    Example:
-        GET /api/stack
-        → {
-            "stack": [...],
-            "por_categoria": {
-                "backend": [...],
-                "frontend": [...]
-            }
-        }
     """
     por_categoria = await obter_stack_uc.executar()
-    
+
     # Converter para ItemStack
     stack_completo = []
     por_categoria_validado: dict[str, list[ItemStack]] = {}
-    
+
     for categoria, itens in por_categoria.items():
         itens_validados = [ItemStack(**item) for item in itens]
         por_categoria_validado[categoria] = itens_validados
         stack_completo.extend(itens_validados)
-    
+
     return RespostaStack(
         stack=stack_completo,
         por_categoria=por_categoria_validado,
@@ -250,8 +229,11 @@ async def obter_stack(
 @roteador.get(
     "/experiencias",
     response_model=RespostaExperiencias,
-    summary="Experiências profissionais",
-    description="Retorna lista de experiências ordenadas cronologicamente.",
+    summary="Professional experiences",
+    description="Returns list of experiences ordered chronologically (current first).",
+    responses={
+        200: {"description": "Experiences list returned successfully"},
+    },
 )
 async def listar_experiencias(
     obter_experiencias_uc: Annotated[
@@ -267,16 +249,9 @@ async def listar_experiencias(
 
     Ordenação:
         Experiência atual primeiro, depois por data (mais recente primeiro).
-
-    Example:
-        GET /api/experiencias
-        → {
-            "experiencias": [...],
-            "total": 2
-        }
     """
     experiencias = await obter_experiencias_uc.executar()
-    
+
     experiencias_schema = [
         Experiencia(
             id=e.id,
@@ -291,7 +266,7 @@ async def listar_experiencias(
         )
         for e in experiencias
     ]
-    
+
     return RespostaExperiencias(
         experiencias=experiencias_schema,
         total=len(experiencias_schema),

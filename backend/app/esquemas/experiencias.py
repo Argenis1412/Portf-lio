@@ -7,6 +7,8 @@ Define contratos para listagem de experiências profissionais.
 from pydantic import BaseModel, Field
 from datetime import date
 
+from app.esquemas.tipos_base import TextoLocalizado
+
 
 class Experiencia(BaseModel):
     """
@@ -19,7 +21,7 @@ class Experiencia(BaseModel):
         localizacao: Localização do trabalho.
         data_inicio: Data de início.
         data_fim: Data de término (None se atual).
-        descricao: Descrição das atividades.
+        descricao: Descrição das atividades (internacionalizada).
         tecnologias: Tecnologias utilizadas.
         atual: Se é o emprego atual.
     """
@@ -27,50 +29,48 @@ class Experiencia(BaseModel):
     id: str = Field(
         ...,
         examples=["exp-001"],
-        description="Identificador único",
+        description="Unique identifier",
     )
     cargo: str = Field(
         ...,
         max_length=100,
         examples=["Backend Developer"],
-        description="Título do cargo",
+        description="Job title",
     )
     empresa: str = Field(
         ...,
         max_length=100,
         examples=["Tech Company"],
-        description="Nome da empresa",
+        description="Company name",
     )
     localizacao: str = Field(
         ...,
         max_length=100,
-        examples=["Remoto"],
-        description="Localização do trabalho",
+        examples=["Remote"],
+        description="Work location",
     )
     data_inicio: date = Field(
         ...,
         examples=["2023-01-01"],
-        description="Data de início (YYYY-MM-DD)",
+        description="Start date (YYYY-MM-DD)",
     )
     data_fim: date | None = Field(
         default=None,
         examples=["2024-06-01"],
-        description="Data de término (None se atual)",
+        description="End date (null if current position)",
     )
-    descricao: str = Field(
+    descricao: TextoLocalizado = Field(
         ...,
-        max_length=1000,
-        examples=["Desenvolvimento de APIs REST com FastAPI..."],
-        description="Descrição das atividades",
+        description="Activity description in PT, EN and ES",
     )
     tecnologias: list[str] = Field(
         ...,
         examples=[["Python", "FastAPI", "PostgreSQL"]],
-        description="Tecnologias utilizadas",
+        description="Technologies used",
     )
     atual: bool = Field(
         default=False,
-        description="Se é o emprego atual",
+        description="Whether this is the current position",
     )
 
 
@@ -85,11 +85,11 @@ class RespostaExperiencias(BaseModel):
 
     experiencias: list[Experiencia] = Field(
         ...,
-        description="Lista de experiências profissionais",
+        description="List of professional experiences",
     )
     total: int = Field(
         ...,
         ge=0,
         examples=[2],
-        description="Total de experiências",
+        description="Total number of experiences",
     )

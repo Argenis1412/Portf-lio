@@ -6,6 +6,8 @@ Define contratos para listagem e detalhes de projetos.
 
 from pydantic import BaseModel, Field, HttpUrl
 
+from app.esquemas.tipos_base import TextoLocalizado
+
 
 class ProjetoResumo(BaseModel):
     """
@@ -17,28 +19,30 @@ class ProjetoResumo(BaseModel):
     id: str = Field(
         ...,
         examples=["portfolio-api"],
-        description="Identificador único do projeto",
+        description="Project unique identifier",
     )
     nome: str = Field(
         ...,
         max_length=100,
         examples=["Portfolio API"],
-        description="Nome do projeto",
+        description="Project name",
     )
-    descricao_curta: str = Field(
+    descricao_curta: TextoLocalizado = Field(
         ...,
-        max_length=200,
-        examples=["API REST com FastAPI e Clean Architecture"],
-        description="Descrição breve do projeto",
+        description="Brief project description in PT, EN and ES",
     )
     tecnologias: list[str] = Field(
         ...,
         examples=[["Python", "FastAPI", "Pydantic"]],
-        description="Lista de tecnologias utilizadas",
+        description="Technologies used",
     )
     destaque: bool = Field(
         default=False,
-        description="Se o projeto deve ser destacado",
+        description="Whether the project should be highlighted",
+    )
+    imagem: HttpUrl | None = Field(
+        default=None,
+        description="Cover image URL",
     )
 
 
@@ -52,54 +56,54 @@ class ProjetoDetalhado(BaseModel):
     id: str = Field(
         ...,
         examples=["portfolio-api"],
-        description="Identificador único do projeto",
+        description="Project unique identifier",
     )
     nome: str = Field(
         ...,
         max_length=100,
         examples=["Portfolio API"],
-        description="Nome do projeto",
+        description="Project name",
     )
-    descricao_curta: str = Field(
+    descricao_curta: TextoLocalizado = Field(
         ...,
-        max_length=200,
-        examples=["API REST com FastAPI e Clean Architecture"],
-        description="Descrição breve",
+        description="Brief project description in PT, EN and ES",
     )
-    descricao_completa: str = Field(
+    descricao_completa: TextoLocalizado = Field(
         ...,
-        max_length=2000,
-        examples=["API REST desenvolvida com FastAPI demonstrando..."],
-        description="Descrição detalhada do projeto",
+        description="Full project description in PT, EN and ES",
     )
     tecnologias: list[str] = Field(
         ...,
         examples=[["Python", "FastAPI", "Pydantic", "Pytest"]],
-        description="Lista de tecnologias utilizadas",
+        description="Technologies used",
     )
     funcionalidades: list[str] = Field(
         ...,
-        examples=[["Health check", "CRUD de projetos", "Validação"]],
-        description="Lista de funcionalidades principais",
+        examples=[["Health check", "Project CRUD", "Validation"]],
+        description="Main features",
     )
     aprendizados: list[str] = Field(
         ...,
-        examples=[["Clean Architecture", "Testes unitários"]],
-        description="O que foi aprendido no projeto",
+        examples=[["Clean Architecture", "Unit testing"]],
+        description="Key learnings from the project",
     )
     repositorio: HttpUrl | None = Field(
         default=None,
         examples=["https://github.com/Argenis1412/Portf-lio"],
-        description="URL do repositório",
+        description="Repository URL",
     )
     demo: HttpUrl | None = Field(
         default=None,
         examples=["https://portfolio-api.railway.app"],
-        description="URL da demo ao vivo",
+        description="Live demo URL",
     )
     destaque: bool = Field(
         default=False,
-        description="Se o projeto deve ser destacado",
+        description="Whether the project should be highlighted",
+    )
+    imagem: HttpUrl | None = Field(
+        default=None,
+        description="Cover image URL",
     )
 
 
@@ -114,11 +118,11 @@ class RespostaProjetos(BaseModel):
 
     projetos: list[ProjetoResumo] = Field(
         ...,
-        description="Lista de projetos",
+        description="List of projects",
     )
     total: int = Field(
         ...,
         ge=0,
         examples=[3],
-        description="Total de projetos",
+        description="Total number of projects",
     )

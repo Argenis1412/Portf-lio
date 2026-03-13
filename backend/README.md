@@ -209,3 +209,83 @@ pytest --cov=app --cov-report=html
 - **Versioning**: Data stays in git.
 - **Demonstration**: Focus on architecture, not DB management.
 - **Easy to swap**: The `RepositorioPortfolio` interface allows for a DB implementation easily.
+
+---
+
+## 🌐 Consuming the API
+
+Base URL: `http://localhost:8000` (development) | your deployed URL (production)
+
+### JavaScript (fetch)
+
+```js
+// Get "About Me" data
+const response = await fetch('http://localhost:8000/api/v1/sobre');
+const about = await response.json();
+
+// Get all projects
+const res = await fetch('http://localhost:8000/api/v1/projetos');
+const { projetos, total } = await res.json();
+
+// Send contact message
+await fetch('http://localhost:8000/api/v1/contato', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    nome: 'John Doe',
+    email: 'john@example.com',
+    assunto: 'Job opportunity',
+    mensagem: 'Hi, I would like to get in touch...',
+  }),
+});
+```
+
+### TypeScript Types
+
+```ts
+interface TextoLocalizado {
+  pt: string;
+  en: string;
+  es: string;
+}
+
+interface Projeto {
+  id: string;
+  nome: string;
+  descricao_curta: TextoLocalizado;
+  descricao_completa?: TextoLocalizado;
+  tecnologias: string[];
+  funcionalidades?: string[];
+  aprendizados?: string[];
+  repositorio: string | null;
+  demo: string | null;
+  destaque: boolean;
+  imagem: string | null;
+}
+
+interface Experiencia {
+  id: string;
+  cargo: string;
+  empresa: string;
+  localizacao: string;
+  data_inicio: string;    // "YYYY-MM-DD"
+  data_fim: string | null;
+  descricao: TextoLocalizado;
+  tecnologias: string[];
+  atual: boolean;
+}
+
+interface Sobre {
+  nome: string;
+  titulo: string;
+  localizacao: string;
+  email: string;
+  telefone: string;
+  github: string;
+  linkedin: string;
+  descricao: TextoLocalizado;
+  disponibilidade: TextoLocalizado;
+}
+```
+
+> **i18n tip**: Use `idioma` as a state variable on your frontend and render `projeto.descricao_curta[idioma]` — the backend serves all three languages in every response.

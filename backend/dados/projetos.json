@@ -2,62 +2,80 @@
   {
     "id": "loja-app",
     "nome": "Loja App",
-    "descricao_curta": "API REST com FastAPI para sistema de pagamentos com regras de negócio financeiras",
-    "descricao_completa": "API REST desenvolvida com FastAPI para sistema de pagamentos. Implementa regras de negócio financeiras como cálculo de juros, descontos e parcelamentos. Utiliza Arquitetura Hexagonal com separação clara entre domínio, casos de uso, adaptadores e infraestrutura. Inclui validação de dados com Pydantic, documentação automática com Swagger UI/OpenAPI, suite de testes unitários e de integração com pytest executados em CI, persistência com PostgreSQL + SQLAlchemy ORM + Alembic para versionamento de schema. Frontend consumidor desenvolvido em React + TypeScript com Tailwind CSS.",
+    "descricao_curta": {
+      "pt": "API REST com FastAPI para sistema de pagamentos com regras de negócio financeiras",
+      "en": "REST API with FastAPI for a payment system with financial business rules",
+      "es": "API REST con FastAPI para sistema de pagos con reglas de negocio financieras"
+    },
+    "descricao_completa": {
+      "pt": "API REST desenvolvida com FastAPI para sistema de pagamentos. Implementa regras de negócio financeiras como cálculo de juros, descontos e parcelamentos. Utiliza Arquitetura Hexagonal com separação clara entre domínio, casos de uso, adaptadores e infraestrutura. Inclui validação de dados com Pydantic, documentação automática com Swagger UI/OpenAPI, suite de testes unitários e de integração com pytest executados em CI, persistência com PostgreSQL + SQLAlchemy ORM + Alembic para versionamento de schema. Frontend consumidor desenvolvido em React + TypeScript com Tailwind CSS.",
+      "en": "REST API built with FastAPI for a payment processing system. Implements financial business rules such as interest calculation, discounts, and installments. Uses Hexagonal Architecture with a clear separation between domain, use cases, adapters, and infrastructure. Includes Pydantic data validation, automatic Swagger UI/OpenAPI documentation, unit and integration tests with pytest running in CI, persistence with PostgreSQL + SQLAlchemy ORM + Alembic for schema versioning. Consumer frontend built with React + TypeScript + Tailwind CSS.",
+      "es": "API REST desarrollada con FastAPI para un sistema de pagos. Implementa reglas de negocio financieras como cálculo de intereses, descuentos y cuotas. Utiliza Arquitectura Hexagonal con separación clara entre dominio, casos de uso, adaptadores e infraestructura. Incluye validación de datos con Pydantic, documentación automática con Swagger UI/OpenAPI, suite de pruebas unitarias y de integración con pytest ejecutadas en CI, persistencia con PostgreSQL + SQLAlchemy ORM + Alembic. Frontend en React + TypeScript + Tailwind CSS."
+    },
     "tecnologias": ["Python", "FastAPI", "Pydantic", "PostgreSQL", "SQLAlchemy ORM", "Alembic", "Pytest", "React", "TypeScript", "Tailwind CSS", "GitHub Actions"],
     "funcionalidades": [
-      "API REST para sistema de pagamentos",
-      "Cálculo de juros, descontos e parcelamentos",
-      "Arquitetura Hexagonal: domínio, casos de uso, adaptadores",
-      "Validação de dados com Pydantic",
-      "Documentação automática com Swagger UI/OpenAPI",
-      "Testes unitários e de integração com pytest",
-      "CI com GitHub Actions",
-      "Persistência com PostgreSQL + SQLAlchemy ORM",
-      "Migrations com Alembic",
-      "Frontend React + TypeScript + Tailwind CSS"
+      "REST API for payment system",
+      "Interest, discount, and installment calculation",
+      "Hexagonal Architecture: domain, use cases, adapters",
+      "Data validation with Pydantic",
+      "Automatic documentation with Swagger UI/OpenAPI",
+      "Unit and integration tests with pytest",
+      "CI with GitHub Actions",
+      "Persistence with PostgreSQL + SQLAlchemy ORM",
+      "Schema migrations with Alembic",
+      "React + TypeScript + Tailwind CSS frontend"
     ],
     "aprendizados": [
-      "Implementação de Arquitetura Hexagonal em Python",
-      "Regras de negócio financeiras determinísticas",
-      "Cálculos monetários com precisão",
-      "ORM com SQLAlchemy",
-      "Migrations com Alembic",
-      "Testes de integração com pytest",
-      "CI com GitHub Actions",
-      "Frontend tipado com React + TypeScript"
+      "Hexagonal Architecture implementation in Python",
+      "Deterministic financial business rules",
+      "Precise monetary calculations",
+      "ORM with SQLAlchemy",
+      "Schema migrations with Alembic",
+      "Integration testing with pytest",
+      "CI with GitHub Actions",
+      "Typed frontend with React + TypeScript"
     ],
     "repositorio": "https://github.com/Argenis1412/Loja_app",
     "demo": null,
-    "destaque": true
+    "destaque": true,
+    "imagem": null
   },
   {
     "id": "portfolio-api",
     "nome": "Portfolio API",
-    "descricao_curta": "API REST com FastAPI e Clean Architecture demonstrando boas práticas de desenvolvimento backend",
-    "descricao_completa": "API REST desenvolvida com FastAPI seguindo princípios de Clean Architecture. Implementa separação clara de responsabilidades com Controllers, Use Cases, Entities e Adapters. Inclui validação com Pydantic V2, documentação automática OpenAPI, testes automatizados com pytest e CI com GitHub Actions.",
+    "descricao_curta": {
+      "pt": "API REST com FastAPI e Clean Architecture demonstrando boas práticas de desenvolvimento backend",
+      "en": "REST API with FastAPI and Clean Architecture demonstrating backend development best practices",
+      "es": "API REST con FastAPI y Clean Architecture demostrando buenas prácticas de desarrollo backend"
+    },
+    "descricao_completa": {
+      "pt": "API REST desenvolvida com FastAPI seguindo princípios de Clean Architecture. Implementa separação clara de responsabilidades com Controllers, Use Cases, Entities e Adapters. Inclui validação com Pydantic V2, documentação automática OpenAPI, testes automatizados com pytest e CI com GitHub Actions.",
+      "en": "REST API built with FastAPI following Clean Architecture principles. Implements clear separation of concerns with Controllers, Use Cases, Entities, and Adapters. Includes Pydantic V2 validation, automatic OpenAPI documentation, automated tests with pytest, and CI with GitHub Actions.",
+      "es": "API REST desarrollada con FastAPI siguiendo principios de Clean Architecture. Implementa separación clara de responsabilidades con Controllers, Use Cases, Entities y Adapters. Incluye validación con Pydantic V2, documentación automática OpenAPI, pruebas automatizadas con pytest y CI con GitHub Actions."
+    },
     "tecnologias": ["Python", "FastAPI", "Pydantic", "Pytest", "Clean Architecture", "GitHub Actions"],
     "funcionalidades": [
-      "Endpoints de informações pessoais e profissionais",
-      "Listagem e detalhamento de projetos",
-      "Stack tecnológico organizado por categorias",
-      "Timeline de experiências profissionais",
-      "Formulário de contato",
-      "Validação automática de dados com Pydantic",
-      "Documentação interativa com Swagger/OpenAPI",
-      "Tratamento de erros HTTP adequado"
+      "Personal and professional information endpoints",
+      "Project listing and detail",
+      "Tech stack organized by categories",
+      "Professional experience timeline",
+      "Contact form",
+      "Automatic data validation with Pydantic",
+      "Interactive documentation with Swagger/OpenAPI",
+      "Proper HTTP error handling"
     ],
     "aprendizados": [
-      "Implementação de Clean Architecture em Python",
-      "Separação de lógica de negócio e frameworks",
-      "Injeção de dependências manual",
-      "Testes unitários com mocks",
-      "Validação de dados com Pydantic V2",
-      "Documentação técnica completa",
-      "CI com GitHub Actions"
+      "Clean Architecture implementation in Python",
+      "Separation of business logic and frameworks",
+      "Manual dependency injection",
+      "Unit testing with mocks",
+      "Data validation with Pydantic V2",
+      "Complete technical documentation",
+      "CI with GitHub Actions"
     ],
     "repositorio": "https://github.com/Argenis1412/Portf-lio",
     "demo": null,
-    "destaque": false
+    "destaque": false,
+    "imagem": null
   }
 ]

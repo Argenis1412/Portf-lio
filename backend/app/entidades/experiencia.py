@@ -34,7 +34,7 @@ class ExperienciaProfissional:
     localizacao: str
     data_inicio: date
     data_fim: date | None
-    descricao: str
+    descricao: dict
     tecnologias: list[str]
     atual: bool
 

@@ -2,44 +2,60 @@
   {
     "id": "exp-001",
     "cargo": "Backend Developer",
-    "empresa": "Loja App (Projeto Pessoal)",
-    "localizacao": "Remoto",
+    "empresa": "Loja App (Personal Project)",
+    "localizacao": "Remote",
     "data_inicio": "2025-12-20",
     "data_fim": "2026-03-06",
-    "descricao": "API REST com FastAPI para sistema de pagamentos com regras de negócio financeiras (cálculo de juros, descontos, parcelamentos). Arquitetura Hexagonal: separação clara entre domínio, casos de uso, adaptadores e infraestrutura. Validação de dados com Pydantic, documentação automática com Swagger UI/OpenAPI. Suite de testes unitários e de integração com pytest executados em CI com GitHub Actions. Persistência com PostgreSQL + SQLAlchemy ORM + Alembic para versionamento de schema. Frontend consumidor: React + TypeScript com Tailwind CSS.",
+    "descricao": {
+      "pt": "API REST com FastAPI para sistema de pagamentos com regras de negócio financeiras (cálculo de juros, descontos, parcelamentos). Arquitetura Hexagonal: separação clara entre domínio, casos de uso, adaptadores e infraestrutura. Validação de dados com Pydantic, documentação automática com Swagger UI/OpenAPI. Suite de testes unitários e de integração com pytest executados em CI com GitHub Actions. Persistência com PostgreSQL + SQLAlchemy ORM + Alembic para versionamento de schema. Frontend consumidor: React + TypeScript com Tailwind CSS.",
+      "en": "REST API with FastAPI for a payment system with financial business rules (interest, discounts, installments). Hexagonal Architecture: clear separation of domain, use cases, adapters, and infrastructure. Pydantic data validation, automatic Swagger UI/OpenAPI documentation. Unit and integration test suite with pytest running in CI via GitHub Actions. Persistence with PostgreSQL + SQLAlchemy ORM + Alembic for schema versioning. Consumer frontend: React + TypeScript + Tailwind CSS.",
+      "es": "API REST con FastAPI para sistema de pagos con reglas de negocio financieras (cálculo de intereses, descuentos, cuotas). Arquitectura Hexagonal: separación clara entre dominio, casos de uso, adaptadores e infraestructura. Validación con Pydantic, documentación automática con Swagger UI/OpenAPI. Suite de pruebas unitarias y de integración con pytest en CI con GitHub Actions. Persistencia con PostgreSQL + SQLAlchemy ORM + Alembic. Frontend en React + TypeScript + Tailwind CSS."
+    },
     "tecnologias": ["Python", "FastAPI", "Pydantic", "PostgreSQL", "SQLAlchemy ORM", "Alembic", "Pytest", "React", "TypeScript", "Tailwind CSS", "GitHub Actions"],
     "atual": true
   },
   {
     "id": "exp-002",
-    "cargo": "Consultor de Negócios",
+    "cargo": "Business Consultant",
     "empresa": "Ademicon",
     "localizacao": "Curitiba, PR",
     "data_inicio": "2025-06-01",
     "data_fim": "2025-10-31",
-    "descricao": "Análise de perfis financeiros e elaboração de propostas consultivas. Operação de sistemas internos e organização de documentação de clientes. Desenvolvimento de habilidades: comunicação, negociação, responsabilidade com dados.",
+    "descricao": {
+      "pt": "Análise de perfis financeiros e elaboração de propostas consultivas. Operação de sistemas internos e organização de documentação de clientes. Desenvolvimento de habilidades: comunicação, negociação, responsabilidade com dados.",
+      "en": "Financial profile analysis and preparation of consultative proposals. Operation of internal systems and organization of client documentation. Skill development: communication, negotiation, data responsibility.",
+      "es": "Análisis de perfiles financieros y elaboración de propuestas consultivas. Operación de sistemas internos y organización de documentación de clientes. Desarrollo de habilidades: comunicación, negociación, responsabilidad con datos."
+    },
     "tecnologias": [],
     "atual": false
   },
   {
     "id": "exp-003",
-    "cargo": "Estudante em Análise e Desenvolvimento de Sistemas - Foco em Backend",
-    "empresa": "Estudo Próprio",
+    "cargo": "Systems Analysis and Development Student - Backend Focus",
+    "empresa": "Self-Study",
     "localizacao": "Curitiba, PR",
     "data_inicio": "2026-02-20",
     "data_fim": "2029-03-06",
-    "descricao": "Período dedicado ao aprendizado intensivo de desenvolvimento backend. Estudos focados em Python, desenvolvimento web, bancos de dados, arquitetura de software e boas práticas. Realização de diversos projetos práticos para consolidar conhecimentos.",
+    "descricao": {
+      "pt": "Período dedicado ao aprendizado intensivo de desenvolvimento backend. Estudos focados em Python, desenvolvimento web, bancos de dados, arquitetura de software e boas práticas. Realização de diversos projetos práticos para consolidar conhecimentos.",
+      "en": "Period dedicated to intensive backend development learning. Studies focused on Python, web development, databases, software architecture, and best practices. Various hands-on projects to consolidate knowledge.",
+      "es": "Período dedicado al aprendizaje intensivo de desarrollo backend. Estudios enfocados en Python, desarrollo web, bases de datos, arquitectura de software y buenas prácticas. Realización de diversos proyectos prácticos para consolidar conocimientos."
+    },
     "tecnologias": ["Python", "FastAPI", "SQL", "Git"],
     "atual": false
   },
   {
     "id": "exp-004",
-    "cargo": "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+    "cargo": "Systems Analysis and Development Technology",
     "empresa": "UFPR",
     "localizacao": "Curitiba, PR",
     "data_inicio": "2026-02-01",
     "data_fim": null,
-    "descricao": "Curso superior de Tecnologia em Análise e Desenvolvimento de Sistemas na Universidade Federal do Paraná (UFPR). Em curso.",
+    "descricao": {
+      "pt": "Curso superior de Tecnologia em Análise e Desenvolvimento de Sistemas na Universidade Federal do Paraná (UFPR). Em curso.",
+      "en": "Associate's degree in Systems Analysis and Development at the Federal University of Paraná (UFPR). In progress.",
+      "es": "Tecnólogo en Análisis y Desarrollo de Sistemas en la Universidad Federal de Paraná (UFPR). En curso."
+    },
     "tecnologias": [],
     "atual": true
   }

@@ -11,7 +11,7 @@ from fastapi import APIRouter
 from app.esquemas.saude import RespostaSaude
 from app.configuracao import configuracoes
 
-roteador = APIRouter(tags=["Saúde"])
+roteador = APIRouter(tags=["Health"])
 
 # Timestamp de inicialização da aplicação
 _INICIO_APLICACAO = time.time()
@@ -20,9 +20,11 @@ _INICIO_APLICACAO = time.time()
 @roteador.get(
     "/saude",
     response_model=RespostaSaude,
-    summary="Health check da API",
-    description="Retorna status OK se a API está funcionando. "
-                "Inclui versão, ambiente e uptime.",
+    summary="API health check",
+    description="Returns OK if the API is running. Includes version, environment, and uptime.",
+    responses={
+        200: {"description": "API is healthy and running"},
+    },
 )
 def verificar_saude() -> RespostaSaude:
     """

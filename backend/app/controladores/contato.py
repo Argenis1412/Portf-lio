@@ -21,11 +21,12 @@ roteador = APIRouter(tags=["Contato"])
 @roteador.post(
     "/contato",
     response_model=RespostaContato,
-    summary="Enviar mensagem de contato",
-    description="Envia mensagem do formulário de contato via Formspree.",
+    summary="Send contact message",
+    description="Submits a contact form message via Formspree. Rate limited to 5 requests/minute.",
     responses={
-        500: {"description": "Erro ao enviar mensagem"},
-        429: {"description": "Muitas requisições"},
+        200: {"description": "Message sent successfully"},
+        429: {"description": "Too many requests - rate limit exceeded"},
+        500: {"description": "Failed to deliver message via external service"},
     },
 )
 @limiter.limit("5/minute")

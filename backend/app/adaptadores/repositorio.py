@@ -119,6 +119,7 @@ class RepositorioJSON(RepositorioPortfolio):
                 repositorio=p.get("repositorio"),
                 demo=p.get("demo"),
                 destaque=p.get("destaque", False),
+                imagem=p.get("imagem"),
             )
             for p in dados
         ]
@@ -170,3 +171,4 @@ class RepositorioJSON(RepositorioPortfolio):
             )
             for e in dados
         ]
+

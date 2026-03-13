@@ -72,40 +72,42 @@ def _obter_descricao_api() -> str:
         str: Descrição formatada em markdown.
     """
     return """
-    API REST para portfólio de desenvolvedor backend.
+    REST API for a backend developer portfolio.
 
-    ## Arquitetura
+    ## Architecture
     - **Clean Architecture**: Controllers → Use Cases → Entities → Adapters
-    - **Validação**: Pydantic V2
-    - **Testes**: pytest com cobertura
-    - **Logging**: Estruturado com request_id
+    - **Validation**: Pydantic V2
+    - **Tests**: pytest with coverage
+    - **Logging**: Structured with request_id
+    - **i18n**: Text fields available in PT, EN, and ES
 
-    ## Versionamento
-    - **v1**: `/api/v1/*` (versão estável)
+    ## Versioning
+    - **v1**: `/api/v1/*` (stable)
 
-    ## Padrão de Resposta
-    - **Sucesso**: Retorna dados validados diretamente
-    - **Erro**: 
+    ## Response Format
+    - **Success**: Returns validated data directly
+    - **Error**:
       ```json
       {
-        "erro": {
-          "codigo": "CODIGO_ERRO",
-          "mensagem": "Descrição legível",
-          "detalhes": {...}
+        \"erro\": {
+          \"codigo\": \"ERROR_CODE\",
+          \"mensagem\": \"Human-readable description\",
+          \"detalhes\": {...}
         }
       }
       ```
 
-    ## Códigos HTTP
-    - `200`: Sucesso
-    - `400`: Erro de regra de negócio
-    - `404`: Recurso não encontrado
-    - `422`: Validação de entrada falhou
-    - `500`: Erro interno do servidor
+    ## HTTP Status Codes
+    - `200`: Success
+    - `400`: Business rule error
+    - `404`: Resource not found
+    - `422`: Input validation failed
+    - `429`: Too many requests (rate limited)
+    - `500`: Internal server error
 
-    ## Headers Customizados
-    - `X-Request-ID`: ID único para rastreamento
-    - `X-Response-Time`: Tempo de resposta em ms
+    ## Custom Headers
+    - `X-Request-ID`: Unique ID for request tracing
+    - `X-Response-Time`: Response time in ms
     """
 
 
@@ -118,20 +120,20 @@ def _obter_tags_openapi() -> list[dict]:
     """
     return [
         {
-            "name": "Saúde",
-            "description": "Health check e status da aplicação",
+            "name": "Health",
+            "description": "Health check and application status",
         },
         {
             "name": "API v1",
-            "description": "Versão 1 da API (recomendado)",
+            "description": "API version 1 (recommended)",
         },
         {
-            "name": "Portfólio",
-            "description": "Dados do portfólio (sobre, projetos, stack, experiências)",
+            "name": "Portfolio",
+            "description": "Portfolio data (about, projects, stack, experiences)",
         },
         {
-            "name": "Contato",
-            "description": "Envio de mensagens de contato",
+            "name": "Contact",
+            "description": "Contact form message submission",
         },
     ]
 
@@ -149,7 +151,7 @@ def _configurar_cors(aplicacao: FastAPI) -> None:
         CORSMiddleware,
         allow_origins=configuracoes.lista_origens_permitidas(),
         allow_credentials=False,
-        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allow_headers=["*"],
     )
 
