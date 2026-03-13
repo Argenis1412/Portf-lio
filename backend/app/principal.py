@@ -7,7 +7,6 @@ Este módulo configura a aplicação FastAPI com:
 - Handlers globais de exceções
 - Endpoint de health check (/saude)
 - Rotas da API versionadas (/api/v1/*)
-- Rotas legadas para retrocompatibilidade (/api/*)
 - Documentação automática (/docs)
 
 Arquitetura: Clean Architecture simplificada
@@ -40,7 +39,7 @@ def criar_aplicacao() -> FastAPI:
         - CORS para origens permitidas
         - Middleware de requisições
         - Handlers de exceções
-        - Rotas versionadas e legadas
+        - Rotas versionadas
         - Logging estruturado
         - Rate limiting
     """
@@ -82,8 +81,7 @@ def _obter_descricao_api() -> str:
     - **Logging**: Estruturado com request_id
 
     ## Versionamento
-    - **v1**: `/api/v1/*` (recomendado para novos consumidores)
-    - **Legacy**: `/api/*` (retrocompatibilidade, será descontinuado)
+    - **v1**: `/api/v1/*` (versão estável)
 
     ## Padrão de Resposta
     - **Sucesso**: Retorna dados validados diretamente
@@ -199,18 +197,13 @@ def _registrar_rotas(aplicacao: FastAPI) -> None:
 
     Rotas registradas:
         - /saude: Health check (sem prefixo)
-        - /api/v1/*: API versionada (recomendado)
-        - /api/*: Rotas legadas (retrocompatibilidade)
+        - /api/v1/*: API versionada
     """
     # Health check (sem prefixo, usado por probes)
     aplicacao.include_router(roteador_saude)
     
     # API v1 (recomendado)
     aplicacao.include_router(roteador_v1, prefix="/api")
-    
-    # Rotas legadas (retrocompatibilidade - serão descontinuadas)
-    aplicacao.include_router(roteador_api, prefix="/api", tags=["Legacy"])
-    aplicacao.include_router(roteador_contato, prefix="/api", tags=["Legacy"])
 
 
 # Instância global da aplicação (usada pelo uvicorn)
