@@ -58,9 +58,20 @@ def obter_obter_experiencias_use_case() -> ObterExperienciasUseCase:
 @lru_cache
 def obter_enviar_contato_use_case() -> EnviarContatoUseCase:
     """Retorna caso de uso para envio de contato."""
-    email_adaptador = FormspreeEmailAdaptador(
-        configuracoes.formspree_url,
-        configuracoes.formspree_form_id,
+    # Fallback para console em ambiente local se Formspree não estiver configurado
+    usar_console = (
+        configuracoes.ambiente == "local" and 
+        not configuracoes.formspree_form_id.strip()
     )
+    
+    if usar_console:
+        from app.adaptadores.email_adaptador import ConsoleEmailAdaptador
+        email_adaptador = ConsoleEmailAdaptador()
+    else:
+        email_adaptador = FormspreeEmailAdaptador(
+            configuracoes.formspree_url,
+            configuracoes.formspree_form_id,
+        )
+        
     logger = LoggerEstruturado()
     return EnviarContatoUseCase(email_adaptador, logger)

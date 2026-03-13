@@ -106,3 +106,31 @@ class FormspreeEmailAdaptador(EmailAdaptador):
         except httpx.HTTPError:
             logger.error("formspree_http_error", exc_info=True)
             return False
+
+
+class ConsoleEmailAdaptador(EmailAdaptador):
+    """
+    Adaptador de fallback que apenas loga a mensagem no console.
+
+    Útil para desenvolvimento local quando o Formspree não está configurado.
+    """
+
+    async def enviar_mensagem(self, mensagem: Mensagem) -> bool:
+        """
+        Loga a mensagem no console de forma estruturada.
+
+        Args:
+            mensagem: Mensagem a ser 'enviada'.
+
+        Returns:
+            bool: Sempre True.
+        """
+        logger.info(
+            "contato_recebido_console",
+            nome=mensagem.nome,
+            email=mensagem.email,
+            assunto=mensagem.assunto,
+            mensagem_resumo=mensagem.mensagem[:50] + "..." if len(mensagem.mensagem) > 50 else mensagem.mensagem,
+            status="interceptado_pelo_console",
+        )
+        return True
