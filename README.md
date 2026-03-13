@@ -24,6 +24,7 @@ This repository contains a full-stack portfolio system built with Clean Architec
 
 ---
 
+<a id="overview"></a>
 ## 🎯 Overview
 
 Professional portfolio system developed to demonstrate skills in:
@@ -50,6 +51,7 @@ Professional portfolio system developed to demonstrate skills in:
 
 ---
 
+<a id="architecture"></a>
 ## 🏗️ Architecture
 
 The project follows **Clean Architecture** principles with clear layer separation:
@@ -93,6 +95,7 @@ The project follows **Clean Architecture** principles with clear layer separatio
 
 ---
 
+<a id="technologies"></a>
 ## 🛠️ Technologies
 
 ### Backend
@@ -117,6 +120,7 @@ The project follows **Clean Architecture** principles with clear layer separatio
 
 ---
 
+<a id="project-structure"></a>
 ## 📁 Project Structure
 
 ```
@@ -153,6 +157,7 @@ portfolio/
 
 ---
 
+<a id="quick-start"></a>
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -197,6 +202,7 @@ uvicorn app.principal:app --reload
 
 ---
 
+<a id="documentation"></a>
 ## 📖 Documentation
 
 ### Backend
@@ -207,6 +213,7 @@ uvicorn app.principal:app --reload
 
 ---
 
+<a id="contributing"></a>
 ## 🤝 Contributing
 
 Contributions are welcome!
@@ -217,6 +224,7 @@ Contributions are welcome!
 
 ---
 
+<a id="license"></a>
 ## 📄 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
