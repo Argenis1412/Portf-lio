@@ -106,8 +106,8 @@ backend/
 ### 2. Installation
 ```bash
 # Clone the repository
-git clone https://github.com/Argenis1412/Portf-lio.git
-cd Portf-lio/backend
+git clone https://github.com/Argenis1412/portfolio.git
+cd portfolio/backend
 
 # Create virtual environment
 py -3.12 -m venv .venv  # Windows (recommended)

@@ -30,7 +30,7 @@ curl -fsSL https://railway.app/install.sh | sh
 
 1. Access [railway.app](https://railway.app)
 2. Click on **"New Project"** → **"Deploy from GitHub repo"**
-3. Select the `Portf-lio` repository
+3. Select the `portfolio` repository
 4. Railway will automatically detect the `railway.toml`
 5. Configure secret environment variables:
    - `FORMSPREE_FORM_ID`: Your Formspree ID

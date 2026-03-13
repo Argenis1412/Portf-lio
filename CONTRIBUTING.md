@@ -9,7 +9,7 @@ Thank you for your interest in contributing to this project! 🙌
 ### 1. Fork the Repository
 
 ```bash
-git clone https://github.com/Argenis1412/Portf-lio.git
+git clone https://github.com/Argenis1412/portfolio.git
 cd portfolio
 ```
 
