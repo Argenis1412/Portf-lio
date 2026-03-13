@@ -1,386 +1,386 @@
-# 🚀 Backend Preparado para Producción - Resumen de Cambios
+# 🚀 Production-Ready Backend - Changes Summary
 
-## 🆕 Versión 2.0 - Logs Estruturados, CI/CD e Deploy (Febrero 2026)
+## 🆕 Version 2.0 - Structured Logs, CI/CD and Deploy (February 2026)
 
-### ✅ Nuevas Funcionalidades
+### ✅ New Features
 
-#### 1. Logging Estruturado com Structlog
+#### 1. Structured Logging with Structlog
 
-**Archivos modificados**:
+**Modified files**:
 - **`app/adaptadores/logger_adaptador.py`**: 
-  - Implementado `LoggerEstruturado` usando structlog
-  - Configuración automática de processadores (JSON/Console)
-  - Context vars para rastreamento de request_id
-  - Timestamps ISO 8601
-  - Stack traces formatados
+  - Implemented `StructuredLogger` using structlog
+  - Automatic processor configuration (JSON/Console)
+  - Context vars for request_id tracking
+  - ISO 8601 Timestamps
+  - Formatted stack traces
 
 - **`app/core/middleware.py`**:
-  - Integrado structlog com contextvars
-  - Request ID adicionado automaticamente ao contexto
-  - Logs estructurados: `requisicao_recebida`, `resposta_enviada`
-  - Removido logging padrão em favor de structlog
+  - Integrated structlog with contextvars
+  - Request ID automatically added to context
+  - Structured logs: `request_received`, `response_sent`
+  - Removed standard logging in favor of structlog
 
 - **`requirements.txt`**:
-  - Adicionado `structlog==24.1.0`
+  - Added `structlog==24.1.0`
 
-**Benefícios**:
-- ✅ Logs parseáveis em JSON (produção)
-- ✅ Logs legíveis em Console (desenvolvimento)
-- ✅ Fácil integração com Datadog, Elastic, Grafana
-- ✅ Rastreamento automático via request_id
+**Benefits**:
+- ✅ JSON parseable logs (production)
+- ✅ Console readable logs (development)
+- ✅ Easy integration with Datadog, Elastic, Grafana
+- ✅ Automatic tracking via request_id
 
-#### 2. CI/CD com GitHub Actions
+#### 2. CI/CD with GitHub Actions
 
-**Archivos existentes actualizados**:
+**Updated existing files**:
 - **`.github/workflows/backend-ci.yml`**:
-  - ✅ Tests automáticos em push/PR
-  - ✅ Cobertura com Codecov
-  - ✅ Lint com Ruff
-  - ✅ Type checking com MyPy
-  - ✅ Security audit com pip-audit
+  - ✅ Automated tests on push/PR
+  - ✅ Coverage with Codecov
+  - ✅ Lint with Ruff
+  - ✅ Type checking with MyPy
+  - ✅ Security audit with pip-audit
   - ✅ Build Docker image
-  - ✅ Deploy automático para Railway
+  - ✅ Automated deploy to Railway
 
-**Benefícios**:
-- ✅ Qualidade de código garantida
-- ✅ Deploy automático após testes
-- ✅ Feedback imediato em PRs
+**Benefits**:
+- ✅ Guaranteed code quality
+- ✅ Automated deploy after tests
+- ✅ Immediate feedback on PRs
 
-#### 3. Configuração para Deploy
+#### 3. Deployment Configuration
 
-**Archivos creados**:
-- **`railway.toml`**: Configuração declarativa para Railway
-  - Health check automático em `/saude`
-  - Variáveis de ambiente definidas
-  - Build com Dockerfile
-  - Restart policy configurado
+**Created files**:
+- **`railway.toml`**: Declarative configuration for Railway
+  - Automated health check at `/saude`
+  - Defined environment variables
+  - Build with Dockerfile
+  - Configured restart policy
 
-- **`render.yaml`**: Blueprint para Render
-  - Deploy automático via Blueprint
-  - Free tier configurado
+- **`render.yaml`**: Blueprint for Render
+  - Automated deploy via Blueprint
+  - Free tier configured
   - Environment variables template
-  - Auto-deploy habilitado
+  - Auto-deploy enabled
 
-- **`backend/DEPLOY.md`**: Guia completo de deploy
-  - Instruções para Railway
-  - Instruções para Render
-  - Deploy genérico com Docker
-  - Troubleshooting comum
-  - Checklist de deploy
+- **`backend/DEPLOY.md`**: Complete deployment guide
+  - Instructions for Railway
+  - Instructions for Render
+  - Generic deploy with Docker
+  - Common troubleshooting
+  - Deployment checklist
 
-**Platforms suportadas**:
-- ✅ Railway (recomendado)
+**Supported platforms**:
+- ✅ Railway (recommended)
 - ✅ Render
-- ✅ Docker genérico
-- ✅ Qualquer plataforma com Dockerfile
+- ✅ Generic Docker
+- ✅ Any platform with Dockerfile
 
-#### 4. Documentação Atualizada
+#### 4. Updated Documentation
 
-**Archivos actualizados**:
+**Updated files**:
 - **`backend/README.md`**:
-  - ✅ Seção de logging estruturado atualizada
-  - ✅ Dependências com structlog
-  - ✅ Roadmap atualizado (items completados)
-  - ✅ Decisões técnicas sobre structlog
+  - ✅ Updated structured logging section
+  - ✅ Dependencies with structlog
+  - ✅ Updated roadmap (completed items)
+  - ✅ Technical decisions about structlog
 
-- **`README.md` (raíz)**:
-  - ✅ Seção de deploy em produção
-  - ✅ Funcionalidades atualizadas
-  - ✅ Links para documentação de deploy
-  - ✅ Badges de CI/CD
+- **`README.md` (root)**:
+  - ✅ Production deployment section
+  - ✅ Updated features
+  - ✅ Links to deployment documentation
+  - ✅ CI/CD badges
 
 ### 🔧 Refactorings
 
-- Migrado de `LoggerPadrao` para `LoggerEstruturado` em todos os arquivos
-- Removido `configurar_logging()` do middleware
-- Configuração automática de structlog via import
+- Migrated from `StandardLogger` to `StructuredLogger` in all files
+- Removed `configure_logging()` from middleware
+- Automatic structlog configuration via import
 
 ### 📋 Migration Guide
 
-Para actualizar código existente:
+To update existing code:
 
 ```python
-# Antes
-from app.adaptadores import LoggerPadrao
-logger = LoggerPadrao()
+# Before
+from app.adaptadores import StandardLogger
+logger = StandardLogger()
 
-# Depois
-from app.adaptadores import LoggerEstruturado
-logger = LoggerEstruturado()
+# After
+from app.adaptadores import StructuredLogger
+logger = StructuredLogger()
 ```
 
-Logs agora são estruturados:
+Logs are now structured:
 ```python
-# Antes
-logger.info(f"Usuário {user_id} criou projeto", extra={"projeto_id": projeto_id})
+# Before
+logger.info(f"User {user_id} created project", extra={"project_id": project_id})
 
-# Depois
-logger.info("usuario_criou_projeto", user_id=user_id, projeto_id=projeto_id)
+# After
+logger.info("user_created_project", user_id=user_id, project_id=project_id)
 ```
 
 ---
 
-## ✅ Versión 1.0 - Archivos Creados (Original)
+## ✅ Version 1.0 - Created Files (Original)
 
-### 1. Core (Infraestructura Transversal)
+### 1. Core (Cross-cutting Infrastructure)
 
-- **`app/core/__init__.py`**: Módulo core con exports principales
-- **`app/core/excecoes.py`**: Exceções customizadas (ErroDominio, ErroValidacao, ErroInfraestrutura, ErroRecursoNaoEncontrado)
-- **`app/core/handlers.py`**: Handlers globais de exceção com respostas padronizadas
-- **`app/core/middleware.py`**: Middleware com request_id, logging estruturado e medição de tempo
+- **`app/core/__init__.py`**: Core module with main exports
+- **`app/core/excecoes.py`**: Custom exceptions (DomainError, ValidationError, InfraError, ResourceNotFoundError)
+- **`app/core/handlers.py`**: Global exception handlers with standardized responses
+- **`app/core/middleware.py`**: Middleware with request_id, structured logging, and timing
 
-### 2. API Versionada
+### 2. Versioned API
 
-- **`app/controladores/v1.py`**: Router principal da API v1 (`/api/v1/*`)
+- **`app/controladores/v1.py`**: Main API v1 router (`/api/v1/*`)
 
-## 📝 Archivos Modificados
+## 📝 Modified Files
 
-### 1. Principal
+### 1. Main
 
 - **`app/principal.py`**: 
-  - Integrado middleware de requisições
-  - Registrado handlers de exceção
-  - Adicionado router v1
-  - Melhorada documentação OpenAPI com tags
-  - Descrição markdown completa na documentação
+  - Integrated request middleware
+  - Registered exception handlers
+  - Added v1 router
+  - Improved OpenAPI documentation with tags
+  - Complete markdown description in documentation
 
-### 2. Controladores
+### 2. Controllers
 
 - **`app/controladores/saude.py`**:
-  - Health check profissional com versão, ambiente e uptime
-  - Retorna informações adicionais para monitoring
+  - Professional health check with version, environment, and uptime
+  - Returns additional information for monitoring
 
 - **`app/controladores/api.py`**:
-  - Substituído HTTPException por ErroRecursoNaoEncontrado
-  - Adicionados exemplos de resposta no OpenAPI
-  - Melhorados docstrings e descrições
+  - Replaced HTTPException with ResourceNotFoundError
+  - Added response examples in OpenAPI
+  - Improved docstrings and descriptions
 
-### 3. Esquemas
+### 3. Schemas
 
 - **`app/esquemas/saude.py`**:
-  - Adicionados campos: versao_api, ambiente, uptime_segundos
-  - Schema mais completo para health checks profissionais
+  - Added fields: api_version, environment, uptime_seconds
+  - More complete schema for professional health checks
 
-### 4. Documentação
+### 4. Documentation
 
 - **`README.md`**:
-  - Seção de Contratos HTTP
-  - Padrão de Resposta (Sucesso e Erro)
-  - Tratamento de Erros com exemplos
-  - Versionamento de API
-  - Guia de Integração com Frontend
-  - Decisões Técnicas detalhadas
-  - Roadmap atualizado
+  - HTTP Contracts section
+  - Response standard (Success and Error)
+  - Error handling with examples
+  - API versioning
+  - Frontend integration guide
+  - Detailed technical decisions
+  - Updated roadmap
 
 ---
 
-## 🎯 Funcionalidades Implementadas
+## 🎯 Implemented Features
 
-### 1. Versionamento de API ✅
+### 1. API Versioning ✅
 
-- **v1**: `/api/v1/*` (recomendado)
-- **Legacy**: `/api/*` (retrocompatibilidade)
-- Política de deprecação definida
+- **v1**: `/api/v1/*` (recommended)
+- **Legacy**: `/api/*` (backward compatibility)
+- Defined deprecation policy
 
-### 2. Error Handling Global ✅
+### 2. Global Error Handling ✅
 
-Hierarquia de exceções:
+Exception hierarchy:
 ```
-ErroDominio (400)
-  ├── ErroValidacao (422)
-  └── ErroRecursoNaoEncontrado (404)
-ErroInfraestrutura (500)
+DomainError (400)
+  ├── ValidationError (422)
+  └── ResourceNotFoundError (404)
+InfraError (500)
 ```
 
-Padrão de resposta:
+Response standard:
 ```json
 {
-  "erro": {
-    "codigo": "CODIGO_ERRO",
-    "mensagem": "Descrição legível",
-    "detalhes": {}
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Readable description",
+    "details": {}
   }
 }
 ```
 
-### 3. Middleware Profissional ✅
+### 3. Professional Middleware ✅
 
-- **Request ID**: UUID único em cada requisição
-- **Logging estruturado**: Logs com contexto completo
-- **Performance tracking**: Tempo de resposta medido
-- **Headers customizados**: `X-Request-ID`, `X-Response-Time`
+- **Request ID**: Unique UUID for each request
+- **Structured logging**: Logs with full context
+- **Performance tracking**: Measured response time
+- **Custom headers**: `X-Request-ID`, `X-Response-Time`
 
-### 4. Health Check Avançado ✅
+### 4. Advanced Health Check ✅
 
 ```json
 {
   "status": "ok",
-  "mensagem": "API funcionando normalmente",
-  "versao_api": "1.0.0",
-  "ambiente": "local",
-  "uptime_segundos": 3600
+  "message": "API working normally",
+  "api_version": "1.0.0",
+  "environment": "local",
+  "uptime_seconds": 3600
 }
 ```
 
-### 5. Documentação OpenAPI Melhorada ✅
+### 5. Improved OpenAPI Documentation ✅
 
-- Tags organizadas por domínio
-- Descrição markdown completa
-- Exemplos de request/response
-- Códigos HTTP documentados
-- Headers customizados explicados
+- Tags organized by domain
+- Full markdown description
+- Request/response examples
+- Documented HTTP codes
+- Explained custom headers
 
 ---
 
-## 📋 Como Testar
+## 📋 How to Test
 
-### 1. Instalar Dependências
+### 1. Install Dependencies
 
 ```bash
 cd backend
 pip install -r requirements.txt
 ```
 
-### 2. Iniciar Servidor
+### 2. Start Server
 
 ```bash
 uvicorn app.principal:app --reload --port 8000
 ```
 
-### 3. Testar Health Check
+### 3. Test Health Check
 
 ```bash
 curl http://localhost:8000/saude
 ```
 
-**Resposta esperada**:
+**Expected response**:
 ```json
 {
   "status": "ok",
-  "mensagem": "API funcionando normalmente",
-  "versao_api": "1.0.0",
-  "ambiente": "local",
-  "uptime_segundos": 10
+  "message": "API working normally",
+  "api_version": "1.0.0",
+  "environment": "local",
+  "uptime_seconds": 10
 }
 ```
 
-### 4. Testar API v1
+### 4. Test API v1
 
 ```bash
-# Listar projetos (v1)
-curl http://localhost:8000/api/v1/projetos
+# List projects (v1)
+curl http://localhost:8000/api/v1/projects
 
-# Projeto não encontrado (erro customizado)
-curl http://localhost:8000/api/v1/projetos/nao-existe
+# Project not found (custom error)
+curl http://localhost:8000/api/v1/projects/does-not-exist
 ```
 
-**Resposta de erro esperada**:
+**Expected error response**:
 ```json
 {
-  "erro": {
-    "codigo": "PROJETO_NAO_ENCONTRADO",
-    "mensagem": "Projeto 'nao-existe' não encontrado"
+  "error": {
+    "code": "PROJECT_NOT_FOUND",
+    "message": "Project 'does-not-exist' not found"
   }
 }
 ```
 
-### 5. Verificar Headers Customizados
+### 5. Check Custom Headers
 
 ```bash
-curl -i http://localhost:8000/api/v1/sobre
+curl -i http://localhost:8000/api/v1/about
 ```
 
-Procurar headers:
+Look for headers:
 ```
 X-Request-ID: 550e8400-e29b-41d4-a716-446655440000
 X-Response-Time: 45.23ms
 ```
 
-### 6. Testar Validação de Entrada
+### 6. Test Input Validation
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/contato \
+curl -X POST http://localhost:8000/api/v1/contact \
   -H "Content-Type: application/json" \
-  -d '{"nome": "", "email": "invalido"}'
+  -d '{"name": "", "email": "invalid"}'
 ```
 
-**Resposta esperada** (422):
+**Expected response** (422):
 ```json
 {
-  "erro": {
-    "codigo": "ERRO_VALIDACAO_ENTRADA",
-    "mensagem": "Dados de entrada inválidos",
-    "detalhes": [...]
+  "error": {
+    "code": "INPUT_VALIDATION_ERROR",
+    "message": "Invalid input data",
+    "details": [...]
   }
 }
 ```
 
-### 7. Acessar Documentação Interativa
+### 7. Access Interactive Documentation
 
-1. Abrir navegador: http://localhost:8000/docs
-2. Verificar:
-   - Tags organizadas (Saúde, API v1, Portfólio, Contato, Legacy)
-   - Descrição completa com versionamento
-   - Exemplos de resposta
-   - Modelos de erro
+1. Open browser: http://localhost:8000/docs
+2. Verify:
+   - Organized tags (Health, API v1, Portfolio, Contact, Legacy)
+   - Full description with versioning
+   - Response examples
+   - Error models
 
-### 8. Verificar Logs Estruturados
+### 8. Verify Structured Logs
 
-No terminal onde está rodando uvicorn, você verá:
+In the terminal where uvicorn is running, you will see:
 
 ```
-2026-02-09 15:30:45 | INFO     | app.core.middleware | Requisição recebida | <request_id>
-2026-02-09 15:30:45 | INFO     | app.core.middleware | Resposta enviada | <request_id> | duracao_ms=45.23
+2026-02-09 15:30:45 | INFO     | app.core.middleware | Request received | <request_id>
+2026-02-09 15:30:45 | INFO     | app.core.middleware | Response sent | <request_id> | duration_ms=45.23
 ```
 
 ---
 
-## 🧪 Executar Testes
+## 🧪 Run Tests
 
 ```bash
-# Todos os testes
+# All tests
 pytest
 
-# Com cobertura
+# With coverage
 pytest --cov=app --cov-report=html
 
-# Ver relatório
+# See report
 open htmlcov/index.html  # Mac/Linux
 start htmlcov/index.html # Windows
 ```
 
 ---
 
-## 🎨 Próximos Passos para Frontend
+## 🎨 Next Steps for Frontend
 
-### 1. Atualizar Base URL
+### 1. Update Base URL
 
 ```typescript
 const API_BASE_URL = 'http://localhost:8000/api/v1';
 ```
 
-### 2. Adicionar Interceptor de Erro
+### 2. Add Error Interceptor
 
 ```typescript
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    const erro = error.response?.data?.erro;
-    toast.error(`[${erro?.codigo}] ${erro?.mensagem}`);
+    const err = error.response?.data?.error;
+    toast.error(`[${err?.code}] ${err?.message}`);
     return Promise.reject(error);
   }
 );
 ```
 
-### 3. Capturar Request ID para Debugging
+### 3. Capture Request ID for Debugging
 
 ```typescript
-const response = await fetch('/api/v1/sobre');
+const response = await fetch('/api/v1/about');
 const requestId = response.headers.get('X-Request-ID');
 console.log(`Request ID: ${requestId}`);
 ```
 
-### 4. Gerar Tipos TypeScript (Opcional)
+### 4. Generate TypeScript Types (Optional)
 
 ```bash
 npx openapi-typescript http://localhost:8000/openapi.json -o src/types/api.ts
@@ -388,36 +388,36 @@ npx openapi-typescript http://localhost:8000/openapi.json -o src/types/api.ts
 
 ---
 
-## 📊 Resumo de Benefícios
+## 📊 Benefits Summary
 
-| Funcionalidade | Antes | Agora |
+| Feature | Before | Now |
 |----------------|-------|-------|
-| **Versionamento** | Sem versão | `/api/v1/*` |
-| **Erros** | HTTPException genérico | Exceções customizadas com códigos |
-| **Logging** | Básico | Estruturado com request_id |
-| **Headers** | Padrão | + X-Request-ID, X-Response-Time |
-| **Health Check** | Status simples | Status + versão + ambiente + uptime |
-| **Docs OpenAPI** | Básica | Tags, exemplos, descrições |
-| **Frontend DX** | Erros inconsistentes | Contratos claros e rastreáveis |
+| **Versioning** | No version | `/api/v1/*` |
+| **Errors** | Generic HTTPException | Custom exceptions with codes |
+| **Logging** | Basic | Structured with request_id |
+| **Headers** | Standard | + X-Request-ID, X-Response-Time |
+| **Health Check** | Simple status | Status + version + environment + uptime |
+| **OpenAPI Docs** | Basic | Tags, examples, descriptions |
+| **Frontend DX** | Inconsistent errors | Clear and traceable contracts |
 
 ---
 
-## ✅ Checklist de Produção
+## ✅ Production Checklist
 
-- [x] API versionada
-- [x] Error handling global
-- [x] Middleware com request_id
-- [x] Logging estruturado
-- [x] Health check profissional
-- [x] Documentação OpenAPI completa
-- [x] README profissional
-- [x] Decisões técnicas documentadas
-- [ ] Deploy em cloud (Railway/Render)
-- [ ] CI/CD configurado
-- [ ] Monitoramento (Sentry)
+- [x] Versioned API
+- [x] Global error handling
+- [x] Middleware with request_id
+- [x] Structured logging
+- [x] Professional health check
+- [x] Complete OpenAPI documentation
+- [x] Professional README
+- [x] Documented technical decisions
+- [ ] Deploy to cloud (Railway/Render)
+- [ ] CI/CD configured
+- [ ] Monitoring (Sentry)
 - [ ] Rate limiting
 - [ ] Cache (Redis)
 
 ---
 
-**🎉 Backend Está Pronto para Consumo Frontend Profissional!**
+**🎉 Backend is Ready for Professional Frontend Consumption!**

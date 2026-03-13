@@ -1,98 +1,98 @@
 # 🎯 CONTRIBUTING
 
-Obrigado pelo interesse em contribuir com este projeto! 🙌
+Thank you for your interest in contributing to this project! 🙌
 
 ---
 
-## 📋 Como Contribuir
+## 📋 How to Contribute
 
-### 1. Fork o Repositório
-
-```bash
-git clone https://github.com/argenis972/Portf-lio.git
-cd portafolio
-```
-
-### 2. Crie uma Branch
+### 1. Fork the Repository
 
 ```bash
-git checkout -b feature/minha-feature
-# ou
-git checkout -b fix/meu-bugfix
+git clone https://github.com/Argenis1412/Portf-lio.git
+cd portfolio
 ```
 
-### 3. Faça suas Alterações
+### 2. Create a Branch
 
-- Siga os padrões de código existentes
-- Adicione testes para novas funcionalidades
-- Atualize a documentação se necessário
+```bash
+git checkout -b feature/my-feature
+# or
+git checkout -b fix/my-bugfix
+```
 
-### 4. Execute os Testes
+### 3. Make Your Changes
+
+- Follow existing code standards
+- Add tests for new features
+- Update documentation if necessary
+
+### 4. Run the Tests
 
 ```bash
 cd backend
 pytest
 ```
 
-### 5. Commit suas Mudanças
+### 5. Commit Your Changes
 
 ```bash
 git add .
-git commit -m "feat: adiciona nova funcionalidade X"
+git commit -m "feat: add new feature X"
 ```
 
-**Padrão de commits:**
-- `feat:` Nova funcionalidade
-- `fix:` Correção de bug
-- `docs:` Atualização de documentação
-- `test:` Adiciona ou corrige testes
-- `refactor:` Refatoração de código
-- `style:` Formatação de código
+**Commit patterns:**
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation update
+- `test:` Add or fix tests
+- `refactor:` Code refactor
+- `style:` Code formatting
 
-### 6. Push para o GitHub
+### 6. Push to GitHub
 
 ```bash
-git push origin feature/minha-feature
+git push origin feature/my-feature
 ```
 
-### 7. Abra um Pull Request
+### 7. Open a Pull Request
 
-- Descreva suas mudanças
-- Referencie issues relacionadas
-- Aguarde o review
-
----
-
-## ✅ Checklist de PR
-
-- [ ] Código segue os padrões do projeto
-- [ ] Testes adicionados e passando
-- [ ] Documentação atualizada
-- [ ] Commits bem descritos
-- [ ] Sem conflitos com `main`
+- Describe your changes
+- Reference related issues
+- Wait for review
 
 ---
 
-## 🐛 Reportando Bugs
+## ✅ PR Checklist
 
-Abra uma issue com:
-
-1. **Descrição clara** do problema
-2. **Passos para reproduzir**
-3. **Comportamento esperado**
-4. **Screenshots** (se aplicável)
-5. **Ambiente** (OS, Python version, etc.)
+- [ ] Code follows project standards
+- [ ] Tests added and passing
+- [ ] Documentation updated
+- [ ] Commits well-described
+- [ ] No conflicts with `main`
 
 ---
 
-## 💡 Sugerindo Features
+## 🐛 Reporting Bugs
 
-Abra uma issue descrevendo:
+Open an issue with:
 
-1. **O que** você gostaria de ver
-2. **Por que** seria útil
-3. **Como** você imagina funcionando
+1. **Clear description** of the problem
+2. **Steps to reproduce**
+3. **Expected behavior**
+4. **Screenshots** (if applicable)
+5. **Environment** (OS, Python version, etc.)
 
 ---
 
-Obrigado! 🚀
+## 💡 Suggesting Features
+
+Open an issue describing:
+
+1. **What** you would like to see
+2. **Why** it would be useful
+3. **How** you imagine it working
+
+---
+
+Thank you! 🚀

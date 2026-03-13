@@ -1,184 +1,183 @@
-# 🧪 Guia de Testes
+# 🧪 Testing Guide
 
-> **Manual completo para execução e escrita de testes**
+> **Full manual for running and writing tests**
 
 ---
 
-## 📋 Estrutura de Testes
+## 📋 Testing Structure
 
 ```
 backend/testes/
-├── conftest.py              # Fixtures compartilhadas
-├── test_casos_uso.py        # Testes de lógica de negócio
-└── test_controladores.py    # Testes de endpoints HTTP
+├── conftest.py              # Shared fixtures
+├── test_casos_uso.py        # Business logic tests
+└── test_controladores.py    # HTTP endpoint tests
 ```
 
 ---
 
-## 🚀 Executando Testes
+## 🚀 Running Tests
 
-### Todos os testes com cobertura
+### All tests with coverage
 
 ```bash
 cd backend
 pytest
 ```
 
-### Testes específicos
+### Specific tests
 
 ```bash
-# Um arquivo específico
+# A specific file
 pytest testes/test_casos_uso.py
 
-# Um teste específico
-pytest testes/test_casos_uso.py::test_obter_sobre_retorna_dados_corretos
+# A specific test
+pytest testes/test_casos_uso.py::test_get_about_returns_correct_data
 
-# Modo verbose
+# Verbose mode
 pytest -v
 
-# Com output de print
+# With print output
 pytest -s
 ```
 
-### Relatório de cobertura
+### Coverage report
 
 ```bash
 # Terminal
 pytest --cov=app --cov-report=term-missing
 
-# HTML (abre htmlcov/index.html)
+# HTML (opens htmlcov/index.html)
 pytest --cov=app --cov-report=html
 ```
 
 ---
 
-## 📊 Métricas Atuais
+## 📊 Current Metrics
 
-| Métrica | Valor | Status |
+| Metric | Value | Status |
 |---------|-------|--------|
-| **Total de Testes** | 17 | ✅ |
-| **Cobertura** | 93.05% | ✅ |
-| **Meta Mínima** | 70% | ✅ |
-| **Linhas Testadas** | 482/518 | ✅ |
+| **Total Tests** | 17 | ✅ |
+| **Coverage** | 93.05% | ✅ |
+| **Minimum Goal** | 70% | ✅ |
+| **Tested Lines** | 482/518 | ✅ |
 
 ---
 
-## ✍️ Escrevendo Testes
+## ✍️ Writing Tests
 
-### Template de Teste
+### Test Template
 
 ```python
 import pytest
 from httpx import AsyncClient
 
-async def test_nome_descritivo(cliente: AsyncClient):
-    """Descrição do que está sendo testado."""
-    # Arrange (preparar)
-    dados = {"campo": "valor"}
+async def test_descriptive_name(client: AsyncClient):
+    """Description of what is being tested."""
+    # Arrange
+    data = {"field": "value"}
     
-    # Act (executar)
-    response = await cliente.post("/api/v1/endpoint", json=dados)
+    # Act
+    response = await client.post("/api/v1/endpoint", json=data)
     
-    # Assert (verificar)
+    # Assert
     assert response.status_code == 200
-    assert response.json()["resultado"] == esperado
+    assert response.json()["result"] == expected
 ```
 
-### Fixtures Disponíveis
+### Available Fixtures
 
-Definidas em `conftest.py`:
+Defined in `conftest.py`:
 
 ```python
 @pytest.fixture
-async def cliente():
-    """Cliente HTTP para testes."""
+async def client():
+    """HTTP client for tests."""
     async with AsyncClient(app=app, base_url="http://test") as c:
         yield c
 ```
 
 ---
 
-## 🎯 Boas Práticas
+## 🎯 Best Practices
 
-✅ **Nomenclatura clara**: `test_<acao>_<retorna>_<resultado>`  
-✅ **Um assert por conceito**: Separe em testes diferentes  
-✅ **Independência**: Cada teste deve rodar isoladamente  
-✅ **Arrange-Act-Assert**: Estruture em 3 blocos  
-✅ **Docstrings**: Explique casos complexos  
-
+✅ **Clear naming**: `test_<action>_<returns>_<result>`  
+✅ **One assert per concept**: Separate into different tests  
+✅ **Independence**: Each test must run in isolation  
+✅ **Arrange-Act-Assert**: Structure in 3 blocks  
+✅ **Docstrings**: Explain complex cases  
 ---
 
-## 🔍 Análise de Cobertura
+## 🔍 Coverage Analysis
 
-### Áreas com menor cobertura
+### Areas with lower coverage
 
-| Módulo | Cobertura | Ação |
+| Module | Coverage | Action |
 |--------|-----------|------|
-| `email_adaptador.py` | 79% | Adicionar testes de erro SMTP |
-| `logger_adaptador.py` | 82% | Testar diferentes níveis de log |
-| `repositorio.py` | 89% | Testar casos de arquivo corrompido |
+| `email_adaptador.py` | 79% | Add SMTP error tests |
+| `logger_adaptador.py` | 82% | Test different log levels |
+| `repositorio.py` | 89% | Test corrupted file cases |
 
-### Como melhorar
+### How to improve
 
 ```bash
-# Identificar linhas não cobertas
+# Identify uncovered lines
 pytest --cov=app --cov-report=term-missing
 
-# Exemplo de output:
+# Output example:
 # app/core/excecoes.py    71%   39, 62-65
-#                                ^^ adicione testes para essas linhas
+#                                ^^ add tests for these lines
 ```
 
 ---
 
-## 🐛 Debugging Testes
+## 🐛 Debugging Tests
 
-### Teste falhando?
+### Failing test?
 
 ```bash
-# Ver output completo
+# View full output
 pytest -vv -s
 
-# Parar no primeiro erro
+# Stop at first error
 pytest -x
 
-# Modo debug (pdb)
+# Debug mode (pdb)
 pytest --pdb
 ```
 
-### Erro comum: AsyncIO
+### Common error: AsyncIO
 
 ```python
-# ❌ Errado
+# ❌ Wrong
 def test_async():
-    resultado = funcao_async()
+    result = async_function()
 
-# ✅ Correto
+# ✅ Correct
 async def test_async():
-    resultado = await funcao_async()
+    result = await async_function()
 ```
 
 ---
 
-## 📝 Checklist de PR
+## 📝 PR Checklist
 
-Antes de abrir Pull Request:
+Before opening Pull Request:
 
-- [ ] Todos os testes passam: `pytest`
-- [ ] Cobertura >= 70%: `pytest --cov-fail-under=70`
-- [ ] Novos features têm testes
-- [ ] Testes passam sem warnings
-- [ ] Testes documentados com docstrings
+- [ ] All tests pass: `pytest`
+- [ ] Coverage >= 70%: `pytest --cov-fail-under=70`
+- [ ] New features have tests
+- [ ] Tests pass without warnings
+- [ ] Tests documented with docstrings
 
 ---
 
 ## 🔄 CI/CD
 
-Testes rodam automaticamente no GitHub Actions:
+Tests run automatically on GitHub Actions:
 
 ```yaml
 # .github/workflows/backend-ci.yml
-- name: 🧪 Executar testes
+- name: 🧪 Run tests
   run: |
     cd backend
     pytest --cov=app --cov-fail-under=70
@@ -186,4 +185,4 @@ Testes rodam automaticamente no GitHub Actions:
 
 ---
 
-✅ **Mantenha a cobertura alta e os testes rápidos!**
+✅ **Keep coverage high and tests fast!**

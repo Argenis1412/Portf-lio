@@ -89,7 +89,7 @@ class ProjetoDetalhado(BaseModel):
     )
     repositorio: HttpUrl | None = Field(
         default=None,
-        examples=["https://github.com/argenis972/Portf-lio"],
+        examples=["https://github.com/Argenis1412/Portf-lio"],
         description="URL do repositório",
     )
     demo: HttpUrl | None = Field(

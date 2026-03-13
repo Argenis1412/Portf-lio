@@ -1,28 +1,28 @@
-# 🚀 Guia de Deploy
+# 🚀 Deployment Guide
 
-> **Manual completo para deploy do portfólio em produção**
-
----
-
-## 📋 Índice
-
-1. [Pré-requisitos](#pré-requisitos)
-2. [Deploy Backend](#deploy-backend)
-3. [Deploy Frontend](#deploy-frontend)
-4. [Monitoramento](#monitoramento)
+> **Full manual for deploying the portfolio to production**
 
 ---
 
-## Pré-requisitos
+## 📋 Table of Contents
 
-### Contas Necessárias
+1. [Prerequisites](#prerequisites)
+2. [Backend Deployment](#backend-deployment)
+3. [Frontend Deployment](#frontend-deployment)
+4. [Monitoring](#monitoring)
 
-- [ ] **GitHub** - Versionamento
-- [ ] **Render/Railway** - Hosting backend (gratuito)
-- [ ] **Vercel/Netlify** - Hosting frontend (gratuito)
-- [ ] **Gmail App Password** - Envio de emails
+---
 
-### Ferramentas
+## Prerequisites
+
+### Required Accounts
+
+- [ ] **GitHub** - Versioning
+- [ ] **Render/Railway** - Backend hosting (free)
+- [ ] **Vercel/Netlify** - Frontend hosting (free)
+- [ ] **Gmail App Password** - Email sending
+
+### Tools
 
 ```bash
 # Git
@@ -37,34 +37,34 @@ node --version  # >= 20
 
 ---
 
-## Deploy Backend
+## Backend Deployment
 
-### Opção 1: Render.com (Recomendado)
+### Option 1: Render.com (Recommended)
 
-1. **Crie conta em [render.com](https://render.com)**
+1. **Create an account at [render.com](https://render.com)**
 
 2. **New → Web Service**
 
-3. **Configurações:**
+3. **Settings:**
    ```
-   Name: portafolio-api
+   Name: portfolio-api
    Environment: Python 3
    Build Command: pip install -r requirements.txt
    Start Command: uvicorn app.principal:app --host 0.0.0.0 --port $PORT
    ```
 
-4. **Variáveis de Ambiente:**
+4. **Environment Variables:**
    ```env
-   AMBIENTE=producao
+   ENVIRONMENT=production
    SMTP_HOST=smtp.gmail.com
    SMTP_PORT=587
-   EMAIL_REMETENTE=seu@email.com
-   EMAIL_SENHA=senha_app_gmail
-   EMAIL_DESTINO=seu@email.com
-   CORS_ORIGINS=https://seu-frontend.vercel.app
+   EMAIL_SENDER=your@email.com
+   EMAIL_PASSWORD=gmail_app_password
+   EMAIL_DESTINATION=your@email.com
+   CORS_ORIGINS=https://your-frontend.vercel.app
    ```
 
-5. **Crie `backend/Dockerfile`:**
+5. **Create `backend/Dockerfile`:**
    ```dockerfile
    FROM python:3.12-slim
    WORKDIR /app
@@ -74,17 +74,17 @@ node --version  # >= 20
    CMD ["uvicorn", "app.principal:app", "--host", "0.0.0.0", "--port", "8000"]
    ```
 
-### Opção 2: Railway
+### Option 2: Railway
 
-Similar ao Render, mas com PostgreSQL grátis incluído.
+Similar to Render, but with free PostgreSQL included.
 
 ---
 
-## Deploy Frontend
+## Frontend Deployment
 
-### Opção 1: Vercel (Recomendado)
+### Option 1: Vercel (Recommended)
 
-1. **Instale Vercel CLI:**
+1. **Install Vercel CLI:**
    ```bash
    npm install -g vercel
    ```
@@ -95,12 +95,12 @@ Similar ao Render, mas com PostgreSQL grátis incluído.
    vercel --prod
    ```
 
-3. **Configure variável de ambiente:**
+3. **Configure environment variable:**
    ```
-   VITE_API_URL=https://seu-backend.onrender.com/api/v1
+   VITE_API_URL=https://your-backend.onrender.com/api/v1
    ```
 
-### Opção 2: Netlify
+### Option 2: Netlify
 
 ```bash
 cd frontend
@@ -110,41 +110,41 @@ npx netlify-cli deploy --prod --dir=dist
 
 ---
 
-## Monitoramento
+## Monitoring
 
 ### Logs
 
 **Render:**
 ```bash
-# Via dashboard em real-time
+# Via dashboard in real-time
 ```
 
 **Vercel:**
 ```bash
-vercel logs https://seu-app.vercel.app
+vercel logs https://your-app.vercel.app
 ```
 
 ### Health Check
 
-Configure monitoramento em **[UptimeRobot](https://uptimerobot.com)**:
+Configure monitoring in **[UptimeRobot](https://uptimerobot.com)**:
 
 ```
-URL: https://seu-backend.onrender.com/saude
-Interval: 5 minutos
+URL: https://your-backend.onrender.com/saude
+Interval: 5 minutes
 ```
 
 ---
 
-## Checklist de Deploy
+## Deployment Checklist
 
-- [ ] Backend respondendo em `https://`
-- [ ] CORS configurado com frontend
-- [ ] Variáveis de ambiente setadas
-- [ ] Email funcionando
-- [ ] Frontend consumindo API corretamente
-- [ ] HTTPS ativo em ambos
-- [ ] Monitoramento configurado
+- [ ] Backend responding on `https://`
+- [ ] CORS configured with frontend
+- [ ] Environment variables set
+- [ ] Email working
+- [ ] Frontend consuming API correctly
+- [ ] HTTPS active on both
+- [ ] Monitoring configured
 
 ---
 
-✅ **Pronto! Seu portfólio está no ar!**
+## ✅ Done! Your portfolio is live!

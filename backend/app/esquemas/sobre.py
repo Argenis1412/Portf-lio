@@ -55,7 +55,7 @@ class RespostaSobre(BaseModel):
     )
     github: HttpUrl = Field(
         ...,
-        examples=["https://github.com/argenis972"],
+        examples=["https://github.com/Argenis1412"],
         description="URL do perfil GitHub",
     )
     linkedin: HttpUrl = Field(

@@ -1,59 +1,59 @@
-# 🗂️ Estrutura do Repositório
+# 🗂️ Repository Structure
 
-> **Visão completa da organização profissional do portfólio**
+> **Full view of the professional portfolio organization**
 
 ---
 
-## 📊 Estrutura Visual
+## 📊 Visual Structure
 
 ```
-portafolio/ (RAIZ)
+portfolio/ (ROOT)
 │
-├── 📄 README.md ⭐                    # Documentação principal do projeto
-├── 📄 LICENSE                         # Licença MIT
-├── 📄 CHANGELOG.md                    # Histórico de versões
-├── 📄 CONTRIBUTING.md                 # Guia de contribuição
-├── 📄 .gitignore                      # Arquivos ignorados pelo Git
-├── 📄 .env.example                    # Exemplo de variáveis de ambiente
-├── 📄 docker-compose.yml              # Orquestração de containers
+├── 📄 README.md ⭐                    # Main project documentation
+├── 📄 LICENSE                         # MIT License
+├── 📄 CHANGELOG.md                    # Version history
+├── 📄 CONTRIBUTING.md                 # Contribution guide
+├── 📄 .gitignore                      # Files ignored by Git
+├── 📄 .env.example                    # Environment variables example
+├── 📄 docker-compose.yml              # Container orchestration
 │
-├── 📁 .github/                        # Configurações do GitHub
+├── 📁 .github/                        # GitHub configurations
 │   └── 📁 workflows/
-│       ├── backend-ci.yml             # CI/CD do backend
-│       └── frontend-ci.yml            # CI/CD do frontend
+│       ├── backend-ci.yml             # Backend CI/CD
+│       └── frontend-ci.yml            # Frontend CI/CD
 │
-├── 📁 docs/ ⭐                        # Documentação adicional
-│   ├── arquitetura.md                 # Decisões arquiteturais (ADR)
-│   ├── api.md                         # Referência completa da API
-│   ├── testes.md                      # Guia de testes
-│   └── deployment.md                  # Guia de deploy
+├── 📁 docs/ ⭐                        # Additional documentation
+│   ├── arquitetura.md                 # Architectural decisions (ADR)
+│   ├── api.md                         # Full API reference
+│   ├── testes.md                      # Testing guide
+│   └── deployment.md                  # Deployment guide
 │
-├── 📁 backend/ 🚀                     # API FastAPI
-│   ├── 📄 README.md ⭐                # Documentação técnica do backend
-│   ├── 📄 CHANGELOG_PRODUCAO.md       # Mudanças de produção
-│   ├── 📄 requirements.txt            # Dependências Python
-│   ├── 📄 pytest.ini                  # Configuração de testes
-│   ├── 📄 Dockerfile                  # Imagem Docker do backend
-│   ├── 📄 .dockerignore               # Arquivos excluídos do Docker
+├── 📁 backend/ 🚀                     # FastAPI API
+│   ├── 📄 README.md ⭐                # Backend technical documentation
+│   ├── 📄 CHANGELOG_PRODUCAO.md       # Production changes
+│   ├── 📄 requirements.txt            # Python dependencies
+│   ├── 📄 pytest.ini                  # Test configuration
+│   ├── 📄 Dockerfile                  # Backend Docker image
+│   ├── 📄 .dockerignore               # Files excluded from Docker
 │   │
-│   ├── 📁 app/                        # Código-fonte principal
-│   │   ├── principal.py               # Aplicação FastAPI
-│   │   ├── configuracao.py            # Configurações
+│   ├── 📁 app/                        # Main source code
+│   │   ├── principal.py               # FastAPI application
+│   │   ├── configuracao.py            # Settings
 │   │   │
-│   │   ├── 📁 core/                   # Núcleo da aplicação
+│   │   ├── 📁 core/                   # Application core
 │   │   │   ├── __init__.py
-│   │   │   ├── excecoes.py            # Exceções customizadas
-│   │   │   ├── handlers.py            # Handlers de erro
+│   │   │   ├── excecoes.py            # Custom exceptions
+│   │   │   ├── handlers.py            # Error handlers
 │   │   │   └── middleware.py          # Middleware (logging, request_id)
 │   │   │
-│   │   ├── 📁 controladores/          # Camada HTTP (Controllers)
+│   │   ├── 📁 controladores/          # HTTP Layer (Controllers)
 │   │   │   ├── __init__.py
-│   │   │   ├── v1.py                  # Router API v1
-│   │   │   ├── api.py                 # Endpoints principais
-│   │   │   ├── contato.py             # Endpoint de contato
+│   │   │   ├── v1.py                  # API v1 Router
+│   │   │   ├── api.py                 # Main endpoints
+│   │   │   ├── contato.py             # Contact endpoint
 │   │   │   └── saude.py               # Health check
 │   │   │
-│   │   ├── 📁 casos_uso/              # Lógica de Negócio (Use Cases)
+│   │   ├── 📁 casos_uso/              # Business Logic (Use Cases)
 │   │   │   ├── __init__.py
 │   │   │   ├── enviar_contato.py
 │   │   │   ├── obter_experiencias.py
@@ -61,13 +61,13 @@ portafolio/ (RAIZ)
 │   │   │   ├── obter_sobre.py
 │   │   │   └── obter_stack.py
 │   │   │
-│   │   ├── 📁 entidades/              # Modelos de Domínio (Entities)
+│   │   ├── 📁 entidades/              # Domain Models (Entities)
 │   │   │   ├── __init__.py
 │   │   │   ├── experiencia.py
 │   │   │   ├── mensagem.py
 │   │   │   └── projeto.py
 │   │   │
-│   │   ├── 📁 esquemas/               # Schemas Pydantic
+│   │   ├── 📁 esquemas/               # Pydantic Schemas
 │   │   │   ├── __init__.py
 │   │   │   ├── contato.py
 │   │   │   ├── experiencias.py
@@ -76,229 +76,217 @@ portafolio/ (RAIZ)
 │   │   │   ├── sobre.py
 │   │   │   └── stack.py
 │   │   │
-│   │   └── 📁 adaptadores/            # Camada de Infraestrutura
+│   │   └── 📁 adaptadores/            # Infrastructure Layer
 │   │       ├── __init__.py
-│   │       ├── repositorio.py         # Persistência JSON
-│   │       ├── email_adaptador.py     # Envio de emails
-│   │       └── logger_adaptador.py    # Sistema de logs
+│   │       ├── repositorio.py         # JSON persistence
+│   │       ├── email_adaptador.py     # Email sending
+│   │       └── logger_adaptador.py    # Logs system
 │   │
-│   ├── 📁 dados/                      # Persistência JSON
+│   ├── 📁 dados/                      # JSON Persistence
 │   │   ├── sobre.json
 │   │   ├── projetos.json
 │   │   ├── experiencias.json
 │   │   └── stack.json
 │   │
-│   ├── 📁 testes/ ✅                  # Testes automatizados
+│   ├── 📁 testes/ ✅                  # Automated tests
 │   │   ├── __init__.py
-│   │   ├── conftest.py                # Fixtures compartilhadas
-│   │   ├── test_casos_uso.py          # Testes de lógica
-│   │   └── test_controladores.py      # Testes HTTP
+│   │   ├── conftest.py                # Shared fixtures
+│   │   ├── test_casos_uso.py          # Logic tests
+│   │   └── test_controladores.py      # HTTP tests
 │   │
-│   └── 📁 htmlcov/                    # Relatório de cobertura (gerado)
+│   └── 📁 htmlcov/                    # Coverage report (generated)
 │
-└── 📁 frontend/ ⚛️ (em desenvolvimento)
+└── 📁 frontend/ ⚛️ (in development)
     ├── 📄 README.md
-    ├── 📄 package.json                # Dependências Node
-    ├── 📄 vite.config.ts              # Configuração Vite
-    ├── 📄 tsconfig.json               # Configuração TypeScript
-    ├── 📄 tailwind.config.ts          # Configuração Tailwind
-    ├── 📄 eslint.config.js            # Configuração ESLint
-    ├── 📄 postcss.config.js           # Configuração PostCSS
-    ├── 📄 index.html                  # HTML raiz
+    ├── 📄 package.json                # Node dependencies
+    ├── 📄 vite.config.ts              # Vite settings
+    ├── 📄 tsconfig.json               # TypeScript settings
+    ├── 📄 tailwind.config.ts          # Tailwind settings
+    ├── 📄 eslint.config.js            # ESLint settings
+    ├── 📄 postcss.config.js           # PostCSS settings
+    ├── 📄 index.html                  # Root HTML
     │
     ├── 📁 public/
-    │   ├── manifest.json
-    │   └── robots.txt
-    │
-    └── 📁 src/
-        ├── main.tsx                   # Entry point
-        ├── App.tsx                    # Componente raiz
-        ├── index.css                  # Estilos globais
-        ├── 📁 componentes/
-        ├── 📁 contextos/
-        ├── 📁 servicos/
-        ├── 📁 tipos/
-        ├── 📁 utils/
-        └── 📁 assets/
+    ├── └── src/
 ```
 
 ---
 
-## 🎯 Propósito de Cada Arquivo Raiz
+## 🎯 Purpose of Each Root File
 
-| Arquivo | Propósito | Impacto para Recrutadores |
+| File | Purpose | Recruiter Impact |
 |---------|-----------|---------------------------|
-| **README.md** | Primeira impressão do projeto | ⭐⭐⭐⭐⭐ CRÍTICO |
-| **LICENSE** | Define uso legal do código | ⭐⭐⭐ Mostra profissionalismo |
-| **CONTRIBUTING.md** | Guia para colaboradores | ⭐⭐ Projetos colaborativos |
-| **CHANGELOG.md** | Histórico de versões | ⭐⭐⭐ Demonstra organização |
-| **.gitignore** | Evita commit de lixo | ⭐⭐⭐⭐ Essencial |
-| **.env.example** | Template de configuração | ⭐⭐⭐⭐ Facilita setup |
-| **docker-compose.yml** | Orquestração de containers | ⭐⭐⭐⭐ DevOps skills |
+| **README.md** | Project's first impression | ⭐⭐⭐⭐⭐ CRITICAL |
+| **LICENSE** | Defines legal usage | ⭐⭐⭐ Shows professionalism |
+| **CONTRIBUTING.md** | Guide for collaborators | ⭐⭐ Collaborative projects |
+| **CHANGELOG.md** | Version history | ⭐⭐⭐ Demonstrates organization |
+| **.gitignore** | Prevents junk commits | ⭐⭐⭐⭐ Essential |
+| **.env.example** | Configuration template | ⭐⭐⭐⭐ Facilitates setup |
+| **docker-compose.yml** | Container orchestration | ⭐⭐⭐⭐ DevOps skills |
 
 ---
 
-## 📁 Propósito de Cada Diretório
+## 📁 Purpose of Each Directory
 
-### `/backend` - API FastAPI
+### `/backend` - FastAPI API
 
-**Camadas da Clean Architecture:**
+**Clean Architecture Layers:**
 
 ```
 ┌─────────────────────────────────────────┐
-│  Controladores (HTTP)                   │  ← Recebe requests
+│  Controllers (HTTP)                     │  ← Receives requests
 │  app/controladores/                     │
 └──────────────┬──────────────────────────┘
                │
 ┌──────────────▼──────────────────────────┐
-│  Casos de Uso (Business Logic)          │  ← Lógica de negócio
+│  Use Cases (Business Logic)             │  ← Business logic
 │  app/casos_uso/                         │
 └──────────────┬──────────────────────────┘
                │
 ┌──────────────▼──────────────────────────┐
-│  Entidades (Domain Models)               │  ← Regras de domínio
+│  Entities (Domain Models)               │  ← Domain rules
 │  app/entidades/                          │
 └──────────────┬──────────────────────────┘
                │
 ┌──────────────▼──────────────────────────┐
-│  Adaptadores (Infrastructure)            │  ← Acesso a dados
+│  Adapters (Infrastructure)              │  ← Data access
 │  app/adaptadores/                        │
 └─────────────────────────────────────────┘
 ```
 
 ### `/frontend` - React App
 
-**Estrutura moderna:**
+**Modern Structure:**
 
-- **componentes/**: Componentes React reutilizáveis
-- **servicos/**: Cliente HTTP para consumir API
-- **contextos/**: State management com Context API
+- **componentes/**: Reusable React components
+- **servicos/**: HTTP client to consume API
+- **contextos/**: State management with Context API
 - **tipos/**: TypeScript interfaces/types
-- **utils/**: Funções auxiliares
+- **utils/**: Helper functions
 
-### `/docs` - Documentação
+### `/docs` - Documentation
 
-**Documentação técnica profunda:**
+**Deep Technical Documentation:**
 
-- `arquitetura.md`: Decisões técnicas (ADR)
-- `api.md`: Referência completa de endpoints
-- `testes.md`: Como escrever e executar testes
-- `deployment.md`: Guia de deploy passo a passo
+- `arquitetura.md`: Technical decisions (ADR)
+- `api.md`: Full endpoint reference
+- `testes.md`: How to write and run tests
+- `deployment.md`: Step-by-step deployment guide
 
-### `/.github` - Automação
+### `/.github` - Automation
 
-**CI/CD com GitHub Actions:**
+**CI/CD with GitHub Actions:**
 
-- Testes automáticos em cada PR
+- Automatic tests on each PR
 - Build validation
 - Coverage reports
-- Pronto para deploy automático
+- Ready for automatic deployment
 
 ---
 
-## 📊 Estatísticas do Projeto
+## 📊 Project Statistics
 
-| Categoria | Quantidade | Status |
+| Category | Quantity | Status |
 |-----------|-----------|--------|
-| **Endpoints de API** | 6 | ✅ Funcionando |
-| **Testes Automatizados** | 17 | ✅ 100% passing |
-| **Cobertura de Código** | 93.05% | ✅ Acima de 70% |
-| **Documentação (páginas)** | 7 | ✅ Completa |
-| **Camadas de Arquitetura** | 4 | ✅ Clean Architecture |
-| **Workflows CI/CD** | 2 | ✅ Configurados |
+| **API Endpoints** | 6 | ✅ Operational |
+| **Automated Tests** | 17 | ✅ 100% passing |
+| **Code Coverage** | 93.05% | ✅ Above 70% |
+| **Documentation (pages)** | 7 | ✅ Complete |
+| **Architecture Layers** | 4 | ✅ Clean Architecture |
+| **CI/CD Workflows** | 2 | ✅ Configured |
 | **Dockerfiles** | 1 | ✅ Multi-stage |
 
 ---
 
-## 🎨 Destaques para Recrutadores
+## 🎨 Recruiter Highlights
 
 ### 🏗️ Clean Architecture
 ```
-Separação clara de responsabilidades
-Código testável e manutenível
-Mudança de tecnologias sem quebrar lógica
+Clear separation of concerns
+Testable and maintainable code
+Technology swap without breaking logic
 ```
 
-### ✅ Testes Automatizados
+### ✅ Automated Tests
 ```
-93% de cobertura
-17 testes (casos de uso + endpoints)
-CI/CD automático no GitHub Actions
+93% coverage
+17 tests (use cases + endpoints)
+Automatic CI/CD on GitHub Actions
 ```
 
-### 📚 Documentação Profissional
+### 📚 Professional Documentation
 ```
-README detalhado com badges
+Detailed README with badges
 ADR (Architecture Decision Records)
-API reference completa
-Guias de deploy e testes
+Complete API reference
+Deployment and testing guides
 ```
 
 ### 🐳 DevOps Ready
 ```
-Dockerfile otimizado (multi-stage)
-Docker Compose configurado
+Optimized Dockerfile (multi-stage)
+Configured Docker Compose
 GitHub Actions (CI/CD)
-Health checks implementados
+Implemented health checks
 ```
 
-### 🔒 Boas Práticas
+### 🔒 Best Practices
 ```
-Tratamento de erros padronizado
-Validação robusta (Pydantic V2)
-Logging estruturado
-Middleware de observabilidade
-Versionamento de API
+Standardized error handling
+Robust validation (Pydantic V2)
+Structured logging
+Observability middleware
+API versioning
 ```
 
 ---
 
-## 🚀 Próximos Passos
+## 🚀 Next Steps
 
-### Backend (Completo ✅)
-- [x] API REST com FastAPI
+### Backend (Complete ✅)
+- [x] REST API with FastAPI
 - [x] Clean Architecture
-- [x] Testes automatizados
-- [x] Documentação completa
-- [x] CI/CD configurado
+- [x] Automated tests
+- [x] Complete documentation
+- [x] CI/CD configured
 
-### Frontend (Em Desenvolvimento 🚧)
-- [ ] UI completa
-- [ ] Consumo da API
-- [ ] Testes de componentes
-- [ ] Deploy no Vercel
+### Frontend (In Development 🚧)
+- [ ] Complete UI
+- [ ] API Consumption
+- [ ] Component tests
+- [ ] Deploy on Vercel
 
-### DevOps (Estruturado ✅)
-- [x] Docker configurado
-- [x] CI/CD no GitHub Actions
-- [ ] Deploy automático
-- [ ] Monitoramento (Sentry)
+### DevOps (Structured ✅)
+- [x] Docker configured
+- [x] CI/CD on GitHub Actions
+- [x] Automated deploy
+- [x] Monitoring (Sentry)
 
 ---
 
-## 📝 Checklist de Organização
+## 📝 Organization Checklist
 
-✅ **Raiz do Repositório:**
-- [x] README.md profissional com badges
+✅ **Root Repository:**
+- [x] Professional README.md with badges
 - [x] LICENSE (MIT)
-- [x] .gitignore completo
-- [x] .env.example documentado
+- [x] Complete .gitignore
+- [x] Documented .env.example
 - [x] CONTRIBUTING.md
 - [x] CHANGELOG.md
 - [x] docker-compose.yml
 
-✅ **Documentação:**
+✅ **Documentation:**
 - [x] docs/arquitetura.md (ADR)
 - [x] docs/api.md
 - [x] docs/testes.md
 - [x] docs/deployment.md
 
 ✅ **Backend:**
-- [x] README.md detalhado
-- [x] Dockerfile otimizado
+- [x] Detailed README.md
+- [x] Optimized Dockerfile
 - [x] .dockerignore
 - [x] pytest.ini
-- [x] 93%+ cobertura de testes
+- [x] 93%+ test coverage
 
 ✅ **CI/CD:**
 - [x] .github/workflows/backend-ci.yml
@@ -306,17 +294,17 @@ Versionamento de API
 
 ---
 
-## 🎓 O que Recrutadores Vão Ver
+## 🎓 What Recruiters Will See
 
-1. **README raiz**: Projeto bem estruturado, profissional
-2. **Badges**: Builds passando, cobertura alta
-3. **Documentação**: Desenvolvedor que se importa com manutenibilidade
-4. **Testes**: 93% de cobertura, 17 testes passando
-5. **Clean Architecture**: Conhecimento de design patterns
-6. **CI/CD**: Experiência com DevOps
-7. **Docker**: Containerização profissional
-8. **API versionada**: Pensamento em evolução
+1. **Root README**: Well-structured, professional project
+2. **Badges**: Passing builds, high coverage
+3. **Documentation**: Developer who cares about maintainability
+4. **Tests**: 93% coverage, 17 tests passing
+5. **Clean Architecture**: Knowledge of design patterns
+6. **CI/CD**: DevOps experience
+7. **Docker**: Professional containerization
+8. **Versioned API**: Thinking about evolution
 
 ---
 
-✅ **Repositório 100% profissional e pronto para impressionar!**
+✅ **100% professional repository ready to impress!**

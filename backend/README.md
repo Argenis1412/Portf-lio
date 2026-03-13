@@ -106,7 +106,7 @@ backend/
 ### 2. Installation
 ```bash
 # Clone the repository
-git clone https://github.com/argenis972/Portf-lio.git
+git clone https://github.com/Argenis1412/Portf-lio.git
 cd Portf-lio/backend
 
 # Create virtual environment

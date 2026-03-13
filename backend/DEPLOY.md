@@ -1,22 +1,22 @@
-# Guia de Deploy - Portfolio Backend
+# Deployment Guide - Portfolio Backend
 
-## 🚀 Deploy em Produção
+## 🚀 Production Deployment
 
-Este guia mostra como fazer deploy do backend em diferentes plataformas.
-
----
-
-## 📋 Pré-requisitos
-
-- ✅ Conta na plataforma escolhida (Railway, Render, etc.)
-- ✅ Repositório Git configurado
-- ✅ Variáveis de ambiente definidas
+This guide shows how to deploy the backend on different platforms.
 
 ---
 
-## 🚂 Deploy no Railway
+## 📋 Prerequisites
 
-### 1. Instalação do Railway CLI (Opcional)
+- ✅ Account on the chosen platform (Railway, Render, etc.)
+- ✅ Configured Git repository
+- ✅ Defined environment variables
+
+---
+
+## 🚂 Deploy on Railway
+
+### 1. Railway CLI Installation (Optional)
 
 ```bash
 # Windows (PowerShell)
@@ -26,15 +26,15 @@ iwr https://railway.app/install.ps1 | iex
 curl -fsSL https://railway.app/install.sh | sh
 ```
 
-### 2. Deploy via Dashboard (Recomendado)
+### 2. Deploy via Dashboard (Recommended)
 
-1. Acesse [railway.app](https://railway.app)
-2. Clique em **"New Project"** → **"Deploy from GitHub repo"**
-3. Selecione o repositório `Portafolio`
-4. Railway detectará automaticamente o `railway.toml`
-5. Configure as variáveis de ambiente secretas:
-   - `FORMSPREE_FORM_ID`: Seu ID do Formspree
-   - `ORIGENS_PERMITIDAS`: Domínios permitidos (ex: `https://seudominio.com`)
+1. Access [railway.app](https://railway.app)
+2. Click on **"New Project"** → **"Deploy from GitHub repo"**
+3. Select the `Portf-lio` repository
+4. Railway will automatically detect the `railway.toml`
+5. Configure secret environment variables:
+   - `FORMSPREE_FORM_ID`: Your Formspree ID
+   - `ALLOWED_ORIGINS`: Allowed domains (e.g., `https://yourdomain.com`)
 
 ### 3. Deploy via CLI
 
@@ -42,54 +42,54 @@ curl -fsSL https://railway.app/install.sh | sh
 # Login
 railway login
 
-# Criar novo projeto
+# Initialize new project
 railway init
 
 # Deploy
 railway up
 
-# Listar variáveis
+# List variables
 railway variables
 
-# Adicionar variáveis secretas
-railway variables set FORMSPREE_FORM_ID=seu_form_id
-railway variables set ORIGENS_PERMITIDAS=https://seudominio.com
+# Add secret variables
+railway variables set FORMSPREE_FORM_ID=your_form_id
+railway variables set ALLOWED_ORIGINS=https://yourdomain.com
 ```
 
-### 4. Verificar Deploy
+### 4. Verify Deployment
 
 ```bash
-# Ver logs
+# View logs
 railway logs
 
-# Abrir no browser
+# Open in browser
 railway open
 ```
 
-**URL gerada**: `https://portfolio-backend-production.up.railway.app`
+**Generated URL**: `https://portfolio-backend-production.up.railway.app`
 
 ---
 
-## 🎨 Deploy no Render
+## 🎨 Deploy on Render
 
 ### 1. Deploy via Dashboard
 
-1. Acesse [render.com](https://render.com)
-2. Clique em **"New +"** → **"Blueprint"**
-3. Conecte seu repositório GitHub
-4. Render detectará automaticamente o `render.yaml`
-5. Revise as configurações e clique em **"Apply"**
-6. Configure as variáveis secretas no dashboard:
+1. Access [render.com](https://render.com)
+2. Click on **"New +"** → **"Blueprint"**
+3. Connect your GitHub repository
+4. Render will automatically detect the `render.yaml`
+5. Review the settings and click **"Apply"**
+6. Configure secret variables in the dashboard:
    - `FORMSPREE_FORM_ID`
 
-### 2. Deploy Manual (Web Service)
+### 2. Manual Deployment (Web Service)
 
 1. **New +** → **Web Service**
-2. Conecte repositório
-3. Configurações:
+2. Connect repository
+3. Settings:
    - **Name**: `portfolio-backend`
    - **Environment**: `Docker`
-   - **Region**: Oregon (ou mais próximo)
+   - **Region**: Oregon (or nearest)
    - **Branch**: `main`
    - **Dockerfile Path**: `backend/Dockerfile`
    - **Docker Context**: `backend`
@@ -98,175 +98,175 @@ railway open
    - **Auto-Deploy**: Yes
 5. **Environment Variables**:
    ```
-   AMBIENTE=producao
-   VERSAO_API=1.0.0
+   ENVIRONMENT=production
+   API_VERSION=1.0.0
    PORT=10000
-   FORMSPREE_FORM_ID=seu_form_id
-   ORIGENS_PERMITIDAS=https://seudominio.com
+   FORMSPREE_FORM_ID=your_form_id
+   ALLOWED_ORIGINS=https://yourdomain.com
    ```
 
-### 3. Verificar Deploy
+### 3. Verify Deployment
 
-**URL gerada**: `https://portfolio-backend.onrender.com`
+**Generated URL**: `https://portfolio-backend.onrender.com`
 
-Teste:
+Test:
 ```bash
 curl https://portfolio-backend.onrender.com/saude
 ```
 
 ---
 
-## 🐳 Deploy com Docker (Genérico)
+## 🐳 Deploy with Docker (Generic)
 
-### 1. Build da Imagem
+### 1. Image Build
 
 ```bash
 cd backend
 docker build -t portfolio-backend:latest .
 ```
 
-### 2. Testar Localmente
+### 2. Test Locally
 
 ```bash
 docker run -p 8000:8000 \
-  -e AMBIENTE=producao \
-  -e FORMSPREE_FORM_ID=seu_form_id \
+  -e ENVIRONMENT=production \
+  -e FORMSPREE_FORM_ID=your_form_id \
   portfolio-backend:latest
 ```
 
-### 3. Push para Registry
+### 3. Push to Registry
 
 ```bash
 # Docker Hub
-docker tag portfolio-backend:latest seu-usuario/portfolio-backend:latest
-docker push seu-usuario/portfolio-backend:latest
+docker tag portfolio-backend:latest your-user/portfolio-backend:latest
+docker push your-user/portfolio-backend:latest
 
 # GitHub Container Registry
-docker tag portfolio-backend:latest ghcr.io/argenis972/portfolio-backend:latest
-docker push ghcr.io/argenis972/portfolio-backend:latest
+docker tag portfolio-backend:latest ghcr.io/Argenis1412/portfolio-backend:latest
+docker push ghcr.io/Argenis1412/portfolio-backend:latest
 ```
 
 ---
 
-## 🔐 Variáveis de Ambiente Necessárias
+## 🔐 Required Environment Variables
 
-| Variável | Obrigatória | Padrão | Descrição |
+| Variable | Required | Default | Description |
 |----------|-------------|--------|-----------|
-| `AMBIENTE` | ❌ | `desenvolvimento` | `producao` ou `desenvolvimento` |
-| `VERSAO_API` | ❌ | `1.0.0` | Versão da API |
-| `FORMSPREE_FORM_ID` | ✅ | - | ID do formulário Formspree |
-| `ORIGENS_PERMITIDAS` | ⚠️ | `*` | Origens CORS (separadas por vírgula) |
-| `PORT` | ❌ | `8000` | Porta do servidor |
+| `ENVIRONMENT` | ❌ | `development` | `production` or `development` |
+| `API_VERSION` | ❌ | `1.0.0` | API version |
+| `FORMSPREE_FORM_ID` | ✅ | - | Formspree form ID |
+| `ALLOWED_ORIGINS` | ⚠️ | `*` | CORS origins (comma-separated) |
+| `PORT` | ❌ | `8000` | Server port |
 
-### Obter FORMSPREE_FORM_ID
+### Obtain FORMSPREE_FORM_ID
 
-1. Acesse [formspree.io](https://formspree.io)
-2. Crie novo formulário
-3. Copie o ID (ex: `xpznbqgk`)
+1. Access [formspree.io](https://formspree.io)
+2. Create new form
+3. Copy the ID (e.g., `xpznbqgk`)
 
 ---
 
-## 📊 Monitoramento
+## 📊 Monitoring
 
 ### Health Check
 
 ```bash
-curl https://sua-url.com/saude
+curl https://your-url.com/saude
 ```
 
-**Resposta esperada**:
+**Expected response**:
 ```json
 {
   "status": "ok",
-  "mensagem": "API funcionando normalmente",
-  "versao_api": "1.0.0",
-  "ambiente": "producao",
-  "uptime_segundos": 3600
+  "message": "API working normally",
+  "api_version": "1.0.0",
+  "environment": "production",
+  "uptime_seconds": 3600
 }
 ```
 
-### Logs Estruturados
+### Structured Logs
 
-Logs em formato JSON/Console com structlog:
+Logs in JSON/Console format with structlog:
 
 ```json
 {
-  "event": "requisicao_recebida",
+  "event": "request_received",
   "timestamp": "2026-02-10T10:30:00.000000Z",
   "level": "info",
   "request_id": "550e8400-e29b-41d4-a716-446655440000",
-  "metodo": "GET",
-  "path": "/api/v1/projetos"
+  "method": "GET",
+  "path": "/api/v1/projects"
 }
 ```
 
-### Rastreamento
+### Tracing
 
-Todas as respostas incluem headers:
-- `X-Request-ID`: UUID único
-- `X-Response-Time`: Tempo em ms
+All responses include headers:
+- `X-Request-ID`: Unique UUID
+- `X-Response-Time`: Time in ms
 
 ---
 
-## 🔄 CI/CD Automático
+## 🔄 Automatic CI/CD
 
 ### GitHub Actions
 
-Já configurado em `.github/workflows/backend-ci.yml`:
+Already configured in `.github/workflows/backend-ci.yml`:
 
-- ✅ Roda testes em push para `main`
-- ✅ Verifica cobertura
-- ✅ Build da imagem Docker
-- ✅ Deploy automático (configurar secrets)
+- ✅ Runs tests on push to `main`
+- ✅ Verifies coverage
+- ✅ Docker image build
+- ✅ Automated deploy (configure secrets)
 
-**Secrets necessários no GitHub**:
-- `RAILWAY_TOKEN` (para Railway)
-- `RENDER_API_KEY` (para Render)
+**Required Secrets on GitHub**:
+- `RAILWAY_TOKEN` (for Railway)
+- `RENDER_API_KEY` (for Render)
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Erro: "Application failed to respond"
+### Error: "Application failed to respond"
 
-**Causa**: API não está rodando na porta correta
+**Cause**: API is not running on the correct port
 
-**Solução**:
+**Solution**:
 ```python
-# Em backend/app/principal.py (já configurado)
+# In backend/app/principal.py (already configured)
 import os
 port = int(os.getenv("PORT", 8000))
 ```
 
-### Erro: CORS bloqueando requisições
+### Error: CORS blocking requests
 
-**Causa**: Frontend não está nas origens permitidas
+**Cause**: Frontend is not in the allowed origins
 
-**Solução**:
+**Solution**:
 ```bash
-# Adicionar origem do frontend
-railway variables set ORIGENS_PERMITIDAS=https://meu-frontend.vercel.app
+# Add frontend origin
+railway variables set ALLOWED_ORIGINS=https://my-frontend.vercel.app
 
-# Ou permitir todas (NÃO recomendado em produção)
-railway variables set ORIGENS_PERMITIDAS=*
+# Or allow all (NOT recommended in production)
+railway variables set ALLOWED_ORIGINS=*
 ```
 
-### Erro: "Health check failed"
+### Error: "Health check failed"
 
-**Causa**: Endpoint `/saude` não está respondendo
+**Cause**: Endpoint `/saude` is not responding
 
-**Verificar**:
+**Check**:
 ```bash
-# Ver logs
+# View logs
 railway logs
 
-# Testar localmente
+# Test locally
 curl http://localhost:8000/saude
 ```
 
 ---
 
-## 📚 Referências
+## 📚 References
 
 - [Railway Docs](https://docs.railway.app/)
 - [Render Docs](https://render.com/docs)
@@ -275,20 +275,20 @@ curl http://localhost:8000/saude
 
 ---
 
-## ✅ Checklist de Deploy
+## ✅ Deployment Checklist
 
-- [ ] Código commitado no GitHub
-- [ ] Testes passando
-- [ ] Dockerfile funcional
-- [ ] Variáveis de ambiente configuradas
-- [ ] CORS configurado corretamente
-- [ ] Health check respondendo
-- [ ] Logs estruturados configurados
-- [ ] Monitoramento ativo
-- [ ] Domínio customizado (opcional)
+- [ ] Code committed to GitHub
+- [ ] Tests passing
+- [ ] Functional Dockerfile
+- [ ] Environment variables configured
+- [ ] CORS correctly configured
+- [ ] Health check responding
+- [ ] Structured logs configured
+- [ ] Active monitoring
+- [ ] Custom domain (optional)
 
 ---
 
-**Autor**: Argenis Lopez  
+**Author**: Argenis Lopez  
 **Email**: argenislopez28708256@gmail.com  
-**GitHub**: [@argenis972](https://github.com/argenis972)
+**GitHub**: [@Argenis1412](https://github.com/Argenis1412)

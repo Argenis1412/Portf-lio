@@ -1,19 +1,19 @@
 # 📊 API Reference
 
-> **Documentação completa dos endpoints da API**
+> **Full documentation of API endpoints**
 
 ---
 
 ## 🌐 Base URL
 
-### Desenvolvimento
+### Development
 ```
 http://localhost:8000/api/v1
 ```
 
-### Produção
+### Production
 ```
-https://seu-backend.onrender.com/api/v1
+https://your-backend.onrender.com/api/v1
 ```
 
 ---
@@ -24,57 +24,57 @@ https://seu-backend.onrender.com/api/v1
 
 **GET** `/saude`
 
-Verifica o status da API.
+Verifies the API status.
 
-**Resposta 200:**
+**Response 200:**
 ```json
 {
   "status": "ok",
-  "versao_api": "1.0.0",
-  "ambiente": "producao",
-  "uptime_segundos": 3600.5
+  "api_version": "1.0.0",
+  "environment": "production",
+  "uptime_seconds": 3600.5
 }
 ```
 
 ---
 
-### 2. Sobre Mim
+### 2. About Me
 
 **GET** `/api/v1/sobre`
 
-Retorna informações pessoais.
+Returns personal information.
 
-**Resposta 200:**
+**Response 200:**
 ```json
 {
-  "nome": "Seu Nome",
+  "nome": "Your Name",
   "cargo": "Full Stack Developer",
-  "descricao": "Desenvolvedor...",
-  "resumo": "Resumo profissional...",
+  "descricao": "Developer...",
+  "resumo": "Professional summary...",
   "foto": "/path/to/photo.jpg",
   "linkedin": "https://linkedin.com/in/...",
   "github": "https://github.com/...",
-  "email": "email@exemplo.com"
+  "email": "email@example.com"
 }
 ```
 
 ---
 
-### 3. Projetos
+### 3. Projects
 
-#### Listar Projetos
+#### List Projects
 
 **GET** `/api/v1/projetos`
 
-Retorna todos os projetos ordenados por destaque.
+Returns all projects ordered by featured status.
 
-**Resposta 200:**
+**Response 200:**
 ```json
 [
   {
     "id": "proj-001",
-    "titulo": "Sistema XYZ",
-    "descricao": "Descrição do projeto",
+    "titulo": "System XYZ",
+    "descricao": "Project description",
     "tecnologias": ["React", "FastAPI", "PostgreSQL"],
     "imagem": "/path/to/image.jpg",
     "link_github": "https://github.com/...",
@@ -84,50 +84,50 @@ Retorna todos os projetos ordenados por destaque.
 ]
 ```
 
-#### Obter Projeto Específico
+#### Get Specific Project
 
 **GET** `/api/v1/projetos/{projeto_id}`
 
-Retorna um projeto pelo ID.
+Returns a project by ID.
 
-**Parâmetros:**
-- `projeto_id` (path) - ID do projeto
+**Parameters:**
+- `projeto_id` (path) - Project ID
 
-**Resposta 200:**
+**Response 200:**
 ```json
 {
   "id": "proj-001",
-  "titulo": "Sistema XYZ",
+  "titulo": "System XYZ",
   ...
 }
 ```
 
-**Resposta 404:**
+**Response 404:**
 ```json
 {
   "erro": {
-    "codigo": "PROJETO_NAO_ENCONTRADO",
-    "mensagem": "Projeto 'proj-999' não encontrado"
+    "codigo": "PROJECT_NOT_FOUND",
+    "mensagem": "Project 'proj-999' not found"
   }
 }
 ```
 
 ---
 
-### 4. Stack Tecnológico
+### 4. Technical Stack
 
 **GET** `/api/v1/stack`
 
-Retorna tecnologias agrupadas por categoria.
+Returns technologies grouped by category.
 
-**Resposta 200:**
+**Response 200:**
 ```json
 {
   "Frontend": [
     {
       "nome": "React",
       "icone": "⚛️",
-      "nivel": "avancado"
+      "nivel": "advanced"
     }
   ],
   "Backend": [...],
@@ -138,21 +138,21 @@ Retorna tecnologias agrupadas por categoria.
 
 ---
 
-### 5. Experiências
+### 5. Experiences
 
 **GET** `/api/v1/experiencias`
 
-Retorna experiências profissionais ordenadas cronologicamente.
+Returns professional experiences ordered chronologically.
 
-**Resposta 200:**
+**Response 200:**
 ```json
 [
   {
     "id": "exp-001",
     "empresa": "Tech Corp",
     "cargo": "Backend Developer",
-    "periodo": "2023 - Atual",
-    "descricao": "Responsabilidades...",
+    "periodo": "2023 - Present",
+    "descricao": "Responsibilities...",
     "tecnologias": ["Python", "FastAPI", "Docker"]
   }
 ]
@@ -160,70 +160,70 @@ Retorna experiências profissionais ordenadas cronologicamente.
 
 ---
 
-### 6. Contato
+### 6. Contact
 
 **POST** `/api/v1/contato`
 
-Envia mensagem de contato via email.
+Sends a contact message via email.
 
 **Body:**
 ```json
 {
-  "nome": "João Silva",
-  "email": "joao@exemplo.com",
-  "assunto": "Proposta de Projeto",
-  "mensagem": "Olá, gostaria de discutir..."
+  "nome": "John Doe",
+  "email": "john@example.com",
+  "assunto": "Project Proposal",
+  "mensagem": "Hello, I would like to discuss..."
 }
 ```
 
-**Resposta 200:**
+**Response 200:**
 ```json
 {
-  "mensagem": "Contato enviado com sucesso! Retornarei em breve."
+  "mensagem": "Contact sent successfully! I will return soon."
 }
 ```
 
-**Resposta 422 (Validação):**
+**Response 422 (Validation):**
 ```json
 {
   "erro": {
-    "codigo": "ERRO_VALIDACAO_ENTRADA",
-    "mensagem": "Dados de entrada inválidos",
+    "codigo": "INPUT_VALIDATION_ERROR",
+    "mensagem": "Invalid input data",
     "detalhes": [
       {
         "campo": "email",
-        "mensagem": "Email inválido"
+        "mensagem": "Invalid email"
       }
     ]
   }
 }
 ```
 
-**Resposta 500 (Erro de Envio):**
+**Response 500 (Send Error):**
 ```json
 {
   "erro": {
-    "codigo": "ERRO_ENVIO_EMAIL",
-    "mensagem": "Falha ao enviar email: SMTP timeout"
+    "codigo": "EMAIL_SEND_ERROR",
+    "mensagem": "Failed to send email: SMTP timeout"
   }
 }
 ```
 
 ---
 
-## 🔒 Códigos de Erro
+## 🔒 Error Codes
 
-| Código | HTTP | Descrição |
+| Code | HTTP | Description |
 |--------|------|-----------|
-| `PROJETO_NAO_ENCONTRADO` | 404 | Projeto não existe |
-| `EXPERIENCIA_NAO_ENCONTRADA` | 404 | Experiência não existe |
-| `ERRO_VALIDACAO_ENTRADA` | 422 | Dados inválidos (Pydantic) |
-| `ERRO_ENVIO_EMAIL` | 500 | Falha no envio de email |
-| `ERRO_INTERNO` | 500 | Erro genérico do servidor |
+| `PROJECT_NOT_FOUND` | 404 | Project does not exist |
+| `EXPERIENCE_NOT_FOUND` | 404 | Experience does not exist |
+| `INPUT_VALIDATION_ERROR` | 422 | Invalid data (Pydantic) |
+| `EMAIL_SEND_ERROR` | 500 | Email sending failure |
+| `INTERNAL_ERROR` | 500 | Generic server error |
 
 ---
 
-## 📝 Schemas Pydantic
+## 📝 Pydantic Schemas
 
 ### RespostaSobre
 ```python
@@ -262,22 +262,22 @@ class RequisicaoContato(BaseModel):
 
 ---
 
-## 🧪 Exemplos de Uso
+## 🧪 Usage Examples
 
 ### cURL
 
 ```bash
-# Listar projetos
+# List projects
 curl http://localhost:8000/api/v1/projetos
 
-# Enviar contato
+# Send contact
 curl -X POST http://localhost:8000/api/v1/contato \
   -H "Content-Type: application/json" \
   -d '{
-    "nome": "João",
-    "email": "joao@exemplo.com",
-    "assunto": "Teste",
-    "mensagem": "Olá, esta é uma mensagem de teste."
+    "nome": "John",
+    "email": "john@example.com",
+    "assunto": "Test",
+    "mensagem": "Hello, this is a test message."
   }'
 ```
 
@@ -287,18 +287,18 @@ curl -X POST http://localhost:8000/api/v1/contato \
 import httpx
 
 async with httpx.AsyncClient() as client:
-    # Obter sobre
+    # Get about
     response = await client.get("http://localhost:8000/api/v1/sobre")
-    dados = response.json()
+    data = response.json()
     
-    # Enviar contato
+    # Send contact
     response = await client.post(
         "http://localhost:8000/api/v1/contato",
         json={
-            "nome": "João",
-            "email": "joao@exemplo.com",
-            "assunto": "Proposta",
-            "mensagem": "Mensagem..."
+            "nome": "John",
+            "email": "john@example.com",
+            "assunto": "Proposal",
+            "mensagem": "Message..."
         }
     )
 ```
@@ -306,32 +306,32 @@ async with httpx.AsyncClient() as client:
 ### JavaScript (fetch)
 
 ```javascript
-// Listar projetos
+// List projects
 const response = await fetch('http://localhost:8000/api/v1/projetos');
-const projetos = await response.json();
+const projects = await response.json();
 
-// Enviar contato
+// Send contact
 const response = await fetch('http://localhost:8000/api/v1/contato', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
-    nome: 'João',
-    email: 'joao@exemplo.com',
-    assunto: 'Proposta',
-    mensagem: 'Olá...'
+    nome: 'John',
+    email: 'john@example.com',
+    assunto: 'Proposal',
+    mensagem: 'Hello...'
   })
 });
 ```
 
 ---
 
-## 📚 Documentação Interativa
+## 📚 Interactive Documentation
 
-Quando o servidor estiver rodando, acesse:
+When the server is running, access:
 
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
 
 ---
 
-✅ **Para mais detalhes, consulte a documentação interativa!**
+✅ **For more details, refer to the interactive documentation!**

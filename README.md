@@ -163,7 +163,7 @@ portfolio/
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/argenis972/Portf-lio.git
+git clone https://github.com/Argenis1412/Portf-lio.git
 cd portfolio
 ```
 
@@ -228,4 +228,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 **Argenis Lopez**
 
 - 💼 LinkedIn: [LinkedIn](https://www.linkedin.com/in/argenis972/)
-- 🐙 GitHub: [argenis972](https://github.com/argenis972)
+- 🐙 GitHub: [Argenis1412](https://github.com/Argenis1412)

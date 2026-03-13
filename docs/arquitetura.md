@@ -1,223 +1,223 @@
-# 🏗️ Decisões Arquiteturais
+# 🏗️ Architectural Decisions
 
-> **Documento de Registro de Decisões Arquiteturais (ADR)**  
-> Este arquivo documenta as principais decisões técnicas do projeto e suas motivações.
+> **Architectural Decision Record (ADR)**  
+> This file documents the main technical decisions of the project and their motivations.
 
 ---
 
-## 📚 Índice
+## 📚 Table of Contents
 
 1. [Clean Architecture](#1-clean-architecture)
-2. [Persistência em JSON](#2-persistência-em-json)
-3. [FastAPI como Framework](#3-fastapi-como-framework)
-4. [Versionamento de API](#4-versionamento-de-api)
-5. [Tratamento de Erros Customizado](#5-tratamento-de-erros-customizado)
+2. [JSON Persistence](#2-json-persistence)
+3. [FastAPI as Framework](#3-fastapi-as-framework)
+4. [API Versioning](#4-api-versioning)
+5. [Custom Error Handling](#5-custom-error-handling)
 
 ---
 
 ## 1. Clean Architecture
 
-### Contexto
-Precisávamos de uma arquitetura que permitisse escalabilidade, testabilidade e manutenibilidade a longo prazo.
+### Context
+We needed an architecture that would allow for scalability, testability, and long-term maintainability.
 
-### Decisão
-Adotamos **Clean Architecture** com separação em camadas:
-- **Controllers** (camada de interface)
-- **Use Cases** (lógica de negócio)
-- **Entities** (modelos de domínio)
-- **Adapters** (repositórios e serviços externos)
+### Decision
+Adopted **Clean Architecture** with layer separation:
+- **Controllers** (interface layer)
+- **Use Cases** (business logic)
+- **Entities** (domain models)
+- **Adapters** (repositories and external services)
 
-### Consequências
+### Consequences
 
-**Positivas:**
-- ✅ Código altamente testável (93%+ cobertura)
-- ✅ Fácil substituição de dependências (JSON → PostgreSQL futuro)
-- ✅ Lógica de negócio isolada de frameworks
+**Positive:**
+- ✅ Highly testable code (93%+ coverage)
+- ✅ Easy dependency swapping (Future JSON → PostgreSQL)
+- ✅ Business logic isolated from frameworks
 
-**Negativas:**
-- ⚠️ Maior complexidade inicial
-- ⚠️ Mais arquivos para gerenciar
+**Negative:**
+- ⚠️ Higher initial complexity
+- ⚠️ More files to manage
 
 ### Status
-✅ **Implementado** - Funcionando em produção
+✅ **Implemented** - Working in production
 
 ---
 
-## 2. Persistência em JSON
+## 2. JSON Persistence
 
-### Contexto
-Projeto em fase inicial, necessidade de simplicidade sem infraestrutura complexa.
+### Context
+Initial phase project, need for simplicity without complex infrastructure.
 
-### Decisão
-Usar **arquivos JSON** para persistência de dados (`dados/projetos.json`, etc.).
+### Decision
+Use **JSON files** for data persistence (`dados/projetos.json`, etc.).
 
-### Consequências
+### Consequences
 
-**Positivas:**
-- ✅ Zero configuração de banco de dados
-- ✅ Fácil versionamento dos dados no Git
-- ✅ Ideal para portfólio estático
+**Positive:**
+- ✅ Zero database configuration
+- ✅ Easy data versioning in Git
+- ✅ Ideal for static portfolio
 
-**Negativas:**
-- ⚠️ Não escala para alto volume de escrita
-- ⚠️ Sem transações ACID
-- ⚠️ Busca menos eficiente
+**Negative:**
+- ⚠️ Does not scale for high write volume
+- ⚠️ No ACID transactions
+- ⚠️ Less efficient search
 
-### Migração Futura
-Preparado para migração para PostgreSQL via padrão Repository:
+### Future Migration
+Prepared for PostgreSQL migration via the Repository pattern:
 
 ```python
-# Interface atual
-class Repositorio:
-    def obter_todos(self) -> List[T]: ...
+# Current interface
+class Repository:
+    def get_all(self) -> List[T]: ...
 
-# Futura implementação
-class RepositorioPG(Repositorio):
-    def obter_todos(self) -> List[T]:
-        return session.query(Modelo).all()
+# Future implementation
+class RepositoryPG(Repository):
+    def get_all(self) -> List[T]:
+        return session.query(Model).all()
 ```
 
 ### Status
-✅ **Implementado** - Suficiente para MVP
+✅ **Implemented** - Sufficient for MVP
 
 ---
 
-## 3. FastAPI como Framework
+## 3. FastAPI as Framework
 
-### Contexto
-Necessidade de framework moderno com validação automática, documentação e performance.
+### Context
+Need for a modern framework with automatic validation, documentation, and performance.
 
-### Decisão
-Escolher **FastAPI** ao invés de Flask/Django.
+### Decision
+Choose **FastAPI** over Flask/Django.
 
-### Razões
+### Reasons
 
-| Critério | FastAPI | Flask | Django |
+| Criterion | FastAPI | Flask | Django |
 |----------|---------|-------|--------|
-| Performance | ⚡ Assíncrono | 🐌 Sync | 🐌 Sync |
-| Validação | ✅ Pydantic | ❌ Manual | ⚠️ Forms |
-| Docs Auto | ✅ OpenAPI | ❌ Não | ❌ Não |
-| Type Hints | ✅ Nativo | ⚠️ Opcional | ⚠️ Opcional |
-| Curva Aprendizado | 📘 Médio | 📗 Fácil | 📕 Alto |
+| Performance | ⚡ Asynchronous | 🐌 Sync | 🐌 Sync |
+| Validation | ✅ Pydantic | ❌ Manual | ⚠️ Forms |
+| Auto Docs | ✅ OpenAPI | ❌ No | ❌ No |
+| Type Hints | ✅ Native | ⚠️ Optional | ⚠️ Optional |
+| Learning Curve | 📘 Medium | 📗 Easy | 📕 High |
 
-### Consequências
+### Consequences
 
-**Positivas:**
-- ✅ Documentação Swagger automática
-- ✅ Validação de entrada/saída grátis
-- ✅ Melhor performance em I/O assíncrono
+**Positive:**
+- ✅ Automatic Swagger documentation
+- ✅ Free input/output validation
+- ✅ Better performance in asynchronous I/O
 
-**Negativas:**
-- ⚠️ Ecossistema menor que Django
-- ⚠️ Menos bibliotecas third-party
+**Negative:**
+- ⚠️ Smaller ecosystem than Django
+- ⚠️ Fewer third-party libraries
 
 ### Status
-✅ **Implementado** - Excelente escolha
+✅ **Implemented** - Excellent choice
 
 ---
 
-## 4. Versionamento de API
+## 4. API Versioning
 
-### Contexto
-APIs em produção precisam evoluir sem quebrar clientes existentes.
+### Context
+Production APIs need to evolve without breaking existing clients.
 
-### Decisão
-Implementar versionamento via **caminho da URL** (`/api/v1/projetos`).
+### Decision
+Implement versioning via **URL path** (`/api/v1/projetos`).
 
-### Alternativas Consideradas
+### Considered Alternatives
 
-| Estratégia | Prós | Contras | Decisão |
+| Strategy | Pros | Cons | Decision |
 |-----------|------|---------|---------|
-| **URL Path** | 🟢 Explícito, fácil cache | 🔴 Duplicação de código | ✅ **Escolhido** |
-| Header | 🟢 URL limpa | 🔴 Difícil testar no browser | ❌ |
-| Query Param | 🟢 Fácil implementar | 🔴 Inconsistente | ❌ |
+| **URL Path** | 🟢 Explicit, easy cache | 🔴 Code duplication | ✅ **Chosen** |
+| Header | 🟢 Clean URL | 🔴 Hard to test in browser | ❌ |
+| Query Param | 🟢 Easy to implement | 🔴 Inconsistent | ❌ |
 
-### Implementação
+### Implementation
 
 ```python
 # backend/app/controladores/v1.py
-roteador_v1 = APIRouter(prefix="/api/v1")
+router_v1 = APIRouter(prefix="/api/v1")
 
-# Futuro v2 terá mudanças sem quebrar v1
-roteador_v2 = APIRouter(prefix="/api/v2")
+# Future v2 will have changes without breaking v1
+router_v2 = APIRouter(prefix="/api/v2")
 ```
 
 ### Status
-✅ **Implementado** - Pronto para evolução
+✅ **Implemented** - Ready for evolution
 
 ---
 
-## 5. Tratamento de Erros Customizado
+## 5. Custom Error Handling
 
-### Contexto
-Erros padrão do FastAPI (`{"detail": "..."}`) não fornecem informações estruturadas para o frontend.
+### Context
+Default FastAPI errors (`{"detail": "..."}`) do not provide structured information for the frontend.
 
-### Decisão
-Criar **hierarquia de exceções customizadas** com códigos de erro:
+### Decision
+Create a **hierarchy of custom exceptions** with error codes:
 
-```python
+```json
 {
-    "erro": {
-        "codigo": "PROJETO_NAO_ENCONTRADO",
-        "mensagem": "Projeto 'xyz' não existe",
-        "detalhes": {...}
+    "error": {
+        "code": "PROJECT_NOT_FOUND",
+        "message": "Project 'xyz' does not exist",
+        "details": {...}
     }
 }
 ```
 
-### Consequências
+### Consequences
 
-**Positivas:**
-- ✅ Frontend pode tratar erros específicos
-- ✅ Facilita internacionalização
-- ✅ Logging estruturado
+**Positive:**
+- ✅ Frontend can handle specific errors
+- ✅ Facilitates internationalization
+- ✅ Structured logging
 
-**Negativas:**
-- ⚠️ Mais código para manter
+**Negative:**
+- ⚠️ More code to maintain
 
-### Códigos de Erro
+### Error Codes
 
-| Código | HTTP | Descrição |
+| Code | HTTP | Description |
 |--------|------|-----------|
-| `PROJETO_NAO_ENCONTRADO` | 404 | Projeto não existe |
-| `ERRO_VALIDACAO_ENTRADA` | 422 | Dados inválidos |
-| `ERRO_ENVIO_EMAIL` | 500 | Falha no envio |
+| `PROJECT_NOT_FOUND` | 404 | Project does not exist |
+| `INPUT_VALIDATION_ERROR` | 422 | Invalid data |
+| `EMAIL_SEND_ERROR` | 500 | Sending failure |
 
 ### Status
-✅ **Implementado** - 100% dos endpoints
+✅ **Implemented** - 100% of endpoints
 
 ---
 
-## 📝 Template para Novas Decisões
+## 📝 Template for New Decisions
 
 ```markdown
-## N. [TÍTULO DA DECISÃO]
+## N. [DECISION TITLE]
 
-### Contexto
-[Situação que motivou a decisão]
+### Context
+[Situation that motivated the decision]
 
-### Decisão
-[O que foi decidido]
+### Decision
+[What was decided]
 
-### Consequências
-**Positivas:**
-- ✅ [Benefício 1]
+### Consequences
+**Positive:**
+- ✅ [Benefit 1]
 
-**Negativas:**
-- ⚠️ [Custo 1]
+**Negative:**
+- ⚠️ [Cost 1]
 
 ### Status
-[✅ Implementado | 🚧 Em progresso | ❌ Revertido]
+[✅ Implemented | 🚧 In progress | ❌ Reverted]
 ```
 
 ---
 
-## 🔄 Histórico de Revisões
+## 🔄 Revision History
 
-| Data | Versão | Autor | Mudança |
+| Date | Version | Author | Change |
 |------|--------|-------|---------|
-| 2025-01-XX | 1.0 | [Seu Nome] | Versão inicial |
+| 2025-01-XX | 1.0 | [Your Name] | Initial version |
 
 ---
 
-**Nota**: Este documento deve ser atualizado sempre que uma decisão técnica significativa for tomada.
+**Note**: This document should be updated whenever a significant technical decision is made.

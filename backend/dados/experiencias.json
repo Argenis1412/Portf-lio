@@ -5,7 +5,7 @@
     "empresa": "Loja App (Projeto Pessoal)",
     "localizacao": "Remoto",
     "data_inicio": "2025-12-20",
-    "data_fim": null,
+    "data_fim": "2026-03-06",
     "descricao": "API REST com FastAPI para sistema de pagamentos com regras de negócio financeiras (cálculo de juros, descontos, parcelamentos). Arquitetura Hexagonal: separação clara entre domínio, casos de uso, adaptadores e infraestrutura. Validação de dados com Pydantic, documentação automática com Swagger UI/OpenAPI. Suite de testes unitários e de integração com pytest executados em CI com GitHub Actions. Persistência com PostgreSQL + SQLAlchemy ORM + Alembic para versionamento de schema. Frontend consumidor: React + TypeScript com Tailwind CSS.",
     "tecnologias": ["Python", "FastAPI", "Pydantic", "PostgreSQL", "SQLAlchemy ORM", "Alembic", "Pytest", "React", "TypeScript", "Tailwind CSS", "GitHub Actions"],
     "atual": true
