@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-slate-950 text-slate-50 antialiased;
+}
+
+/* Custom transitions and glassmorphism helpers */
+.glass {
+  @apply bg-slate-900/40 backdrop-blur-md border border-slate-800/50;
+}
+
+.transition-smooth {
+  @apply transition-all duration-300 ease-in-out;
+}
