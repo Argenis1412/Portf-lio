@@ -19,7 +19,7 @@ export default function Hero() {
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 text-app-text">
             Backend Developer
           </h1>
-          <p className="mt-4 text-lg md:text-xl text-app-muted mb-10 max-w-xl mx-auto md:mx-0">
+          <p className="mt-4 text-lg md:text-xl text-app-muted mb-10 max-w-xl mx-auto md:mx-0 whitespace-pre-line">
             {t('hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
@@ -29,6 +29,26 @@ export default function Hero() {
             <a href="#contact" className="bg-transparent hover:bg-app-surface-hover text-app-text font-semibold py-3 px-8 rounded-full transition-smooth border border-app-border">
               {t('nav.contact')}
             </a>
+          </div>
+
+          {/* Technical Metric Badges */}
+          <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-10">
+             <span className="flex items-center gap-1.5 bg-app-surface border border-app-border px-3 py-1.5 rounded-full text-xs font-semibold text-app-text shadow-sm">
+                <svg className="w-3.5 h-3.5 text-app-primary" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+                90% Test Coverage
+             </span>
+             <span className="flex items-center gap-1.5 bg-app-surface border border-app-border px-3 py-1.5 rounded-full text-xs font-semibold text-app-text shadow-sm">
+                <svg className="w-3.5 h-3.5 text-app-primary" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+                Clean Architecture
+             </span>
+             <span className="flex items-center gap-1.5 bg-app-surface border border-app-border px-3 py-1.5 rounded-full text-xs font-semibold text-app-text shadow-sm">
+                <svg className="w-3.5 h-3.5 text-app-primary" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+                Versioned API
+             </span>
+             <span className="flex items-center gap-1.5 bg-app-surface border border-app-border px-3 py-1.5 rounded-full text-xs font-semibold text-app-text shadow-sm">
+                <svg className="w-3.5 h-3.5 text-app-primary" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+                CI/CD & GitHub Actions
+             </span>
           </div>
         </div>
 
