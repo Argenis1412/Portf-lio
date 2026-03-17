@@ -13,7 +13,7 @@ Professional backend for a developer portfolio, implementing:
 - ✅ **Clear separation** of responsibilities
 - ✅ **Automatic validation** with Pydantic V2
 - ✅ **Interactive Documentation** with OpenAPI/Swagger
-- ✅ **Automated Tests** with pytest (93%+ coverage)
+- ✅ **Automated Tests** with pytest (91%+ coverage)
 - ✅ **Full Type Hints** (mypy strict compatible)
 
 ---
@@ -151,13 +151,14 @@ Returns API status and basic metrics.
 
 ### Portfolio Data
 - `GET /api/v1/sobre`: "About Me" information.
-- `GET /api/v1/projetos`: List of projects.
-- `GET /api/v1/projetos/{id}`: Project details.
-- `GET /api/v1/stack`: Technical stack.
+- `GET /api/v1/projetos`: List of projects (includes `repositorio` and `demo` links).
+- `GET /api/v1/projetos/{id}`: Full project details.
+- `GET /api/v1/stack`: Technical stack, grouped by category.
 - `GET /api/v1/experiencias`: Professional experiences.
+- `GET /api/v1/formacao`: Academic formation / education history.
 
 ### Contact
-- `POST /api/v1/contato`: Send contact message.
+- `POST /api/v1/contato`: Send contact message (forwarded via Formspree).
 
 ---
 
@@ -181,7 +182,7 @@ pytest --cov=app --cov-report=html
 .\test --cov=app --cov-report=html
 ```
 
-**Current Coverage: >=85%**
+**Current Coverage: 91%** (90.55% measured — 19 tests, all passing)
 
 ---
 

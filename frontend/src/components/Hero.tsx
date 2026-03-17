@@ -32,11 +32,11 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="order-1 md:order-2 flex justify-center md:justify-end relative">
+        <div className="order-1 md:order-2 flex justify-center md:justify-end relative mr-0 md:mr-4">
           {/* Intense bronze glow background */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 md:w-96 md:h-96 bg-app-primary/20 rounded-full blur-[70px] -z-10 animate-pulse"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[308px] h-[308px] md:w-[430px] md:h-[430px] bg-app-primary/20 rounded-full blur-[70px] -z-10 animate-pulse"></div>
           
-          <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full p-1.5 bg-gradient-to-tr from-app-primary to-transparent shadow-[0_0_30px_rgba(212,163,115,0.3)]">
+          <div className="relative w-[276px] h-[276px] md:w-[368px] md:h-[368px] rounded-full p-1.5 bg-gradient-to-tr from-app-primary to-transparent shadow-[0_0_30px_rgba(212,163,115,0.3)]">
             <div className="w-full h-full rounded-full overflow-hidden bg-app-surface-hover flex items-center justify-center relative">
                <img src={profilePic} alt="Profile" className="w-full h-full object-cover rounded-full filter grayscale-[10%] brightness-110" />
             </div>

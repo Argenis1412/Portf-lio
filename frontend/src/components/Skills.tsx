@@ -18,9 +18,9 @@ export default function Skills() {
   const categories = Array.from(new Set(skills.map(s => s.categoria)));
 
   return (
-    <section id="stack" className="py-16 bg-transparent transition-colors duration-300 relative group overflow-hidden">
+    <section id="stack" className="py-16 bg-transparent section-alt transition-colors duration-300 relative group overflow-hidden">
       {/* Dynamic hover glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-app-primary/5 rounded-full blur-[120px] -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-app-primary/5 dark:bg-app-primary/10 rounded-full blur-[120px] -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
       <div className="max-w-6xl mx-auto px-4">
         <div ref={ref} className={`reveal-hidden ${isVisible ? 'reveal-visible' : ''}`}>
           <h2 className="text-3xl md:text-5xl font-bold mb-12 text-center text-app-text">
