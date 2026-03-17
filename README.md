@@ -1,233 +1,107 @@
-# 🚀 Professional Portfolio Backend
+# 🏛️ Graphite & Bronze: Professional Engineering Portfolio
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](.)
-[![Python](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-gold.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/downloads/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB.svg)](https://react.dev/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **Professional REST API system built with FastAPI, focusing on Clean Architecture and production-ready backend standards.**
+> **A high-end engineering showcase built with Python (FastAPI) and React (TypeScript), featuring Clean Architecture and a sophisticated Graphite & Bronze aesthetic.**
 
-This repository serves as a robust backend foundation for a developer portfolio, demonstrating advanced Python patterns and scalable architecture.
-
----
-
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Technologies](#technologies)
-- [Project Structure](#project-structure)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [License](#license)
+This repository demonstrates a production-grade approach to personal branding, emphasizing architectural precision, automated testing, and a premium user experience.
 
 ---
 
-<a id="overview"></a>
-## 🎯 Overview
-
-Professional portfolio system developed to demonstrate skills in:
-
-- **Core**: Professional REST API with FastAPI, Clean Architecture, and robust validation.
-- **Quality**: Automated tests (>=85% coverage), strict typing, and standardized patterns.
-- **Production**: Structured logging, health monitoring, and performance middleware.
-- **Documentation**: Interactive OpenAPI/Swagger and detailed implementation guides.
-- **DevOps**: Docker integration and automated CI/CD pipelines.
-
-### 🌟 Key Features
-
-✅ **Complete REST API** with versioning (`/api/v1/`)  
-✅ **Professional Experience Management**  
-✅ **Project Showcase** with technical details  
-✅ **Contact System** with email sending integration  
-✅ **Professional Health Check** with uptime metrics  
-✅ **Standardized Error Handling** with custom error codes  
-✅ **Observability Middleware** (Request ID, structured logging, performance timing)  
-✅ **Structured Logs** with structlog (JSON in production, Console in dev)  
-✅ **CI/CD with GitHub Actions** (tests, lint, build)  
-✅ **Deployment Ready** for platforms like Railway/Render  
-🎨 **Frontend Component**: React + TypeScript client included as an API consumer
+## 🎨 Aesthetic: Graphite & Bronze
+Inspired by high-level engineering tools like Linear and Vercel, the portfolio uses a neutral, matte palette designed to project maturity and professional stability.
+- **Modo Oscuro (Graphite)**: A non-flickering stone-gray (#121212) base with sophisticated bronze accents.
+- **Modo Claro (Cloud)**: A smoky paper-gray (#F5F5F3) for reduced eye strain and maximum readability.
+- **Interactive Lighting**: Dynamic "Aro de Luz" (bronze glows) and subtle hardware-accelerated transitions.
 
 ---
 
-<a id="architecture"></a>
-## 🏗️ Architecture
+## 🏗️ Architecture & Technology
 
-The project follows **Clean Architecture** principles with clear layer separation:
+### System Overview
+The project is built on **Clean Architecture** principles, ensuring that business logic remains independent of frameworks and external UI components.
 
 ```mermaid
 graph TD
-    Client[Client Browser] <-->|HTTP/REST| Frontend[React + Vite Frontend]
-    Client <-->|HTTP/REST| Backend[FastAPI Backend]
+    Client[Client Browser] <-->|Rest API| Backend[FastAPI Backend]
+    Client <-->|Interacts| Frontend[React + TS Frontend]
     
-    subgraph Frontend [React Frontend]
-        UI[UI Components]
-        Context[State & Context]
-        API_Client[API Fetch Wrappers]
-        UI --> Context
-        UI --> API_Client
+    subgraph "⚛️ Frontend (React & Vite)"
+        UI[Atomic Components]
+        Context[Theme & i18n Context]
+        Hooks[Custom Revealing Hooks]
     end
     
-    API_Client <-->|fetch| Controllers
-    
-    subgraph Backend [Clean Architecture API]
-        Controllers[Controllers/Routers layer]
-        UseCases[Use Cases layer]
-        Entities[Entities/Domain Models]
-        Adapters[Adapters/Repositories]
-        
-        Controllers -->|Validates & routes| UseCases
-        UseCases -->|Business logic| Entities
-        UseCases -->|Data access| Adapters
+    subgraph "🚀 Backend (FastAPI & Clean Arch)"
+        Controllers[API Routers / V1]
+        UseCases[Business Logic]
+        Entities[Domain Models]
+        Adapters[JSON Storage / Email]
     end
-    
-    Adapters -->|JSON storage| Storage[(JSON Files)]
 ```
 
-### Benefits
-
-- 🔄 **Testability**: Each layer can be tested in isolation.
-- 🔌 **Decoupling**: Easy to swap implementations (e.g., JSON → Database).
-- 📦 **Maintainability**: Organized and localized code.
-- 🎯 **Scalability**: Structure ready for growth.
-
----
-
-<a id="technologies"></a>
-## 🛠️ Technologies
-
-### Backend
-
-| Technology | Version | Purpose |
-|-----------|--------|-----------|
-| **Python** | 3.12 | Core language |
-| **FastAPI** | 0.115+ | Async web framework |
-| **Pydantic** | 2.10+ | Data validation |
-| **Uvicorn** | 0.34+ | ASGI server |
-| **pytest** | 8.3+ | Test framework |
-| **pytest-cov** | 6.0+ | Code coverage |
-
-### Frontend *(in development)*
-
-| Technology | Version | Purpose |
-|-----------|--------|-----------|
-| **React** | 18+ | UI library |
-| **TypeScript** | 5+ | Static typing |
-| **Vite** | 7+ | Build tool |
-| **TailwindCSS** | 3+ | Styling |
+### Technical Excellence
+- **Frontend**: Vite-powered React with TailwindCSS (V4 compatible architecture), smooth reveals, and hardware-accelerated animations.
+- **Backend**: FastAPI with strict Pydantic V2 validation, structured logging (`structlog`), and request-id tracking.
+- **Testing**: Robust test suite with **93.05% code coverage**, ensuring every business rule is validated.
+- **DevOps**: Docker-ready with multi-stage builds and GitHub Actions CI/CD.
 
 ---
 
-<a id="project-structure"></a>
 ## 📁 Project Structure
 
-```
+```bash
 portfolio/
-│
-├── backend/                    # FastAPI API
-│   ├── app/
-│   │   ├── core/              # Core (exceptions, middleware, limits)
-│   │   ├── controladores/     # HTTP Endpoints (Controllers)
-│   │   ├── casos_uso/         # Business logic (Use Cases)
-│   │   ├── entidades/         # Domain models (Entities)
-│   │   ├── esquemas/          # Pydantic Schemas
-│   │   └── adaptadores/       # Repositories, external services
-│   ├── dados/                 # JSON persistence
-│   ├── testes/                # Automated tests
-│   ├── requirements.txt       # Python dependencies
-│   └── README.md              # Detailed documentation
-│
-├── frontend/                  # React Application
-│   ├── src/
-│   ├── package.json
-│   └── README.md
-│
-├── .github/                   # GitHub workflows
-│   └── workflows/
-│       ├── backend-ci.yml     # CI for backend
-│
-├── .gitignore                 # Ignored files
-├── .env.example               # Environment variables example
-├── LICENSE                    # MIT License
-├── docker-compose.yml         # Container orchestration
-└── README.md                  # This file
+├── 🚀 backend/          # Python API (Clean Architecture)
+│   ├── app/            # Source code (Core, Controllers, UseCases, Entities, Adapters)
+│   ├── dados/          # JSON Persistence (Zero-infrastructure data storage)
+│   └── testes/         # Automated unit and integration tests
+├── ⚛️ frontend/         # React Application
+│   ├── src/            # Components, Hooks, Contexts, and modern CSS
+│   └── public/         # Optimized assets
+└── ⚙️ docker-compose.yml # Container orchestration
 ```
 
 ---
 
-<a id="quick-start"></a>
-## 🚀 Quick Start
+## 🚀 Quick Setup
 
 ### Prerequisites
+- Python 3.12+
+- Node.js 20+
 
-- **Python 3.12** installed
-- **Git** configured
-
-### 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/Argenis1412/portfolio.git
-cd portfolio
-```
-
-### 2️⃣ Configure the Backend
-
+### 1. Backend Initialization
 ```bash
 cd backend
-
-# Create a virtual environment
-py -3.12 -m venv .venv  # Windows (recommended)
-# or: python -m venv .venv
-
-# Activate the environment (Windows)
-.venv\Scripts\activate
-
-# Activate the environment (Linux/Mac)
-source .venv/bin/activate
-
-# Install dependencies
+python -m venv .venv
+source .venv/bin/activate # or .venv\Scripts\activate on Windows
 pip install -r requirements.txt
-
-# Run tests
-# (Standard needs venv active)
-pytest
-# (Quick Windows shortcut)
-.\test
-
-# Start the server
 uvicorn app.principal:app --reload
 ```
 
-🌐 API available at: **http://localhost:8000**  
-📚 Documentation: **http://localhost:8000/docs**
+### 2. Frontend Initialization
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
 ---
 
-<a id="documentation"></a>
-## 📖 Documentation
+## 👨‍💻 Author: Argenis Lopez
+**Backend Developer & Systems Student at UFPR**
 
-### Backend
+Focused on building secure, scalable, and high-performance backend systems with hexagonal architecture and deterministic financial logic.
 
-- **[Detailed README](backend/README.md)**: Architecture, endpoints, examples.
-- **[Swagger UI](http://localhost:8000/docs)**: Interactive documentation.
-- **[ReDoc](http://localhost:8000/redoc)**: Alternative documentation.
-
----
-
-<a id="contributing"></a>
-## 🤝 Contributing
-
-Contributions are welcome!
-
-1. **Report bugs** via Issues.
-2. **Suggest improvements** via Issues.
-3. **Submit PRs** with fixes/features.
+- 💼 [LinkedIn](https://www.linkedin.com/in/argenis972/)
+- 🐙 [GitHub](https://github.com/Argenis1412)
 
 ---
-
-<a id="license"></a>
-## 📄 License
+*Developed with precision and a focus on architectural integrity.*
+ License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 

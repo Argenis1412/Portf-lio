@@ -41,11 +41,11 @@
 }
 
 body {
-  @apply bg-app-bg text-app-text antialiased transition-colors duration-300 font-sans selection:bg-app-primary/30;
+  @apply bg-app-bg text-app-text antialiased transition-colors duration-300 font-['Inter'] selection:bg-app-primary/30;
 }
 
 h1, h2, h3 {
-  @apply tracking-wider;
+  @apply tracking-wider font-['Montserrat'] font-bold;
 }
 
 /* Custom transitions and glassmorphism helpers */
