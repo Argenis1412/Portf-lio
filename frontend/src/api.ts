@@ -27,7 +27,7 @@ export interface Skill {
 
 export interface Experience {
   id: string;
-  cargo: string;
+  cargo: LocalizedString;
   empresa: string;
   localizacao: string;
   data_inicio: string;
@@ -48,7 +48,25 @@ export interface Formacao {
   atual: boolean;
 }
 
+export interface About {
+  nome: string;
+  titulo: string;
+  localizacao: string;
+  email: string;
+  telefone: string;
+  github: string;
+  linkedin: string;
+  descricao: LocalizedString;
+  disponibilidade: LocalizedString;
+}
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1';
+
+export const fetchAbout = async (): Promise<About> => {
+  const res = await fetch(`${API_BASE_URL}/sobre`);
+  if (!res.ok) throw new Error('Failed to fetch about info');
+  return res.json();
+};
 
 export const fetchProjects = async (): Promise<Project[]> => {
   console.log(`Fetching projects from: ${API_BASE_URL}/projetos`);

@@ -31,11 +31,9 @@ class Experiencia(BaseModel):
         examples=["exp-001"],
         description="Unique identifier",
     )
-    cargo: str = Field(
+    cargo: TextoLocalizado = Field(
         ...,
-        max_length=100,
-        examples=["Backend Developer"],
-        description="Job title",
+        description="Job title in PT, EN and ES",
     )
     empresa: str = Field(
         ...,

@@ -54,7 +54,7 @@ export default function Experience() {
             const lang = language as keyof LocalizedString;
             const title = isEducation
               ? (entry as { kind: 'education' } & Formacao).curso[lang]
-              : (entry as ExperienceType).cargo;
+              : (entry as ExperienceType).cargo[lang];
             const subtitle = isEducation
               ? (entry as Formacao).instituicao
               : (entry as ExperienceType).empresa;

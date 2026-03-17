@@ -1,7 +1,11 @@
 [
   {
     "id": "exp-001",
-    "cargo": "Backend Developer",
+    "cargo": {
+      "pt": "Desenvolvedor Backend",
+      "en": "Backend Developer",
+      "es": "Desarrollador Backend"
+    },
     "empresa": "Loja App (Personal Project)",
     "localizacao": "Remote",
     "data_inicio": "2025-12-20",
@@ -28,7 +32,11 @@
   },
   {
     "id": "exp-002",
-    "cargo": "Consultor de Negócios",
+    "cargo": {
+      "pt": "Consultor de Negócios",
+      "en": "Business Consultant",
+      "es": "Consultor de Negocios"
+    },
     "empresa": "Ademicon",
     "localizacao": "Curitiba, PR",
     "data_inicio": "2025-06-01",
@@ -41,4 +49,4 @@
     "tecnologias": [],
     "atual": false
   }
-]
+]
