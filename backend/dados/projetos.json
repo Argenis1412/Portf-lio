@@ -53,7 +53,7 @@
       "en": "REST API built with FastAPI following Clean Architecture principles. Implements clear separation of concerns with Controllers, Use Cases, Entities, and Adapters. Includes Pydantic V2 validation, automatic OpenAPI documentation, automated tests with pytest, and CI with GitHub Actions.",
       "es": "API REST desarrollada con FastAPI siguiendo principios de Clean Architecture. Implementa separación clara de responsabilidades con Controllers, Use Cases, Entities y Adapters. Incluye validación con Pydantic V2, documentación automática OpenAPI, pruebas automatizadas con pytest y CI con GitHub Actions."
     },
-    "tecnologias": ["Python", "FastAPI", "Pydantic", "Pytest", "Clean Architecture", "GitHub Actions"],
+    "tecnologias": ["Python", "FastAPI", "Pydantic", "Pytest", "Clean Architecture", "90% Test Coverage", "Versioned API", "CI/CD & GitHub Actions"],
     "funcionalidades": [
       "Personal and professional information endpoints",
       "Project listing and detail",

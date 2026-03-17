@@ -30,26 +30,6 @@ export default function Hero() {
               {t('nav.contact')}
             </a>
           </div>
-
-          {/* Technical Metric Badges */}
-          <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-10">
-             <span className="flex items-center gap-1.5 bg-app-surface border border-app-border px-3 py-1.5 rounded-full text-xs font-semibold text-app-text shadow-sm">
-                <svg className="w-3.5 h-3.5 text-app-primary" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                90% Test Coverage
-             </span>
-             <span className="flex items-center gap-1.5 bg-app-surface border border-app-border px-3 py-1.5 rounded-full text-xs font-semibold text-app-text shadow-sm">
-                <svg className="w-3.5 h-3.5 text-app-primary" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                Clean Architecture
-             </span>
-             <span className="flex items-center gap-1.5 bg-app-surface border border-app-border px-3 py-1.5 rounded-full text-xs font-semibold text-app-text shadow-sm">
-                <svg className="w-3.5 h-3.5 text-app-primary" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                Versioned API
-             </span>
-             <span className="flex items-center gap-1.5 bg-app-surface border border-app-border px-3 py-1.5 rounded-full text-xs font-semibold text-app-text shadow-sm">
-                <svg className="w-3.5 h-3.5 text-app-primary" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                CI/CD & GitHub Actions
-             </span>
-          </div>
         </div>
 
         <div className="order-1 md:order-2 flex justify-center md:justify-end relative mr-0 md:mr-4">
