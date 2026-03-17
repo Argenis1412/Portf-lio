@@ -14,7 +14,7 @@ export function useReveal(threshold = 0.1) {
       },
       {
         threshold,
-        rootMargin: '50px',
+        rootMargin: '200px',
       }
     );
 

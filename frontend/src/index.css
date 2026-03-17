@@ -11,43 +11,69 @@
   --color-app-border: var(--theme-border);
   --color-app-primary: var(--theme-primary);
   --color-app-primary-hover: var(--theme-primary-hover);
+  --color-app-secondary: var(--theme-secondary);
 }
 
 :root {
   color-scheme: light;
-  --theme-bg: var(--color-slate-50);
-  --theme-text: var(--color-slate-900);
+  --theme-bg: #F5F5F3;
+  --theme-text: #262626;
   --theme-surface: #ffffff;
-  --theme-surface-hover: var(--color-slate-100);
-  --theme-muted: var(--color-slate-600);
-  --theme-border: var(--color-slate-200);
-  --theme-primary: var(--color-amber-500);
-  --theme-primary-hover: var(--color-amber-600);
+  --theme-surface-hover: #EEEEED;
+  --theme-muted: #737373;
+  --theme-border: #E5E5E5;
+  --theme-primary: #BC8E5B;
+  --theme-primary-hover: #A67C4D;
+  --theme-secondary: #D4A373;
 }
 
 .dark {
   color-scheme: dark;
-  --theme-bg: #0a0a0a;
-  --theme-text: var(--color-slate-100);
-  --theme-surface: #121212;
-  --theme-surface-hover: var(--color-slate-900);
-  --theme-muted: var(--color-slate-400);
-  --theme-border: var(--color-slate-800);
-  --theme-primary: var(--color-amber-500);
-  --theme-primary-hover: var(--color-amber-400);
+  --theme-bg: #121212;
+  --theme-text: #E5E5E5;
+  --theme-surface: #1E1E1E;
+  --theme-surface-hover: #262626;
+  --theme-muted: #A3A3A3;
+  --theme-border: #2A2A2A;
+  --theme-primary: #D4A373;
+  --theme-primary-hover: #E2B68A;
+  --theme-secondary: #BC8E5B;
 }
 
 body {
-  @apply bg-app-bg text-app-text antialiased transition-colors duration-300;
+  @apply bg-app-bg text-app-text antialiased transition-colors duration-300 font-sans selection:bg-app-primary/30;
+}
+
+h1, h2, h3 {
+  @apply tracking-wider;
 }
 
 /* Custom transitions and glassmorphism helpers */
 .glass {
-  @apply bg-app-surface/70 backdrop-blur-md border border-app-border shadow-sm transition-colors duration-300;
+  @apply bg-app-surface border border-app-border backdrop-blur-md transition-all duration-300 ease-in-out;
 }
 
 .dark .glass {
-  @apply bg-app-surface/80 backdrop-blur-md border border-app-border/80 shadow-none;
+  @apply bg-transparent border-app-border;
+}
+
+.premium-shadow {
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+}
+
+.dark .premium-shadow {
+  box-shadow: none;
+}
+
+.gradient-border {
+  position: relative;
+  background-clip: padding-box;
+  border: 1px solid var(--theme-border);
+}
+
+.dark .gradient-border:hover {
+  border-color: var(--theme-primary);
+  transition: border-color 0.4s ease;
 }
 
 .transition-smooth {
@@ -57,7 +83,8 @@ body {
 .reveal-hidden {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  will-change: opacity, transform;
 }
 
 .reveal-visible {

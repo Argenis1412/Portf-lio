@@ -14,19 +14,19 @@ export default function Navbar() {
           </div>
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-6">
-              <a href="#hero" className="hover:text-app-primary-hover px-3 py-2 rounded-md text-sm font-medium transition-colors text-app-text">
+              <a href="#hero" className="hover:text-app-primary px-3 py-2 rounded-md text-xs font-semibold uppercase tracking-widest transition-colors text-app-text">
                 {t('nav.about')}
               </a>
-              <a href="#stack" className="hover:text-app-primary-hover px-3 py-2 rounded-md text-sm font-medium transition-colors text-app-text">
+              <a href="#stack" className="hover:text-app-primary px-3 py-2 rounded-md text-xs font-semibold uppercase tracking-widest transition-colors text-app-text">
                 {t('nav.stack')}
               </a>
-              <a href="#projects" className="hover:text-app-primary-hover px-3 py-2 rounded-md text-sm font-medium transition-colors text-app-text">
+              <a href="#projects" className="hover:text-app-primary px-3 py-2 rounded-md text-xs font-semibold uppercase tracking-widest transition-colors text-app-text">
                 {t('nav.projects')}
               </a>
-              <a href="#experience" className="hover:text-app-primary-hover px-3 py-2 rounded-md text-sm font-medium transition-colors text-app-text">
+              <a href="#experience" className="hover:text-app-primary px-3 py-2 rounded-md text-xs font-semibold uppercase tracking-widest transition-colors text-app-text">
                 {t('nav.journey')}
               </a>
-              <a href="#contact" className="hover:text-app-primary-hover px-3 py-2 rounded-md text-sm font-medium transition-colors text-app-text">
+              <a href="#contact" className="hover:text-app-primary px-3 py-2 rounded-md text-xs font-semibold uppercase tracking-widest transition-colors text-app-text">
                 {t('nav.contact')}
               </a>
             </div>
@@ -46,7 +46,7 @@ export default function Navbar() {
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as any)}
-              className="bg-app-surface border border-app-border text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block p-2 transition-smooth shadow-sm text-app-text"
+              className="bg-app-surface border border-app-border text-sm rounded-lg focus:ring-app-primary focus:border-app-primary block p-2 transition-smooth shadow-sm text-app-text"
             >
               <option value="pt">PT</option>
               <option value="en">EN</option>

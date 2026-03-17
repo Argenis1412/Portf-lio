@@ -39,15 +39,13 @@ export default function Experience() {
   };
 
   return (
-    <section id="experience" className="py-24 max-w-4xl mx-auto px-4">
+    <section id="experience" className="py-16 max-w-4xl mx-auto px-4">
       <div ref={ref} className={`reveal-hidden ${isVisible ? 'reveal-visible' : ''}`}>
-        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center text-app-text">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-500">
+        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center text-app-text tracking-widest">
             {t('nav.journey')}
-          </span>
         </h2>
 
-        <div className="relative border-l border-amber-500/30 ml-3 md:ml-6 space-y-12 pb-8">
+        <div className="relative border-l border-app-border ml-3 md:ml-6 space-y-12 pb-8">
           {entries.map((entry) => {
             const isEducation = entry.kind === 'education';
             const lang = language as keyof LocalizedString;
@@ -66,9 +64,9 @@ export default function Experience() {
                 <div
                   className={`absolute w-6 h-6 rounded-full -left-[12.5px] top-1 border-4 border-app-bg flex items-center justify-center
                     ${entry.atual
-                      ? 'bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.7)]'
+                      ? 'bg-app-primary'
                       : isEducation
-                        ? 'bg-sky-400/80'
+                        ? 'bg-app-primary/40'
                         : 'bg-app-muted'
                     }`}
                 >
@@ -77,12 +75,12 @@ export default function Experience() {
                   )}
                 </div>
 
-                <div className="glass rounded-2xl p-6 md:p-8 hover:-translate-y-1 transition-smooth">
+                <div className="glass rounded-xl p-6 md:p-8 border border-app-border hover:border-app-primary hover:shadow-[0_0_30px_rgba(212,163,115,0.25)] transition-all duration-300">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                     <div>
                       {/* Education / Experience badge */}
                       {isEducation && (
-                        <span className="inline-block text-xs font-semibold text-sky-600 dark:text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded-full mb-2">
+                        <span className="inline-block text-xs font-semibold text-app-primary bg-app-primary/10 border border-app-primary/20 px-2 py-0.5 rounded-full mb-2 uppercase tracking-widest">
                           {language === 'pt' ? 'Formação' : language === 'es' ? 'Formación' : 'Education'}
                         </span>
                       )}
@@ -107,7 +105,7 @@ export default function Experience() {
                   {techs.length > 0 && (
                     <div className="flex flex-wrap gap-2 pt-4 border-t border-app-border">
                       {techs.map(tech => (
-                        <span key={tech} className="text-xs font-semibold text-app-primary bg-amber-500/10 px-2 py-1 rounded">
+                        <span key={tech} className="text-xs font-semibold text-app-primary bg-app-primary/5 px-2 py-1 rounded border border-app-primary/10">
                           {tech}
                         </span>
                       ))}

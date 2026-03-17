@@ -28,7 +28,7 @@ export default function Projects() {
 
   if (loading) {
     return (
-      <section id="projects" className="py-24 max-w-6xl mx-auto px-4 text-center">
+      <section id="projects" className="py-16 max-w-6xl mx-auto px-4 text-center">
         <div className="animate-pulse text-xl text-app-muted">
           {t('loading')}
         </div>
@@ -58,23 +58,23 @@ export default function Projects() {
   console.log(`Rendering Projects component. Projects count: ${projects.length}`);
 
   return (
-    <section id="projects" className="py-24 max-w-6xl mx-auto px-4">
+    <section id="projects" className="py-16 max-w-6xl mx-auto px-4 relative group overflow-hidden">
+      {/* Dynamic hover glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-app-primary/5 rounded-full blur-[120px] -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
       <div 
         ref={ref} 
         className={`${isVisible ? 'reveal-visible' : ''}`}
       >
-        <h2 className="text-3xl md:text-5xl font-bold mb-12 text-center text-app-text">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-500">
+        <h2 className="text-3xl md:text-5xl font-bold mb-12 text-center text-app-text tracking-widest">
             {t('nav.projects')}
-          </span>
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project, index) => {
             console.log(`Mapping project ${index}: ${project.nome}`);
             return (
-              <div key={project.id} className="glass rounded-2xl p-6 md:p-8 hover:-translate-y-2 transition-smooth group relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 to-yellow-500 opacity-0 group-hover:opacity-100 transition-smooth"></div>
+              <div key={project.id} className="glass rounded-xl p-6 md:p-8 hover:-translate-y-1 hover:border-app-primary hover:shadow-[0_0_30px_rgba(212,163,115,0.25)] transition-all duration-300 group relative overflow-hidden border border-app-border">
+                <div className="absolute top-0 left-0 w-full h-1 bg-app-primary opacity-0 group-hover:opacity-100 transition-smooth z-10"></div>
                 
                 <h3 className="text-2xl font-bold text-app-text mb-3">{project.nome}</h3>
                 <p className="text-app-muted mb-6 leading-relaxed">
@@ -82,14 +82,14 @@ export default function Projects() {
                 </p>
                 
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tecnologias.slice(0, 5).map(tech => (
-                    <span key={tech} className="bg-app-surface-hover text-app-primary text-xs font-medium px-3 py-1 rounded-full border border-app-border">
+                  {project.tecnologias.slice(0, 11).map(tech => (
+                    <span key={tech} className="bg-app-primary/5 text-app-primary text-xs font-semibold px-3 py-1 rounded-full border border-app-primary/10">
                       {tech}
                     </span>
                   ))}
-                  {project.tecnologias.length > 5 && (
+                  {project.tecnologias.length > 11 && (
                     <span className="bg-app-surface-hover text-app-muted text-xs font-medium px-3 py-1 rounded-full border border-app-border">
-                      +{project.tecnologias.length - 5}
+                      +{project.tecnologias.length - 11}
                     </span>
                   )}
                 </div>
@@ -104,7 +104,7 @@ export default function Projects() {
                     </a>
                   )}
                   {project.demo && (
-                    <a href={project.demo} target="_blank" rel="noopener noreferrer" className="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-900 transition-colors flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-amber-500/20">
+                    <a href={project.demo} target="_blank" rel="noopener noreferrer" className="flex-1 bg-app-primary hover:bg-app-primary-hover text-white transition-colors flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold premium-shadow">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                       Live Demo
                     </a>

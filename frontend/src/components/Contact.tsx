@@ -55,15 +55,13 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 max-w-4xl mx-auto px-4">
+    <section id="contact" className="py-16 max-w-4xl mx-auto px-4">
       <div ref={ref} className={`reveal-hidden ${isVisible ? 'reveal-visible' : ''}`}>
-        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center text-app-text">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-500">
+        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center text-app-text tracking-widest">
             {t('contact.title')}
-          </span>
         </h2>
 
-        <div className="glass rounded-2xl p-8 md:p-12 shadow-xl shadow-amber-500/5">
+        <div className="glass rounded-xl p-8 md:p-12 border border-app-border hover:border-app-primary hover:shadow-[0_0_30px_rgba(212,163,115,0.25)] transition-all duration-300">
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -78,7 +76,7 @@ export default function Contact() {
                   required
                   value={formData.nome}
                   onChange={handleChange}
-                  className="bg-app-surface border border-app-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 text-app-text transition-smooth"
+                  className="bg-app-surface border border-app-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-app-primary text-app-text transition-smooth"
                 />
               </div>
 
@@ -93,7 +91,7 @@ export default function Contact() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="bg-app-surface border border-app-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 text-app-text transition-smooth"
+                  className="bg-app-surface border border-app-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-app-primary text-app-text transition-smooth"
                 />
               </div>
             </div>
@@ -109,7 +107,7 @@ export default function Contact() {
                 rows={5}
                 value={formData.mensagem}
                 onChange={handleChange}
-                className="bg-app-surface border border-app-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 text-app-text transition-smooth resize-none"
+                className="bg-app-surface border border-app-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-app-primary text-app-text transition-smooth resize-none"
               ></textarea>
             </div>
 
@@ -128,7 +126,7 @@ export default function Contact() {
             <button 
               type="submit" 
               disabled={status === 'loading' || status === 'success'}
-              className="mt-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-slate-900 font-bold py-4 px-8 rounded-xl transition-all shadow-lg shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-4 bg-app-primary hover:bg-app-primary-hover text-white font-bold py-4 px-8 rounded-xl transition-all premium-shadow disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest text-sm"
             >
               {status === 'loading' ? t('contact.sending') : t('contact.send')}
             </button>
