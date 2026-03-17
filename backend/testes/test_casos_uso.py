@@ -13,6 +13,7 @@ from app.casos_uso import (
     ObterProjetoPorIdUseCase,
     ObterStackUseCase,
     ObterExperienciasUseCase,
+    ObterFormacaoUseCase,
     EnviarContatoUseCase,
 )
 
@@ -89,6 +90,18 @@ async def test_obter_experiencias_ordena_cronologicamente(repositorio_mock):
     assert experiencias[0].atual is True  # Atual primeiro
     assert experiencias[1].atual is False
     repositorio_mock.obter_experiencias.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_obter_formacao_ordena_por_atual(repositorio_mock):
+    """Testa que formações acadêmicas retornam ordenadas (em curso primeiro)."""
+    uc = ObterFormacaoUseCase(repositorio_mock)
+
+    formacoes = await uc.executar()
+
+    assert len(formacoes) == 1
+    assert formacoes[0].atual is True
+    repositorio_mock.obter_formacao.assert_called_once()
 
 
 @pytest.mark.asyncio

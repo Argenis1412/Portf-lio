@@ -47,7 +47,7 @@ Professional portfolio system developed to demonstrate skills in:
 ✅ **Structured Logs** with structlog (JSON in production, Console in dev)  
 ✅ **CI/CD with GitHub Actions** (tests, lint, build)  
 ✅ **Deployment Ready** for platforms like Railway/Render  
-🎨 **Frontend Component**: React + TypeScript client included as an API consumer (in development)
+🎨 **Frontend Component**: React + TypeScript client included as an API consumer
 
 ---
 
@@ -56,34 +56,33 @@ Professional portfolio system developed to demonstrate skills in:
 
 The project follows **Clean Architecture** principles with clear layer separation:
 
-```
-┌─────────────────────────────────────────────┐
-│           Interface Layer                   │
-│         (Controllers/Routers)               │
-│   → Handles HTTP requests                   │
-│   → Validates input with Pydantic           │
-└──────────────────┬──────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────┐
-│           Use Case Layer                    │
-│      (Business Logic/Use Cases)             │
-│   → Orchestrates business logic             │
-│   → Independent of frameworks               │
-└──────────────────┬──────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────┐
-│           Entity Layer                      │
-│         (Domain Models)                     │
-│   → Pure business rules                     │
-│   → Domain validations                      │
-└──────────────────┬──────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────┐
-│           Adapter Layer                     │
-│    (Repositories/Services)                  │
-│   → Data access (JSON, DB)                  │
-│   → External integrations (Email)           │
-└─────────────────────────────────────────────┘
+```mermaid
+graph TD
+    Client[Client Browser] <-->|HTTP/REST| Frontend[React + Vite Frontend]
+    Client <-->|HTTP/REST| Backend[FastAPI Backend]
+    
+    subgraph Frontend [React Frontend]
+        UI[UI Components]
+        Context[State & Context]
+        API_Client[API Fetch Wrappers]
+        UI --> Context
+        UI --> API_Client
+    end
+    
+    API_Client <-->|fetch| Controllers
+    
+    subgraph Backend [Clean Architecture API]
+        Controllers[Controllers/Routers layer]
+        UseCases[Use Cases layer]
+        Entities[Entities/Domain Models]
+        Adapters[Adapters/Repositories]
+        
+        Controllers -->|Validates & routes| UseCases
+        UseCases -->|Business logic| Entities
+        UseCases -->|Data access| Adapters
+    end
+    
+    Adapters -->|JSON storage| Storage[(JSON Files)]
 ```
 
 ### Benefits
@@ -139,7 +138,7 @@ portfolio/
 │   ├── requirements.txt       # Python dependencies
 │   └── README.md              # Detailed documentation
 │
-├── frontend/                  # React Application (in dev)
+├── frontend/                  # React Application
 │   ├── src/
 │   ├── package.json
 │   └── README.md

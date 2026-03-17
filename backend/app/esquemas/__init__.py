@@ -16,6 +16,7 @@ from app.esquemas.sobre import RespostaSobre
 from app.esquemas.projetos import ProjetoResumo, ProjetoDetalhado, RespostaProjetos
 from app.esquemas.stack import ItemStack, RespostaStack
 from app.esquemas.experiencias import Experiencia, RespostaExperiencias
+from app.esquemas.formacao import ItemFormacao, RespostaFormacao
 from app.esquemas.contato import RequisicaoContato, RespostaContato
 
 __all__ = [
@@ -28,6 +29,8 @@ __all__ = [
     "RespostaStack",
     "Experiencia",
     "RespostaExperiencias",
+    "ItemFormacao",
+    "RespostaFormacao",
     "RequisicaoContato",
     "RespostaContato",
 ]

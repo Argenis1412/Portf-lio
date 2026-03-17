@@ -90,6 +90,17 @@ def test_listar_experiencias_retorna_200():
     assert isinstance(data["experiencias"], list)
 
 
+def test_listar_formacao_retorna_200():
+    """Testa endpoint GET /api/v1/formacao retorna lista."""
+    response = client.get("/api/v1/formacao")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert "formacoes" in data
+    assert "total" in data
+    assert isinstance(data["formacoes"], list)
+
+
 def test_enviar_contato_com_dados_validos_retorna_200():
     """Testa POST /api/contato com dados válidos usando Mock.
     """

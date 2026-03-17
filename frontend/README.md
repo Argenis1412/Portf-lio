@@ -1,73 +1,80 @@
-# React + TypeScript + Vite
+# 🎨 Portfolio Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 
-Currently, two official plugins are available:
+Frontend application for the professional developer portfolio. It consumes the FastAPI backend to display personal information, projects, career timeline, and a contact form.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Features
 
-## React Compiler
+- **Responsive Design**: Mobile-first approach using Tailwind CSS.
+- **Glassmorphism UI**: Modern aesthetic with glass-like components and smooth animations.
+- **i18n Support**: Multilingual interface (English, Portuguese, Spanish) with `LanguageContext`.
+- **Dark/Light Mode**: User-selectable theme with system preference detection (`ThemeContext`).
+- **Dynamic Content**: Fetched directly from the backend API.
+- **Scroll Animations**: Elements reveal smoothly on scroll using a custom `useReveal` hook.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📂 Structure
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── api/             # API client functions (fetch wrappers)
+├── assets/          # Static assets (images, etc.)
+├── components/      # React functional components
+├── context/         # React Context (Language, Theme)
+├── hooks/           # Custom React hooks (useReveal)
+├── locales/         # i18n translation strings
+├── App.tsx          # Main application component
+└── main.tsx         # Entry point
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚀 Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Prerequisites
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Node.js 18+
+- npm or pnpm
+
+### Installation
+
+```bash
+cd frontend
+npm install
 ```
+
+### Development
+
+```bash
+# Start the Vite development server
+npm run dev
+```
+
+The application will be available at `http://localhost:5174` (or another port if 5174 is in use).
+
+### Building for Production
+
+```bash
+npm run build
+```
+
+The optimized static build will be generated in the `dist/` directory.
+
+## 🔗 Environment Setup
+
+To connect to the backend, ensure your backend is running. By default, the `api/index.ts` determines the base URL:
+- In production, it uses the origin of the host.
+- In development, it points to `http://localhost:8000`.
+
+## 🛠️ State Management & Contexts
+
+- **ThemeContext**: Manages the `dark` class on the HTML `documentElement`.
+- **LanguageContext**: Manages the current language (`en`, `pt`, `es`) and provides the `t()` translation function.
+
+## 📝 Scripts
+
+- `npm run dev`: Starts the development server.
+- `npm run build`: Builds the app for production.
+- `npm run lint`: Runs ESLint to catch potential issues.
+- `npm run preview`: Previews the production build locally.

@@ -1,0 +1,124 @@
+import { useEffect, useState } from 'react';
+import { fetchExperience, fetchFormacao } from '../api';
+import type { Experience as ExperienceType, Formacao, LocalizedString } from '../api';
+import { useLanguage } from '../context/LanguageContext';
+import { useReveal } from '../hooks/useReveal';
+
+type TimelineEntry =
+  | ({ kind: 'experience' } & ExperienceType)
+  | ({ kind: 'education' } & Formacao);
+
+export default function Experience() {
+  const [entries, setEntries] = useState<TimelineEntry[]>([]);
+  const { language, t } = useLanguage();
+  const { ref, isVisible } = useReveal();
+
+  useEffect(() => {
+    Promise.all([fetchExperience(), fetchFormacao()])
+      .then(([exps, fmcs]) => {
+        const expEntries: TimelineEntry[] = exps.map(e => ({ kind: 'experience' as const, ...e }));
+        const fmcEntries: TimelineEntry[] = fmcs.map(f => ({ kind: 'education' as const, ...f }));
+        const merged = [...expEntries, ...fmcEntries].sort((a, b) => {
+          if (a.atual !== b.atual) return a.atual ? -1 : 1;
+          return b.data_inicio.localeCompare(a.data_inicio);
+        });
+        setEntries(merged);
+      })
+      .catch(err => console.error(err));
+  }, []);
+
+  const formatDate = (date: string | null, isActual: boolean) => {
+    if (!date) return isActual ? (language === 'pt' ? 'Presente' : language === 'es' ? 'Presente' : 'Present') : '?';
+    const [year, month] = date.split('-');
+    const months: Record<string, Record<string, string>> = {
+      pt: { '01':'jan','02':'fev','03':'mar','04':'abr','05':'mai','06':'jun','07':'jul','08':'ago','09':'set','10':'out','11':'nov','12':'dez' },
+      en: { '01':'Jan','02':'Feb','03':'Mar','04':'Apr','05':'May','06':'Jun','07':'Jul','08':'Aug','09':'Sep','10':'Oct','11':'Nov','12':'Dec' },
+      es: { '01':'ene','02':'feb','03':'mar','04':'abr','05':'may','06':'jun','07':'jul','08':'ago','09':'sep','10':'oct','11':'nov','12':'dic' },
+    };
+    return `${months[language]?.[month] ?? month}/${year}`;
+  };
+
+  return (
+    <section id="experience" className="py-24 max-w-4xl mx-auto px-4">
+      <div ref={ref} className={`reveal-hidden ${isVisible ? 'reveal-visible' : ''}`}>
+        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center text-slate-900 dark:text-slate-100">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-500">
+            {t('nav.journey')}
+          </span>
+        </h2>
+
+        <div className="relative border-l border-amber-500/30 ml-3 md:ml-6 space-y-12 pb-8">
+          {entries.map((entry) => {
+            const isEducation = entry.kind === 'education';
+            const lang = language as keyof LocalizedString;
+            const title = isEducation
+              ? (entry as { kind: 'education' } & Formacao).curso[lang]
+              : (entry as ExperienceType).cargo;
+            const subtitle = isEducation
+              ? (entry as Formacao).instituicao
+              : (entry as ExperienceType).empresa;
+            const description = entry.descricao[language as keyof typeof entry.descricao];
+            const techs = isEducation ? [] : (entry as ExperienceType).tecnologias;
+
+            return (
+              <div key={entry.id} className="relative pl-8 md:pl-12">
+                {/* Timeline dot */}
+                <div
+                  className={`absolute w-6 h-6 rounded-full -left-[12.5px] top-1 border-4 border-slate-50 dark:border-[#0a0a0a] flex items-center justify-center
+                    ${entry.atual
+                      ? 'bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.7)]'
+                      : isEducation
+                        ? 'bg-sky-400/80'
+                        : 'bg-slate-300 dark:bg-slate-600'
+                    }`}
+                >
+                  {isEducation && (
+                    <span className="text-[9px] leading-none select-none">🎓</span>
+                  )}
+                </div>
+
+                <div className="glass rounded-2xl p-6 md:p-8 hover:-translate-y-1 transition-smooth">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                    <div>
+                      {/* Education / Experience badge */}
+                      {isEducation && (
+                        <span className="inline-block text-xs font-semibold text-sky-600 dark:text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2 py-0.5 rounded-full mb-2">
+                          {language === 'pt' ? 'Formação' : language === 'es' ? 'Formación' : 'Education'}
+                        </span>
+                      )}
+                      <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-slate-100 leading-snug">{title}</h3>
+                      <div className="text-amber-600 dark:text-amber-400 font-medium text-base mt-1">{subtitle}</div>
+                    </div>
+                    <div className="text-sm font-medium text-slate-600 dark:text-slate-400 bg-slate-200/80 dark:bg-slate-800/80 px-4 py-2 rounded-full w-fit whitespace-nowrap">
+                      {formatDate(entry.data_inicio, false)} — {formatDate(entry.data_fim, entry.atual)}
+                    </div>
+                  </div>
+
+                  <div className="text-sm text-slate-600 dark:text-slate-500 mb-5 flex items-center gap-2">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    {entry.localizacao}
+                  </div>
+
+                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">{description}</p>
+
+                  {techs.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-300 dark:border-slate-700/50">
+                      {techs.map(tech => (
+                        <span key={tech} className="text-xs font-semibold text-amber-700 dark:text-amber-300/80 bg-amber-500/10 px-2 py-1 rounded">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}

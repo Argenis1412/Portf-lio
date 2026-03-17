@@ -21,38 +21,31 @@ Professional backend for a developer portfolio, implementing:
 ## 🏗️ Architecture
 
 ### Simplified Clean Architecture
+```mermaid
+graph TD
+    subgraph Interface Layer
+        C[Controllers / HTTP Layer]
+        C -.- note1[Receives requests<br>Validates input<br>Returns HTTP responses]
+    end
+    
+    subgraph Use Case Layer
+        UC[Use Cases / Business Logic]
+        UC -.- note2[Orchestrates business logic<br>NO framework dependencies<br>Testable in isolation]
+    end
+    
+    subgraph Domain Layer
+        E[Entities / Domain Models]
+        E -.- note3[Immutable domain models<br>Pure business logic<br>Python Dataclasses]
+    end
+    
+    subgraph External Layer
+        A[Adapters / External Services]
+        A -.- note4[Email Formspree<br>Storage JSON files<br>Logging]
+    end
 
-```
-┌─────────────────────────────────────────────────────┐
-│  Controllers (HTTP Layer)                           │
-│  - Receives requests                                │
-│  - Validates input (Pydantic)                       │
-│  - Returns HTTP responses                           │
-└────────────────┬────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────┐
-│  Use Cases (Business Logic)                         │
-│  - Orchestrates business logic                      │
-│  - NO framework dependencies                        │
-│  - Testable in isolation                            │
-└────────────────┬────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────┐
-│  Entities (Domain Models)                           │
-│  - Immutable domain models                          │
-│  - Pure business logic                              │
-│  - Python Dataclasses                               │
-└────────────────┬────────────────────────────────────┘
-                 │
-                 ▼
-┌─────────────────────────────────────────────────────┐
-│  Adapters (External Services)                       │
-│  - Email (Formspree)                                │
-│  - Storage (JSON files)                             │
-│  - Logging                                          │
-└─────────────────────────────────────────────────────┘
+    C -->|Calls| UC
+    UC -->|Uses| E
+    UC -->|Interfaces with| A
 ```
 
 ### Request Flow

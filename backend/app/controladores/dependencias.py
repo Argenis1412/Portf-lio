@@ -11,6 +11,7 @@ from app.adaptadores.repositorio import RepositorioPortfolio
 from app.casos_uso import (
     EnviarContatoUseCase,
     ObterExperienciasUseCase,
+    ObterFormacaoUseCase,
     ObterProjetoPorIdUseCase,
     ObterProjetosUseCase,
     ObterSobreUseCase,
@@ -53,6 +54,12 @@ def obter_obter_stack_use_case() -> ObterStackUseCase:
 def obter_obter_experiencias_use_case() -> ObterExperienciasUseCase:
     """Retorna caso de uso para experiencias profissionais."""
     return ObterExperienciasUseCase(obter_repositorio())
+
+
+@lru_cache
+def obter_obter_formacao_use_case() -> ObterFormacaoUseCase:
+    """Retorna caso de uso para formações acadêmicas."""
+    return ObterFormacaoUseCase(obter_repositorio())
 
 
 @lru_cache

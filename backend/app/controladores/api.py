@@ -7,6 +7,7 @@ Endpoints:
 - GET /api/projetos/{projeto_id}
 - GET /api/stack
 - GET /api/experiencias
+- GET /api/formacao
 """
 
 from typing import Annotated
@@ -17,8 +18,10 @@ from app.esquemas.sobre import RespostaSobre
 from app.esquemas.projetos import ProjetoResumo, ProjetoDetalhado, RespostaProjetos
 from app.esquemas.stack import ItemStack, RespostaStack
 from app.esquemas.experiencias import Experiencia, RespostaExperiencias
+from app.esquemas.formacao import ItemFormacao, RespostaFormacao
 from app.casos_uso import (
     ObterExperienciasUseCase,
+    ObterFormacaoUseCase,
     ObterProjetoPorIdUseCase,
     ObterProjetosUseCase,
     ObterSobreUseCase,
@@ -26,6 +29,7 @@ from app.casos_uso import (
 )
 from app.controladores.dependencias import (
     obter_obter_experiencias_use_case,
+    obter_obter_formacao_use_case,
     obter_obter_projeto_por_id_use_case,
     obter_obter_projetos_use_case,
     obter_obter_sobre_use_case,
@@ -270,4 +274,50 @@ async def listar_experiencias(
     return RespostaExperiencias(
         experiencias=experiencias_schema,
         total=len(experiencias_schema),
+    )
+
+
+@roteador.get(
+    "/formacao",
+    response_model=RespostaFormacao,
+    summary="Academic formations",
+    description="Returns list of academic formations ordered chronologically (in progress first).",
+    responses={
+        200: {"description": "Formations list returned successfully"},
+    },
+)
+async def listar_formacao(
+    obter_formacao_uc: Annotated[
+        ObterFormacaoUseCase,
+        Depends(obter_obter_formacao_use_case),
+    ],
+) -> RespostaFormacao:
+    """
+    Lista formações acadêmicas.
+
+    Returns:
+        RespostaFormacao: Lista ordenada de formações.
+
+    Ordenação:
+        Formação em curso primeiro, depois por data (mais recente primeiro).
+    """
+    formacoes = await obter_formacao_uc.executar()
+
+    formacoes_schema = [
+        ItemFormacao(
+            id=f.id,
+            curso=f.curso,
+            instituicao=f.instituicao,
+            localizacao=f.localizacao,
+            data_inicio=f.data_inicio,
+            data_fim=f.data_fim,
+            descricao=f.descricao,
+            atual=f.atual,
+        )
+        for f in formacoes
+    ]
+
+    return RespostaFormacao(
+        formacoes=formacoes_schema,
+        total=len(formacoes_schema),
     )

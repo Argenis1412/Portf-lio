@@ -14,6 +14,7 @@ import anyio
 
 from app.entidades.projeto import Projeto
 from app.entidades.experiencia import ExperienciaProfissional
+from app.entidades.formacao import FormacaoAcademica
 
 
 class RepositorioPortfolio(ABC):
@@ -46,6 +47,11 @@ class RepositorioPortfolio(ABC):
     @abstractmethod
     async def obter_experiencias(self) -> list[ExperienciaProfissional]:
         """Retorna lista de experiências profissionais."""
+        pass
+
+    @abstractmethod
+    async def obter_formacao(self) -> list[FormacaoAcademica]:
+        """Retorna lista de formações acadêmicas."""
         pass
 
 
@@ -170,5 +176,27 @@ class RepositorioJSON(RepositorioPortfolio):
                 atual=e.get("atual", False),
             )
             for e in dados
+        ]
+
+    async def obter_formacao(self) -> list[FormacaoAcademica]:
+        """
+        Obtém lista de formações acadêmicas.
+
+        Returns:
+            list[FormacaoAcademica]: Lista de entidades FormacaoAcademica.
+        """
+        dados = await self._ler_json("formacao.json")
+        return [
+            FormacaoAcademica(
+                id=f["id"],
+                curso=f["curso"],
+                instituicao=f["instituicao"],
+                localizacao=f["localizacao"],
+                data_inicio=date.fromisoformat(f["data_inicio"]),
+                data_fim=date.fromisoformat(f["data_fim"]) if f.get("data_fim") else None,
+                descricao=f["descricao"],
+                atual=f.get("atual", False),
+            )
+            for f in dados
         ]
 

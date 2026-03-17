@@ -10,6 +10,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 from app.entidades.projeto import Projeto
 from app.entidades.experiencia import ExperienciaProfissional
+from app.entidades.formacao import FormacaoAcademica
 from app.adaptadores.repositorio import RepositorioPortfolio
 from app.adaptadores.email_adaptador import EmailAdaptador
 from app.adaptadores.logger_adaptador import LoggerAdaptador
@@ -110,6 +111,20 @@ def repositorio_mock() -> RepositorioPortfolio:
         ),
     ]
     
+    # Mock obter_formacao
+    mock.obter_formacao.return_value = [
+        FormacaoAcademica(
+            id="edu-001",
+            curso={"pt": "Tecnologia em Análise e Desenvolvimento de Sistemas", "en": "Associate's Degree in Systems Analysis", "es": "Tecnólogo en Análisis y Desarrollo"},
+            instituicao="UFPR – Universidade Federal do Paraná",
+            localizacao="Curitiba, PR",
+            data_inicio=date(2026, 2, 1),
+            data_fim=date(2029, 3, 6),
+            descricao={"pt": "Em curso.", "en": "In progress.", "es": "En curso."},
+            atual=True,
+        ),
+    ]
+
     return mock
 
 
