@@ -40,6 +40,16 @@ class ProjetoResumo(BaseModel):
         default=False,
         description="Whether the project should be highlighted",
     )
+    repositorio: HttpUrl | None = Field(
+        default=None,
+        examples=["https://github.com/Argenis1412/portfolio"],
+        description="Repository URL",
+    )
+    demo: HttpUrl | None = Field(
+        default=None,
+        examples=["https://portfolio-api.railway.app"],
+        description="Live demo URL",
+    )
     imagem: HttpUrl | None = Field(
         default=None,
         description="Cover image URL",

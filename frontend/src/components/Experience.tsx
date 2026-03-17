@@ -41,7 +41,7 @@ export default function Experience() {
   return (
     <section id="experience" className="py-24 max-w-4xl mx-auto px-4">
       <div ref={ref} className={`reveal-hidden ${isVisible ? 'reveal-visible' : ''}`}>
-        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center text-slate-900 dark:text-slate-100">
+        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center text-app-text">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-500">
             {t('nav.journey')}
           </span>
@@ -64,12 +64,12 @@ export default function Experience() {
               <div key={entry.id} className="relative pl-8 md:pl-12">
                 {/* Timeline dot */}
                 <div
-                  className={`absolute w-6 h-6 rounded-full -left-[12.5px] top-1 border-4 border-slate-50 dark:border-[#0a0a0a] flex items-center justify-center
+                  className={`absolute w-6 h-6 rounded-full -left-[12.5px] top-1 border-4 border-app-bg flex items-center justify-center
                     ${entry.atual
                       ? 'bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.7)]'
                       : isEducation
                         ? 'bg-sky-400/80'
-                        : 'bg-slate-300 dark:bg-slate-600'
+                        : 'bg-app-muted'
                     }`}
                 >
                   {isEducation && (
@@ -86,15 +86,15 @@ export default function Experience() {
                           {language === 'pt' ? 'Formação' : language === 'es' ? 'Formación' : 'Education'}
                         </span>
                       )}
-                      <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-slate-100 leading-snug">{title}</h3>
-                      <div className="text-amber-600 dark:text-amber-400 font-medium text-base mt-1">{subtitle}</div>
+                      <h3 className="text-xl md:text-2xl font-bold text-app-text leading-snug">{title}</h3>
+                      <div className="text-app-primary font-medium text-base mt-1">{subtitle}</div>
                     </div>
-                    <div className="text-sm font-medium text-slate-600 dark:text-slate-400 bg-slate-200/80 dark:bg-slate-800/80 px-4 py-2 rounded-full w-fit whitespace-nowrap">
+                    <div className="text-sm font-medium text-app-muted bg-app-surface-hover/80 px-4 py-2 rounded-full w-fit whitespace-nowrap">
                       {formatDate(entry.data_inicio, false)} — {formatDate(entry.data_fim, entry.atual)}
                     </div>
                   </div>
 
-                  <div className="text-sm text-slate-600 dark:text-slate-500 mb-5 flex items-center gap-2">
+                  <div className="text-sm text-app-muted mb-5 flex items-center gap-2">
                     <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -102,12 +102,12 @@ export default function Experience() {
                     {entry.localizacao}
                   </div>
 
-                  <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">{description}</p>
+                  <p className="text-app-text leading-relaxed mb-4">{description}</p>
 
                   {techs.length > 0 && (
-                    <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-300 dark:border-slate-700/50">
+                    <div className="flex flex-wrap gap-2 pt-4 border-t border-app-border">
                       {techs.map(tech => (
-                        <span key={tech} className="text-xs font-semibold text-amber-700 dark:text-amber-300/80 bg-amber-500/10 px-2 py-1 rounded">
+                        <span key={tech} className="text-xs font-semibold text-app-primary bg-amber-500/10 px-2 py-1 rounded">
                           {tech}
                         </span>
                       ))}

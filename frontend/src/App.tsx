@@ -12,7 +12,7 @@ function App() {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <div className="min-h-screen flex flex-col pt-16 selection:bg-amber-500/30 selection:text-slate-900 dark:selection:text-white transition-colors duration-300">
+        <div className="min-h-screen flex flex-col pt-16 selection:bg-app-primary/30 selection:text-app-text transition-colors duration-300">
           <Navbar />
           <main className="flex-grow">
             <Hero />

@@ -2,26 +2,52 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-app-bg: var(--theme-bg);
+  --color-app-text: var(--theme-text);
+  --color-app-surface: var(--theme-surface);
+  --color-app-surface-hover: var(--theme-surface-hover);
+  --color-app-muted: var(--theme-muted);
+  --color-app-border: var(--theme-border);
+  --color-app-primary: var(--theme-primary);
+  --color-app-primary-hover: var(--theme-primary-hover);
+}
+
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
+  --theme-bg: var(--color-slate-50);
+  --theme-text: var(--color-slate-900);
+  --theme-surface: #ffffff;
+  --theme-surface-hover: var(--color-slate-100);
+  --theme-muted: var(--color-slate-600);
+  --theme-border: var(--color-slate-200);
+  --theme-primary: var(--color-amber-500);
+  --theme-primary-hover: var(--color-amber-600);
+}
+
+.dark {
+  color-scheme: dark;
+  --theme-bg: #0a0a0a;
+  --theme-text: var(--color-slate-100);
+  --theme-surface: #121212;
+  --theme-surface-hover: var(--color-slate-900);
+  --theme-muted: var(--color-slate-400);
+  --theme-border: var(--color-slate-800);
+  --theme-primary: var(--color-amber-500);
+  --theme-primary-hover: var(--color-amber-400);
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased transition-colors duration-300;
-}
-
-/* Dark mode specific elegant colors */
-.dark body {
-  @apply bg-[#0a0a0a] text-slate-100;
+  @apply bg-app-bg text-app-text antialiased transition-colors duration-300;
 }
 
 /* Custom transitions and glassmorphism helpers */
 .glass {
-  @apply bg-white/70 backdrop-blur-md border border-slate-200 shadow-sm transition-colors duration-300;
+  @apply bg-app-surface/70 backdrop-blur-md border border-app-border shadow-sm transition-colors duration-300;
 }
 
 .dark .glass {
-  @apply bg-[#121212]/80 backdrop-blur-md border border-slate-800/80 shadow-none;
+  @apply bg-app-surface/80 backdrop-blur-md border border-app-border/80 shadow-none;
 }
 
 .transition-smooth {

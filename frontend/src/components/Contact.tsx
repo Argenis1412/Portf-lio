@@ -57,7 +57,7 @@ export default function Contact() {
   return (
     <section id="contact" className="py-24 max-w-4xl mx-auto px-4">
       <div ref={ref} className={`reveal-hidden ${isVisible ? 'reveal-visible' : ''}`}>
-        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center text-slate-900 dark:text-slate-100">
+        <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center text-app-text">
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-yellow-500">
             {t('contact.title')}
           </span>
@@ -68,7 +68,7 @@ export default function Contact() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label htmlFor="nome" className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                <label htmlFor="nome" className="text-sm font-semibold text-app-text">
                   {t('contact.name')}
                 </label>
                 <input 
@@ -78,12 +78,12 @@ export default function Contact() {
                   required
                   value={formData.nome}
                   onChange={handleChange}
-                  className="bg-slate-50 dark:bg-[#121212] border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 dark:text-slate-100 transition-smooth"
+                  className="bg-app-surface border border-app-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 text-app-text transition-smooth"
                 />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="email" className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                <label htmlFor="email" className="text-sm font-semibold text-app-text">
                   {t('contact.email')}
                 </label>
                 <input 
@@ -93,13 +93,13 @@ export default function Contact() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="bg-slate-50 dark:bg-[#121212] border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 dark:text-slate-100 transition-smooth"
+                  className="bg-app-surface border border-app-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 text-app-text transition-smooth"
                 />
               </div>
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="mensagem" className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <label htmlFor="mensagem" className="text-sm font-semibold text-app-text">
                 {t('contact.message')}
               </label>
               <textarea 
@@ -109,7 +109,7 @@ export default function Contact() {
                 rows={5}
                 value={formData.mensagem}
                 onChange={handleChange}
-                className="bg-slate-50 dark:bg-[#121212] border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 dark:text-slate-100 transition-smooth resize-none"
+                className="bg-app-surface border border-app-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 text-app-text transition-smooth resize-none"
               ></textarea>
             </div>
 

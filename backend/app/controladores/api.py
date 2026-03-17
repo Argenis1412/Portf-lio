@@ -98,6 +98,8 @@ async def listar_projetos(
             descricao_curta=p.descricao_curta,
             tecnologias=p.tecnologias,
             destaque=p.destaque,
+            repositorio=p.repositorio,
+            demo=p.demo,
             imagem=p.imagem,
         )
         for p in projetos
