@@ -1,7 +1,6 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
-// @ts-ignore
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
