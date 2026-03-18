@@ -17,7 +17,7 @@ The goal of this project is not only to showcase my work, but also to demonstrat
 | Layer | Technology |
 |---|---|
 | **Backend** | FastAPI · Pydantic V2 · structlog · slowapi |
-| **Frontend** | React 19 · TypeScript · Vite · Tailwind CSS v4 |
+| **Frontend** | React 19 · TypeScript · Vite · Tailwind CSS v4 · Framer Motion · Lucide |
 | **Testing** | Pytest (backend) · Vitest + Testing Library (frontend) |
 | **CI/CD** | GitHub Actions (lint + test on every push) |
 | **Data** | JSON files (no database needed) |
@@ -25,6 +25,9 @@ The goal of this project is not only to showcase my work, but also to demonstrat
 
 - **Architecture**: Clean Architecture (Controllers → Use Cases → Entities → Adapters).
 - **i18n**: All content served in PT / EN / ES simultaneously from the API.
+- **Premium UX**: Smooth declarative animations (Framer Motion), unified iconography (Lucide), and Skeleton Screens for polished loading states.
+- **Recruiter Optimized**: One-click "Copy Email" and "Copy WhatsApp" badges in the footer with animated feedback and official branding.
+- **Localized Validation**: Custom form validation that respects the selected language and updates reactively.
 - **91% backend test coverage** with fully isolated business logic (90.55% measured — 19 tests, all passing).
 - **Contact form** forwarded via Formspree (no server-side email setup required).
 
