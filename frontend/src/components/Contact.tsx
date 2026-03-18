@@ -102,7 +102,7 @@ export default function Contact() {
                   id="nome" 
                   name="nome"
                   required
-                  placeholder="Seu nome"
+                  placeholder={t('contact.placeholder.name')}
                   value={formData.nome}
                   onChange={handleChange}
                   className="bg-app-surface/50 border border-app-border rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-app-primary/50 text-app-text transition-all duration-300 placeholder:text-app-muted/30"
@@ -118,7 +118,7 @@ export default function Contact() {
                   id="email" 
                   name="email"
                   required
-                  placeholder="exemplo@email.com"
+                  placeholder={t('contact.placeholder.email')}
                   value={formData.email}
                   onChange={handleChange}
                   className="bg-app-surface/50 border border-app-border rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-app-primary/50 text-app-text transition-all duration-300 placeholder:text-app-muted/30"
@@ -135,7 +135,7 @@ export default function Contact() {
                 name="mensagem"
                 required
                 rows={5}
-                placeholder="Como posso te ajudar?"
+                placeholder={t('contact.placeholder.message')}
                 value={formData.mensagem}
                 onChange={handleChange}
                 className="bg-app-surface/50 border border-app-border rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-app-primary/50 text-app-text transition-all duration-300 placeholder:text-app-muted/30 resize-none"
@@ -166,7 +166,9 @@ export default function Contact() {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                 ) : (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                  </svg>
                 )}
                 {status === 'loading' ? t('contact.sending') : t('contact.send')}
               </button>

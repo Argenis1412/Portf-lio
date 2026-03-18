@@ -56,7 +56,10 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.sending': 'Enviando...',
       'contact.success': 'Mensagem enviada com sucesso!',
       'contact.error': 'Erro ao enviar. A mensagem deve ter pelo menos 10 caracteres.',
-      'contact.whatsapp': 'Conversar no WhatsApp'
+      'contact.whatsapp': 'Conversar no WhatsApp',
+      'contact.placeholder.name': 'Seu nome',
+      'contact.placeholder.email': 'exemplo@email.com',
+      'contact.placeholder.message': 'Como posso te ajudar?'
     },
     en: {
       'nav.about': 'About',
@@ -77,7 +80,10 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.sending': 'Sending...',
       'contact.success': 'Message sent successfully!',
       'contact.error': 'Error sending. Message must be at least 10 characters long.',
-      'contact.whatsapp': 'Chat on WhatsApp'
+      'contact.whatsapp': 'Chat on WhatsApp',
+      'contact.placeholder.name': 'Your name',
+      'contact.placeholder.email': 'example@email.com',
+      'contact.placeholder.message': 'How can I help you?'
     },
     es: {
       'nav.about': 'Sobre',
@@ -98,7 +104,10 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.sending': 'Enviando...',
       'contact.success': '¡Mensaje enviado con éxito!',
       'contact.error': 'Error al enviar. El mensaje debe tener al menos 10 caracteres.',
-      'contact.whatsapp': 'Chatear por WhatsApp'
+      'contact.whatsapp': 'Chatear por WhatsApp',
+      'contact.placeholder.name': 'Tu nombre',
+      'contact.placeholder.email': 'ejemplo@correo.com',
+      'contact.placeholder.message': '¿En qué puedo ayudarte?'
     }
   };
 
