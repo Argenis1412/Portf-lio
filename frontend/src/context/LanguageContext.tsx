@@ -59,7 +59,9 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.whatsapp': 'Conversar no WhatsApp',
       'contact.placeholder.name': 'Seu nome',
       'contact.placeholder.email': 'exemplo@email.com',
-      'contact.placeholder.message': 'Como posso te ajudar?'
+      'contact.placeholder.message': 'Como posso te ajudar?',
+      'contact.copy_email': 'Copiar E-mail',
+      'contact.email_copied': 'E-mail copiado!'
     },
     en: {
       'nav.about': 'About',
@@ -83,7 +85,9 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.whatsapp': 'Chat on WhatsApp',
       'contact.placeholder.name': 'Your name',
       'contact.placeholder.email': 'example@email.com',
-      'contact.placeholder.message': 'How can I help you?'
+      'contact.placeholder.message': 'How can I help you?',
+      'contact.copy_email': 'Copy Email',
+      'contact.email_copied': 'Email copied!'
     },
     es: {
       'nav.about': 'Sobre',
@@ -107,7 +111,9 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.whatsapp': 'Chatear por WhatsApp',
       'contact.placeholder.name': 'Tu nombre',
       'contact.placeholder.email': 'ejemplo@correo.com',
-      'contact.placeholder.message': '¿En qué puedo ayudarte?'
+      'contact.placeholder.message': '¿En qué puedo ayudarte?',
+      'contact.copy_email': 'Copiar Correo',
+      'contact.email_copied': '¡Correo copiado!'
     }
   };
 

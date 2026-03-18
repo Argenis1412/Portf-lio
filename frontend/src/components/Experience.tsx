@@ -1,8 +1,10 @@
+import { motion } from 'framer-motion';
+import Skeleton from './ui/Skeleton';
+import { GraduationCap, MapPin, Briefcase } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { fetchExperience, fetchFormacao } from '../api';
 import type { Experience as ExperienceType, Formacao, LocalizedString } from '../api';
 import { useLanguage } from '../context/LanguageContext';
-import { useReveal } from '../hooks/useReveal';
 
 type TimelineEntry =
   | ({ kind: 'experience' } & ExperienceType)
@@ -10,8 +12,8 @@ type TimelineEntry =
 
 export default function Experience() {
   const [entries, setEntries] = useState<TimelineEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const { language, t } = useLanguage();
-  const { ref, isVisible } = useReveal();
 
   useEffect(() => {
     Promise.all([fetchExperience(), fetchFormacao()])
@@ -24,7 +26,8 @@ export default function Experience() {
         });
         setEntries(merged);
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
   }, []);
 
   const formatDate = (date: string | null, isActual: boolean) => {
@@ -38,12 +41,44 @@ export default function Experience() {
     return `${months[language]?.[month] ?? month}/${year}`;
   };
 
+  if (loading) {
+    return (
+      <section id="experience" className="py-16 section-alt">
+        <div className="max-w-4xl mx-auto px-4">
+          <Skeleton className="h-10 w-48 mx-auto mb-16" />
+          <div className="relative border-l border-app-border ml-3 md:ml-6 space-y-12 pb-8">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="relative pl-8 md:pl-12">
+                <div className="absolute w-6 h-6 rounded-full -left-[12.5px] top-1 bg-app-surface-hover border-4 border-app-bg" />
+                <div className="glass rounded-xl p-8 border border-app-border">
+                  <Skeleton className="h-6 w-3/4 mb-4" />
+                  <Skeleton className="h-4 w-1/2 mb-6" />
+                  <Skeleton className="h-4 w-full mb-2" />
+                  <Skeleton className="h-4 w-5/6 mb-4" />
+                  <div className="flex gap-2">
+                    <Skeleton className="h-5 w-12 rounded" />
+                    <Skeleton className="h-5 w-12 rounded" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="experience" className="py-16 section-alt transition-colors duration-300 relative group overflow-hidden">
       {/* Dynamic hover glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-app-primary/5 dark:bg-app-primary/10 rounded-full blur-[120px] -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
       <div className="max-w-4xl mx-auto px-4">
-      <div ref={ref} className={`reveal-hidden ${isVisible ? 'reveal-visible' : ''}`}>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
         <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center text-app-text tracking-widest">
             {t('nav.journey')}
         </h2>
@@ -62,7 +97,14 @@ export default function Experience() {
             const techs = isEducation ? [] : (entry as ExperienceType).tecnologias;
 
             return (
-              <div key={entry.id} className="relative pl-8 md:pl-12">
+              <motion.div 
+                key={entry.id}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="relative pl-8 md:pl-12"
+              >
                 {/* Timeline dot */}
                 <div
                   className={`absolute w-6 h-6 rounded-full -left-[12.5px] top-1 border-4 border-app-bg flex items-center justify-center
@@ -73,8 +115,10 @@ export default function Experience() {
                         : 'bg-app-muted'
                     }`}
                 >
-                  {isEducation && (
-                    <span className="text-[9px] leading-none select-none">🎓</span>
+                  {isEducation ? (
+                    <GraduationCap className="w-3 h-3 text-white" />
+                  ) : (
+                    <Briefcase className="w-3 h-3 text-white" />
                   )}
                 </div>
 
@@ -96,10 +140,7 @@ export default function Experience() {
                   </div>
 
                   <div className="text-sm text-app-muted mb-5 flex items-center gap-2">
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                    <MapPin className="w-4 h-4 flex-shrink-0" />
                     {entry.localizacao}
                   </div>
 
@@ -115,11 +156,11 @@ export default function Experience() {
                     </div>
                   )}
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
-      </div>
+      </motion.div>
       </div>
     </section>
   );
