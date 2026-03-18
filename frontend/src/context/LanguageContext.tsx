@@ -55,7 +55,8 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.send': 'Enviar Mensagem',
       'contact.sending': 'Enviando...',
       'contact.success': 'Mensagem enviada com sucesso!',
-      'contact.error': 'Erro ao enviar. A mensagem deve ter pelo menos 10 caracteres.'
+      'contact.error': 'Erro ao enviar. A mensagem deve ter pelo menos 10 caracteres.',
+      'contact.whatsapp': 'Conversar no WhatsApp'
     },
     en: {
       'nav.about': 'About',
@@ -75,7 +76,8 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.send': 'Send Message',
       'contact.sending': 'Sending...',
       'contact.success': 'Message sent successfully!',
-      'contact.error': 'Error sending. Message must be at least 10 characters long.'
+      'contact.error': 'Error sending. Message must be at least 10 characters long.',
+      'contact.whatsapp': 'Chat on WhatsApp'
     },
     es: {
       'nav.about': 'Sobre',
@@ -95,7 +97,8 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.send': 'Enviar Mensaje',
       'contact.sending': 'Enviando...',
       'contact.success': '¡Mensaje enviado con éxito!',
-      'contact.error': 'Error al enviar. El mensaje debe tener al menos 10 caracteres.'
+      'contact.error': 'Error al enviar. El mensaje debe tener al menos 10 caracteres.',
+      'contact.whatsapp': 'Chatear por WhatsApp'
     }
   };
 

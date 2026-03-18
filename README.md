@@ -158,7 +158,7 @@ For detailed information about each part, see:
 
 **Argenis Lopez** — Backend Developer
 
-- 💼 [LinkedIn](https://www.linkedin.com/in/argenis972/)
+- 💼 [LinkedIn](https://www.linkedin.com/in/argenis1412/)
 - 🐙 [GitHub](https://github.com/Argenis1412)
 
 ---
