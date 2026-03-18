@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Loader2 } from 'lucide-react';
+import { Mail, Loader2, Copy, Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { fetchAbout } from '../api';
@@ -8,6 +8,7 @@ import type { About } from '../api';
 export default function Contact() {
   const { t, language } = useLanguage();
   const [about, setAbout] = useState<About | null>(null);
+  const [copied, setCopied] = useState(false);
   
   const [formData, setFormData] = useState({
     nome: '',
@@ -68,6 +69,13 @@ export default function Contact() {
     window.open(`https://wa.me/${finalNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
+  const handleCopyEmail = () => {
+    const email = about?.email || 'argenis.developer@gmail.com';
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -117,10 +125,31 @@ export default function Contact() {
                 />
               </div>
 
-              <div className="flex flex-col gap-2.5">
-                <label htmlFor="email" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">
-                  {t('contact.email')}
-                </label>
+              <div className="flex flex-col gap-2.5 group/label">
+                <div className="flex items-center justify-between px-1">
+                  <label htmlFor="email" className="text-xs font-bold text-app-muted uppercase tracking-widest">
+                    {t('contact.email')}
+                  </label>
+                  <motion.button
+                    type="button"
+                    onClick={handleCopyEmail}
+                    className="flex items-center gap-1.5 text-[10px] font-bold text-app-primary/60 hover:text-app-primary transition-colors uppercase tracking-tight"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <AnimatePresence mode="wait">
+                      {copied ? (
+                        <motion.span key="check" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-1">
+                          <Check className="w-3 h-3" /> {t('contact.email_copied')}
+                        </motion.span>
+                      ) : (
+                        <motion.span key="copy" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-1">
+                          <Copy className="w-3 h-3" /> {t('contact.copy_email')}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+                </div>
                 <input 
                   type="email" 
                   id="email" 
