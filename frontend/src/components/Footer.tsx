@@ -17,15 +17,17 @@ export default function Footer() {
       .catch(err => console.error('Error fetching about data for footer:', err));
   }, []);
 
-  const handleCopyEmail = () => {
-    const email = about?.email || 'argenis.developer@gmail.com';
+  const handleCopyEmail = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const email = about?.email || 'argenislopez28708256@gmail.com';
     navigator.clipboard.writeText(email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
-  const handleCopyWhatsApp = () => {
-    const phone = about?.telefone || '+55 (11) 98765-4321';
+  const handleCopyWhatsApp = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const phone = about?.telefone || '(41) 9 9510-3364';
     navigator.clipboard.writeText(phone);
     setCopiedWhatsApp(true);
     setTimeout(() => setCopiedWhatsApp(false), 2000);
@@ -43,19 +45,19 @@ export default function Footer() {
           
           {/* Email Copy Badge */}
           <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={handleCopyEmail}
-            className="group flex items-center gap-3 px-5 py-2.5 bg-app-surface border border-app-border rounded-2xl hover:border-app-primary transition-all duration-300 shadow-sm relative overflow-hidden w-full max-w-[280px] md:w-auto"
+            className="group flex items-center gap-3 px-5 py-2.5 bg-app-surface border border-app-border rounded-2xl hover:border-app-primary transition-all duration-300 shadow-sm relative overflow-hidden w-full max-w-[320px] md:w-auto"
           >
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-app-primary/10 text-app-primary group-hover:bg-app-primary group-hover:text-white transition-colors duration-300">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-app-primary/10 text-app-primary group-hover:bg-app-primary group-hover:text-white transition-colors duration-300 flex-shrink-0">
               <Mail className="w-4 h-4" />
             </div>
-            <div className="text-left flex-1">
+            <div className="text-left flex-1 min-w-0">
               <p className="text-[10px] uppercase tracking-widest text-app-muted font-bold leading-none mb-1">Email</p>
-              <p className="text-xs font-semibold text-app-text truncate">{about?.email || 'argenis.developer@gmail.com'}</p>
+              <p className="text-xs font-semibold text-app-text truncate">{about?.email || 'argenislopez28708256@gmail.com'}</p>
             </div>
-            <div className="ml-2 pl-3 border-l border-app-border flex items-center justify-center">
+            <div className="ml-2 pl-3 border-l border-app-border flex items-center justify-center flex-shrink-0">
               <AnimatePresence mode="wait">
                 {copiedEmail ? (
                   <motion.div
@@ -82,19 +84,19 @@ export default function Footer() {
 
           {/* WhatsApp Copy Badge */}
           <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={handleCopyWhatsApp}
-            className="group flex items-center gap-3 px-5 py-2.5 bg-app-surface border border-app-border rounded-2xl hover:border-[#25D366] transition-all duration-300 shadow-sm relative overflow-hidden w-full max-w-[280px] md:w-auto"
+            className="group flex items-center gap-3 px-5 py-2.5 bg-app-surface border border-app-border rounded-2xl hover:border-[#25D366] transition-all duration-300 shadow-sm relative overflow-hidden w-full max-w-[320px] md:w-auto"
           >
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#25D366]/10 text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-colors duration-300">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#25D366]/10 text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-colors duration-300 flex-shrink-0">
               <MessageSquare className="w-4 h-4" />
             </div>
-            <div className="text-left flex-1">
+            <div className="text-left flex-1 min-w-0">
               <p className="text-[10px] uppercase tracking-widest text-app-muted font-bold leading-none mb-1">WhatsApp</p>
-              <p className="text-xs font-semibold text-app-text truncate">{about?.telefone || '+55 (11) 98765-4321'}</p>
+              <p className="text-xs font-semibold text-app-text truncate">{about?.telefone || '(41) 9 9510-3364'}</p>
             </div>
-            <div className="ml-2 pl-3 border-l border-app-border flex items-center justify-center">
+            <div className="ml-2 pl-3 border-l border-app-border flex items-center justify-center flex-shrink-0">
               <AnimatePresence mode="wait">
                 {copiedWhatsApp ? (
                   <motion.div
