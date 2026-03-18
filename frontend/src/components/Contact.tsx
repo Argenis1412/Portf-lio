@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Loader2 } from 'lucide-react';
+import { Mail, Loader2, AlertCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { fetchAbout } from '../api';
@@ -15,6 +15,8 @@ export default function Contact() {
     assunto: 'Contato via Portfólio',
     mensagem: ''
   });
+  
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   useEffect(() => {
@@ -23,12 +25,33 @@ export default function Contact() {
       .catch(err => console.error('Error fetching about data for contact:', err));
   }, []);
 
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.nome.trim()) {
+      newErrors.nome = t('contact.error.name_required');
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = t('contact.error.email_required');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = t('contact.error.email_invalid');
+    }
+    
+    if (!formData.mensagem.trim()) {
+      newErrors.mensagem = t('contact.error.message_required');
+    } else if (formData.mensagem.length < 10) {
+      newErrors.mensagem = t('contact.error.message_too_short');
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.mensagem.length < 10) {
-      setStatus('error');
-      return;
-    }
+    
+    if (!validateForm()) return;
     
     setStatus('loading');
     
@@ -45,6 +68,7 @@ export default function Contact() {
       if (response.ok) {
         setStatus('success');
         setFormData({ nome: '', email: '', assunto: 'Contato via Portfólio', mensagem: '' });
+        setErrors({});
       } else {
         setStatus('error');
       }
@@ -69,13 +93,19 @@ export default function Contact() {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-    if (status === 'error') {
-      setStatus('idle');
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
+    
+    if (status === 'error') setStatus('idle');
   };
 
   return (
@@ -98,7 +128,7 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="glass rounded-2xl p-8 md:p-12 border border-app-border hover:border-app-primary/50 hover:shadow-[0_0_40px_rgba(212,163,115,0.15)] transition-all duration-500"
         >
-          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-8">
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col gap-2.5">
@@ -109,12 +139,23 @@ export default function Contact() {
                   type="text" 
                   id="nome" 
                   name="nome"
-                  required
                   placeholder={t('contact.placeholder.name')}
                   value={formData.nome}
                   onChange={handleChange}
-                  className="bg-app-surface/50 border border-app-border rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-app-primary/50 text-app-text transition-all duration-300 placeholder:text-app-muted/30"
+                  className={`bg-app-surface/50 border ${errors.nome ? 'border-red-500/50 focus:ring-red-500/20' : 'border-app-border focus:ring-app-primary/50'} rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 text-app-text transition-all duration-300 placeholder:text-app-muted/30`}
                 />
+                <AnimatePresence>
+                  {errors.nome && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1"
+                    >
+                      <AlertCircle className="w-3 h-3" /> {errors.nome}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
 
               <div className="flex flex-col gap-2.5">
@@ -125,12 +166,23 @@ export default function Contact() {
                   type="email" 
                   id="email" 
                   name="email"
-                  required
                   placeholder={t('contact.placeholder.email')}
                   value={formData.email}
                   onChange={handleChange}
-                  className="bg-app-surface/50 border border-app-border rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-app-primary/50 text-app-text transition-all duration-300 placeholder:text-app-muted/30"
+                  className={`bg-app-surface/50 border ${errors.email ? 'border-red-500/50 focus:ring-red-500/20' : 'border-app-border focus:ring-app-primary/50'} rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 text-app-text transition-all duration-300 placeholder:text-app-muted/30`}
                 />
+                <AnimatePresence>
+                  {errors.email && (
+                    <motion.p 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1"
+                    >
+                      <AlertCircle className="w-3 h-3" /> {errors.email}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
 
@@ -141,13 +193,24 @@ export default function Contact() {
               <textarea 
                 id="mensagem" 
                 name="mensagem"
-                required
                 rows={5}
                 placeholder={t('contact.placeholder.message')}
                 value={formData.mensagem}
                 onChange={handleChange}
-                className="bg-app-surface/50 border border-app-border rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 focus:ring-app-primary/50 text-app-text transition-all duration-300 placeholder:text-app-muted/30 resize-none"
+                className={`bg-app-surface/50 border ${errors.mensagem ? 'border-red-500/50 focus:ring-red-500/20' : 'border-app-border focus:ring-app-primary/50'} rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 text-app-text transition-all duration-300 placeholder:text-app-muted/30 resize-none`}
               ></textarea>
+              <AnimatePresence>
+                {errors.mensagem && (
+                  <motion.p 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1"
+                  >
+                    <AlertCircle className="w-3 h-3" /> {errors.mensagem}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
 
             <AnimatePresence>

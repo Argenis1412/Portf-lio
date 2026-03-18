@@ -63,7 +63,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.copy_email': 'Copiar E-mail',
       'contact.email_copied': 'E-mail copiado!',
       'contact.copy_whatsapp': 'Copiar WhatsApp',
-      'contact.whatsapp_copied': 'Número copiado!'
+      'contact.whatsapp_copied': 'Número copiado!',
+      'contact.error.name_required': 'Por favor, insira seu nome.',
+      'contact.error.email_required': 'Por favor, insira seu e-mail.',
+      'contact.error.email_invalid': 'Por favor, insira um e-mail válido.',
+      'contact.error.message_required': 'Por favor, insira sua mensagem.',
+      'contact.error.message_too_short': 'A mensagem deve ter pelo menos 10 caracteres.'
     },
     en: {
       'nav.about': 'About',
@@ -91,7 +96,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.copy_email': 'Copy Email',
       'contact.email_copied': 'Email copied!',
       'contact.copy_whatsapp': 'Copy WhatsApp',
-      'contact.whatsapp_copied': 'Number copied!'
+      'contact.whatsapp_copied': 'Number copied!',
+      'contact.error.name_required': 'Please enter your name.',
+      'contact.error.email_required': 'Please enter your email.',
+      'contact.error.email_invalid': 'Please enter a valid email address.',
+      'contact.error.message_required': 'Please enter your message.',
+      'contact.error.message_too_short': 'Message must be at least 10 characters long.'
     },
     es: {
       'nav.about': 'Sobre',
@@ -119,7 +129,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.copy_email': 'Copiar Correo',
       'contact.email_copied': '¡Correo copiado!',
       'contact.copy_whatsapp': 'Copiar WhatsApp',
-      'contact.whatsapp_copied': '¡Número copiado!'
+      'contact.whatsapp_copied': '¡Número copiado!',
+      'contact.error.name_required': 'Por favor, ingresa tu nombre.',
+      'contact.error.email_required': 'Por favor, ingresa tu correo.',
+      'contact.error.email_invalid': 'Por favor, ingresa un correo válido.',
+      'contact.error.message_required': 'Por favor, ingresa tu mensaje.',
+      'contact.error.message_too_short': 'El mensaje debe tener al menos 10 caracteres.'
     }
   };
 
