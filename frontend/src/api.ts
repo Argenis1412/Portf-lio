@@ -69,28 +69,40 @@ export const fetchAbout = async (): Promise<About> => {
 };
 
 export const fetchProjects = async (): Promise<Project[]> => {
-  console.log(`Fetching projects from: ${API_BASE_URL}/projetos`);
+  if (import.meta.env.DEV) {
+    console.log(`Fetching projects from: ${API_BASE_URL}/projetos`);
+  }
   try {
     const res = await fetch(`${API_BASE_URL}/projetos`);
-    console.log(`Response status: ${res.status}`);
+    if (import.meta.env.DEV) {
+      console.log(`Response status: ${res.status}`);
+    }
     
     if (!res.ok) {
       const errorText = await res.text();
-      console.error(`Fetch failed: ${res.status} ${res.statusText}`, errorText);
+      if (import.meta.env.DEV) {
+        console.error(`Fetch failed: ${res.status} ${res.statusText}`, errorText);
+      }
       throw new Error(`Failed to fetch projects: ${res.status}`);
     }
     
     const data = await res.json();
-    console.log('Projects data received:', data);
+    if (import.meta.env.DEV) {
+      console.log('Projects data received:', data);
+    }
     
     if (!data.projetos || !Array.isArray(data.projetos)) {
-      console.error('Unexpected data format:', data);
+      if (import.meta.env.DEV) {
+        console.error('Unexpected data format:', data);
+      }
       return [];
     }
     
     return data.projetos;
   } catch (err) {
-    console.error('Error fetching projects:', err);
+    if (import.meta.env.DEV) {
+      console.error('Error fetching projects:', err);
+    }
     throw err;
   }
 };
@@ -99,7 +111,7 @@ export const fetchSkills = async (): Promise<Skill[]> => {
   const res = await fetch(`${API_BASE_URL}/stack`);
   if (!res.ok) throw new Error('Failed to fetch skills');
   const data = await res.json();
-  return data.stack; // The backend returns { stack: [...], por_categoria: {...} }
+  return data.stack;
 };
 
 export const fetchExperience = async (): Promise<Experience[]> => {
