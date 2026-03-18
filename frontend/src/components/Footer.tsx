@@ -20,7 +20,11 @@ export default function Footer() {
   useEffect(() => {
     fetchAbout()
       .then(setAbout)
-      .catch(err => console.error('Error fetching about data for footer:', err));
+      .catch(err => {
+        if (import.meta.env.DEV) {
+          console.error('Error fetching about data for footer:', err);
+        }
+      });
   }, []);
 
   const handleCopyEmail = (e: React.MouseEvent) => {

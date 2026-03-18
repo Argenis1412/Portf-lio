@@ -28,7 +28,11 @@ export default function Contact() {
   useEffect(() => {
     fetchAbout()
       .then(setAbout)
-      .catch(err => console.error('Error fetching about data for contact:', err));
+      .catch(err => {
+        if (import.meta.env.DEV) {
+          console.error('Error fetching about data for contact:', err);
+        }
+      });
   }, []);
 
   const validateForm = () => {
