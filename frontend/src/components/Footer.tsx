@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Linkedin, Code2, Mail, Copy, Check } from 'lucide-react';
+import { Github, Linkedin, Code2, Mail, Copy, Check, MessageSquare } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { fetchAbout } from '../api';
@@ -8,7 +8,8 @@ import type { About } from '../api';
 export default function Footer() {
   const { t } = useLanguage();
   const [about, setAbout] = useState<About | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedWhatsApp, setCopiedWhatsApp] = useState(false);
 
   useEffect(() => {
     fetchAbout()
@@ -19,8 +20,15 @@ export default function Footer() {
   const handleCopyEmail = () => {
     const email = about?.email || 'argenis.developer@gmail.com';
     navigator.clipboard.writeText(email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
+  };
+
+  const handleCopyWhatsApp = () => {
+    const phone = about?.telefone || '+55 (11) 98765-4321';
+    navigator.clipboard.writeText(phone);
+    setCopiedWhatsApp(true);
+    setTimeout(() => setCopiedWhatsApp(false), 2000);
   };
 
   const githubUrl = about?.github || "https://github.com/Argenis1412";
@@ -30,24 +38,26 @@ export default function Footer() {
     <footer className="w-full bg-transparent border-t border-app-border py-12 mt-12 transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 text-center">
         
-        {/* Email Copy Badge - Highly valued by recruiters */}
-        <div className="flex justify-center mb-8">
+        {/* Contact Badges - Highly valued by recruiters */}
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-10">
+          
+          {/* Email Copy Badge */}
           <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleCopyEmail}
-            className="group flex items-center gap-3 px-5 py-2.5 bg-app-surface border border-app-border rounded-2xl hover:border-app-primary transition-all duration-300 shadow-sm relative overflow-hidden"
+            className="group flex items-center gap-3 px-5 py-2.5 bg-app-surface border border-app-border rounded-2xl hover:border-app-primary transition-all duration-300 shadow-sm relative overflow-hidden w-full max-w-[280px] md:w-auto"
           >
             <div className="flex items-center justify-center w-8 h-8 rounded-full bg-app-primary/10 text-app-primary group-hover:bg-app-primary group-hover:text-white transition-colors duration-300">
               <Mail className="w-4 h-4" />
             </div>
-            <div className="text-left">
+            <div className="text-left flex-1">
               <p className="text-[10px] uppercase tracking-widest text-app-muted font-bold leading-none mb-1">Email</p>
-              <p className="text-sm font-semibold text-app-text">{about?.email || 'argenis.developer@gmail.com'}</p>
+              <p className="text-xs font-semibold text-app-text truncate">{about?.email || 'argenis.developer@gmail.com'}</p>
             </div>
             <div className="ml-2 pl-3 border-l border-app-border flex items-center justify-center">
               <AnimatePresence mode="wait">
-                {copied ? (
+                {copiedEmail ? (
                   <motion.div
                     key="check"
                     initial={{ scale: 0, opacity: 0 }}
@@ -64,6 +74,45 @@ export default function Footer() {
                     exit={{ scale: 0, opacity: 0 }}
                   >
                     <Copy className="w-4 h-4 text-app-muted group-hover:text-app-primary transition-colors" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.button>
+
+          {/* WhatsApp Copy Badge */}
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleCopyWhatsApp}
+            className="group flex items-center gap-3 px-5 py-2.5 bg-app-surface border border-app-border rounded-2xl hover:border-[#25D366] transition-all duration-300 shadow-sm relative overflow-hidden w-full max-w-[280px] md:w-auto"
+          >
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#25D366]/10 text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-colors duration-300">
+              <MessageSquare className="w-4 h-4" />
+            </div>
+            <div className="text-left flex-1">
+              <p className="text-[10px] uppercase tracking-widest text-app-muted font-bold leading-none mb-1">WhatsApp</p>
+              <p className="text-xs font-semibold text-app-text truncate">{about?.telefone || '+55 (11) 98765-4321'}</p>
+            </div>
+            <div className="ml-2 pl-3 border-l border-app-border flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                {copiedWhatsApp ? (
+                  <motion.div
+                    key="check"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                  >
+                    <Check className="w-4 h-4 text-emerald-500" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="copy"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                  >
+                    <Copy className="w-4 h-4 text-app-muted group-hover:text-[#25D366] transition-colors" />
                   </motion.div>
                 )}
               </AnimatePresence>
