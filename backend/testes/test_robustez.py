@@ -91,3 +91,30 @@ def test_idempotencia_sem_chave_funciona_normalmente():
         
     finally:
         app.dependency_overrides.pop(obter_enviar_contato_use_case, None)
+
+def test_idempotencia_em_progresso():
+    """Testa se requisições simultâneas com mesma chave retornam 409."""
+    payload = {
+        "nome": "Test User",
+        "email": "test@example.com",
+        "assunto": "Re: Test",
+        "mensagem": "Hello world, this is a long enough message."
+    }
+    headers = {"Idempotency-Key": "progress-key-456"}
+    
+    # Simular em progresso manualmente no store
+    from app.core.idempotencia import IdempotencyRecord
+    import time
+    store._cache["progress-key-456"] = IdempotencyRecord(
+        status_code=0,
+        content={},
+        timestamp=time.time(),
+        in_progress=True
+    )
+    
+    try:
+        resp = client.post("/api/v1/contato", json=payload, headers=headers)
+        assert resp.status_code == 409
+        assert "already in progress" in resp.json()["detail"].lower()
+    finally:
+        store._cache.pop("progress-key-456", None)

@@ -48,7 +48,7 @@ export default function Contact() {
     if (status === 'success') {
       const timer = setTimeout(() => {
         setStatus('idle');
-      }, 5000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [status]);
@@ -105,7 +105,12 @@ export default function Contact() {
         setErrors({});
         generateNewKey();
       } else {
+        const errorData = await response.json().catch(() => ({}));
+        if (errorData.detail === 'DUPLICATE_CONTENT') {
+          setErrors({ submit: 'contact.error.duplicate' });
+        }
         setStatus('error');
+        generateNewKey(); // Generate new key so next attempt (even with same content) isn't 409
       }
     } catch {
       setStatus('error');
@@ -266,7 +271,7 @@ export default function Contact() {
                   exit={{ opacity: 0, y: -10 }}
                   className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl text-center text-sm font-semibold"
                 >
-                  {t('contact.error')}
+                  {errors.submit ? t(errors.submit) : t('contact.error')}
                 </motion.div>
               )}
             </AnimatePresence>

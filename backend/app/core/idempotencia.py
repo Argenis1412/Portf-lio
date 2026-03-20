@@ -1,7 +1,7 @@
 import time
+import threading
 from typing import Any, Dict, Optional
-from fastapi import Request, Header
-from fastapi.responses import JSONResponse
+from fastapi import Request, Header, HTTPException, status
 from pydantic import BaseModel
 
 class IdempotencyRecord(BaseModel):
@@ -9,6 +9,7 @@ class IdempotencyRecord(BaseModel):
     status_code: int
     content: Any
     timestamp: float
+    in_progress: bool = False
 
 class IdempotencyStore:
     """
@@ -19,39 +20,83 @@ class IdempotencyStore:
         self._cache: Dict[str, IdempotencyRecord] = {}
         self.max_size = max_size
         self.ttl_seconds = ttl_seconds
+        self._lock = threading.Lock()
 
     def get(self, key: str) -> Optional[IdempotencyRecord]:
         """Recupera registro se não expirado."""
-        record = self._cache.get(key)
-        if not record:
-            return None
-        
-        # Verificar expiração
-        if time.time() - record.timestamp > self.ttl_seconds:
-            self._cache.pop(key, None)
-            return None
+        with self._lock:
+            record = self._cache.get(key)
+            if not record:
+                return None
             
-        return record
+            # Verificar expiração
+            if time.time() - record.timestamp > self.ttl_seconds:
+                self._cache.pop(key, None)
+                return None
+                
+            return record
+
+    def set_in_progress(self, key: str) -> bool:
+        """Marca chave como em progresso. Retorna True se conseguiu."""
+        with self._lock:
+            if key in self._cache:
+                record = self._cache[key]
+                if time.time() - record.timestamp <= self.ttl_seconds:
+                    return False
+                # Se expirou, sobrescreve
+            
+            if len(self._cache) >= self.max_size:
+                primeira = next(iter(self._cache))
+                self._cache.pop(primeira, None)
+
+            self._cache[key] = IdempotencyRecord(
+                status_code=0,
+                content={},
+                timestamp=time.time(),
+                in_progress=True
+            )
+            return True
 
     def set(self, key: str, status_code: int, content: Any):
-        """Armazena novo registro, limpando se necessário."""
-        # Limpeza básica se cache estiver cheio (FIFO simplificado)
-        if len(self._cache) >= self.max_size:
-            # Remover a entrada mais antiga (primeira chave no dict)
-            try:
-                oldest_key = next(iter(self._cache))
-                self._cache.pop(oldest_key, None)
-            except StopIteration:
-                pass
-            
-        self._cache[key] = IdempotencyRecord(
-            status_code=status_code,
-            content=content,
-            timestamp=time.time()
-        )
+        """Armazena novo registro finalizado."""
+        with self._lock:
+            self._cache[key] = IdempotencyRecord(
+                status_code=status_code,
+                content=content,
+                timestamp=time.time(),
+                in_progress=False
+            )
 
-# Instância global simplificada
+class ContentStore:
+    """
+    Armazenamento para evitar duplicidade de conteúdo num curto período.
+    """
+    def __init__(self, ttl_seconds: int = 300): # 5 minutos por padrão
+        self._cache: Dict[str, float] = {}
+        self.ttl_seconds = ttl_seconds
+        self._lock = threading.Lock()
+
+    def check_duplicate(self, content_hash: str) -> bool:
+        """Retorna True se o conteúdo já foi enviado recentemente."""
+        with self._lock:
+            last_sent = self._cache.get(content_hash)
+            if not last_sent:
+                return False
+            
+            if time.time() - last_sent > self.ttl_seconds:
+                self._cache.pop(content_hash, None)
+                return False
+                
+            return True
+
+    def add(self, content_hash: str):
+        """Registra o envio de um conteúdo."""
+        with self._lock:
+            self._cache[content_hash] = time.time()
+
+# Instâncias globais simplificadas
 store = IdempotencyStore()
+content_store = ContentStore()
 
 class IdempotencyException(Exception):
     """Exceção interna para sinalizar que resposta cacheada deve ser retornada."""
@@ -74,6 +119,13 @@ async def verificar_idempotencia(
 
     record = store.get(idempotency_key)
     if record:
+        if record.in_progress:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Request already in progress"
+            )
         raise IdempotencyException(record)
 
+    # Bloquear chave como em progresso
+    store.set_in_progress(idempotency_key)
     return idempotency_key

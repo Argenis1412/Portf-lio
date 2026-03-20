@@ -13,7 +13,8 @@ from app.casos_uso import EnviarContatoUseCase
 from app.controladores.dependencias import obter_enviar_contato_use_case
 from app.core.excecoes import ErroInfraestrutura
 from app.core.limite import limiter
-from app.core.idempotencia import verificar_idempotencia, store
+from app.core.idempotencia import verificar_idempotencia, store, content_store
+import hashlib
 
 roteador = APIRouter(tags=["Contato"])
 
@@ -64,6 +65,17 @@ async def enviar_contato(
             "mensagem": "Mensagem enviada com sucesso!"
         }
     """
+    # Verificação de conteúdo duplicado (Deduplicação de 5 minutos)
+    content_str = f"{requisicao.email.lower()}:{requisicao.mensagem.strip()}"
+    content_hash = hashlib.sha256(content_str.encode()).hexdigest()
+    
+    if content_store.check_duplicate(content_hash):
+        from fastapi import HTTPException, status
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="DUPLICATE_CONTENT"
+        )
+
     sucesso = await enviar_contato_uc.executar(
         nome=requisicao.nome,
         email=requisicao.email,
@@ -71,7 +83,10 @@ async def enviar_contato(
         mensagem=requisicao.mensagem,
     )
     
-    if not sucesso:
+    if sucesso:
+        # Registrar conteúdo para evitar duplicatas nos próximos 5 minutos
+        content_store.add(content_hash)
+    else:
         raise ErroInfraestrutura(
             mensagem="Falha ao enviar mensagem de contato",
             codigo="ERRO_ENVIO_CONTATO",

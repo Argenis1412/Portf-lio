@@ -55,7 +55,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.send': 'Enviar Mensagem',
       'contact.sending': 'Enviando...',
       'contact.success': 'Mensagem enviada com sucesso!',
-      'contact.error': 'Erro ao enviar. A mensagem deve ter pelo menos 10 caracteres.',
+      'contact.error': 'Erro ao enviar mensagem. Por favor, tente novamente.',
       'contact.whatsapp': 'Conversar no WhatsApp',
       'contact.placeholder.name': 'Seu nome',
       'contact.placeholder.email': 'exemplo@email.com',
@@ -68,7 +68,8 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.email_required': 'Por favor, insira seu e-mail.',
       'contact.error.email_invalid': 'Por favor, insira um e-mail válido.',
       'contact.error.message_required': 'Por favor, insira sua mensagem.',
-      'contact.error.message_too_short': 'A mensagem deve ter pelo menos 10 caracteres.'
+      'contact.error.message_too_short': 'A mensagem deve ter pelo menos 10 caracteres.',
+      'contact.error.duplicate': 'Você já enviou esta mensagem. Por favor, aguarde alguns minutos antes de tentar novamente.'
     },
     en: {
       'nav.about': 'About',
@@ -88,7 +89,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.send': 'Send Message',
       'contact.sending': 'Sending...',
       'contact.success': 'Message sent successfully!',
-      'contact.error': 'Error sending. Message must be at least 10 characters long.',
+      'contact.error': 'Error sending message. Please try again.',
       'contact.whatsapp': 'Chat on WhatsApp',
       'contact.placeholder.name': 'Your name',
       'contact.placeholder.email': 'example@email.com',
@@ -101,7 +102,8 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.email_required': 'Please enter your email.',
       'contact.error.email_invalid': 'Please enter a valid email address.',
       'contact.error.message_required': 'Please enter your message.',
-      'contact.error.message_too_short': 'Message must be at least 10 characters long.'
+      'contact.error.message_too_short': 'Message must be at least 10 characters long.',
+      'contact.error.duplicate': 'You already sent this message. Please wait a few minutes before trying again.'
     },
     es: {
       'nav.about': 'Sobre',
@@ -121,7 +123,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.send': 'Enviar Mensaje',
       'contact.sending': 'Enviando...',
       'contact.success': '¡Mensaje enviado con éxito!',
-      'contact.error': 'Error al enviar. El mensaje debe tener al menos 10 caracteres.',
+      'contact.error': 'Error al enviar el mensaje. Por favor, inténtelo de nuevo.',
       'contact.whatsapp': 'Chatear por WhatsApp',
       'contact.placeholder.name': 'Tu nombre',
       'contact.placeholder.email': 'ejemplo@correo.com',
@@ -134,7 +136,8 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.email_required': 'Por favor, ingresa tu correo.',
       'contact.error.email_invalid': 'Por favor, ingresa un correo válido.',
       'contact.error.message_required': 'Por favor, ingresa tu mensaje.',
-      'contact.error.message_too_short': 'El mensaje debe tener al menos 10 caracteres.'
+      'contact.error.message_too_short': 'El mensaje debe tener al menos 10 caracteres.',
+      'contact.error.duplicate': 'Ya has enviado este mensaje. Por favor, espera unos minutos antes de intentarlo de nuevo.'
     }
   };
 
