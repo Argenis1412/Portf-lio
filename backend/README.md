@@ -164,19 +164,15 @@ Returns API status and basic metrics.
 ### Contact
 - `POST /api/v1/contato`: Send contact message (forwarded via Formspree).
 
-#### Contact protection pipeline
-The contact endpoint uses defense in depth before delivering a message:
+#### Anti-Spam Defense Pipeline
+1. **Honeypot DOM trap**: Hidden fields read directly via DOM API.
+2. **Rate limiting (GCRA)**: Prevents flood (5 req/hour).
+3. **Idempotency protection**: Replay protection via `Idempotency-Key`.
+4. **Content deduplication**: Prevents identical submissions in short windows.
+5. **Heuristic spam scoring**: Evaluates keywords, links, and domains.
+6. **Silent drop strategy**: Returns success without notifying spammers.
 
-1. **Honeypot check**: hidden fields such as `website` and `fax` are inspected before processing. These fields are read directly from the DOM in the frontend to capture automated bot submissions.
-2. **Spam score**: short content, excessive links, suspicious keywords, and temporary email domains increase the score.
-3. **Classification**:
-   - `NORMAL`: delivered normally.
-   - `SUSPECT` (`score > 30`): delivered with `[FRAUDE SOSPECHOSO]` in the subject line.
-   - `SILENT_SPAM` (`score > 70`): returns `200 OK` (success), logs the event internally, but skips delivery to avoid notifying the spammer.
-4. **Replay controls**: idempotency and short-term deduplication reduce repeated submissions. Returns `400 Bad Request` with a specific error message.
-5. **Rate Limiting**: Standard `429 Too Many Requests` response after 5 messages/hour, protecting the server.
-
-This keeps the UX unchanged for legitimate users while reducing bot noise in the inbox.
+This multi-layered approach keeps the UX unchanged for legitimate users while effectively eliminating bot noise.
 
 ---
 
