@@ -24,8 +24,17 @@ export default function Contact() {
   
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [idempotencyKey, setIdempotencyKey] = useState<string>('');
+
+  const generateNewKey = () => {
+    const newKey = typeof crypto !== 'undefined' && crypto.randomUUID 
+      ? crypto.randomUUID() 
+      : `key-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    setIdempotencyKey(newKey);
+  };
 
   useEffect(() => {
+    generateNewKey();
     fetchAbout()
       .then(setAbout)
       .catch(err => {
@@ -34,6 +43,15 @@ export default function Contact() {
         }
       });
   }, []);
+
+  useEffect(() => {
+    if (status === 'success') {
+      const timer = setTimeout(() => {
+        setStatus('idle');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -71,6 +89,7 @@ export default function Contact() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Idempotency-Key': idempotencyKey
         },
         body: JSON.stringify(formData)
       });
@@ -84,6 +103,7 @@ export default function Contact() {
             mensagem: ''
         });
         setErrors({});
+        generateNewKey();
       } else {
         setStatus('error');
       }
