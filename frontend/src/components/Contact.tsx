@@ -24,17 +24,19 @@ export default function Contact() {
   
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [idempotencyKey, setIdempotencyKey] = useState<string>('');
-
-  const generateNewKey = () => {
-    const newKey = typeof crypto !== 'undefined' && crypto.randomUUID 
+  const getNewKey = () => {
+    return typeof crypto !== 'undefined' && crypto.randomUUID 
       ? crypto.randomUUID() 
       : `key-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-    setIdempotencyKey(newKey);
+  };
+
+  const [idempotencyKey, setIdempotencyKey] = useState<string>(getNewKey);
+
+  const generateNewKey = () => {
+    setIdempotencyKey(getNewKey());
   };
 
   useEffect(() => {
-    generateNewKey();
     fetchAbout()
       .then(setAbout)
       .catch(err => {
