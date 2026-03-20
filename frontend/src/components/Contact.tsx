@@ -19,7 +19,9 @@ export default function Contact() {
     nome: '',
     email: '',
     assunto: 'Contato via Portfólio',
-    mensagem: ''
+    mensagem: '',
+    website: '', // Honeypot 1
+    fax: '',     // Honeypot 2
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -102,7 +104,9 @@ export default function Contact() {
             nome: '',
             email: '',
             assunto: 'Contato via Portfólio',
-            mensagem: ''
+            mensagem: '',
+            website: '',
+            fax: ''
         });
         setErrors({});
         generateNewKey();
@@ -170,7 +174,26 @@ export default function Contact() {
           className="glass rounded-2xl p-8 md:p-12 border border-app-border hover:border-app-primary/50 hover:shadow-[0_0_40px_rgba(212,163,115,0.15)] transition-all duration-500"
         >
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-8">
-            
+            {/* Honeypot fields - Hidden from humans, bait for bots */}
+              <input
+                type="text"
+                name="website"
+                value={formData.website}
+                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                style={{ position: 'absolute', left: '-5000px' }}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+              <input
+                type="text"
+                name="fax"
+                value={formData.fax}
+                onChange={(e) => setFormData({ ...formData, fax: e.target.value })}
+                style={{ position: 'absolute', left: '-5000px' }}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col gap-2.5">
                 <label htmlFor="nome" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">
