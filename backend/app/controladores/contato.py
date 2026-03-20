@@ -45,29 +45,27 @@ async def enviar_contato(
     ],
     idempotency_key: Annotated[Optional[str], Depends(verificar_idempotencia)] = None,
 ) -> RespostaContato:
+    # Debug log for honeypots
+    logger.debug("contact_request_data", extra={"data": requisicao.model_dump()})
+    
     # 1. Honeypot Check (Direct Bot Trap)
-    # Precisamos ler o corpo bruto para ver campos que não estão no esquema Pydantic
-    try:
-        raw_body = await request.json()
-        if is_honeypot_triggered(raw_body):
-            logger.info(
-                "contact_blocked",
-                extra={
-                    "classification": "HONEYPOT",
-                    "action": "silent_drop",
-                    "honeypot_fields": [
-                        field for field in ("website", "fax", "company", "middle_name")
-                        if raw_body.get(field)
-                    ],
-                },
-            )
-            return RespostaContato(
-                sucesso=True,
-                mensagem="Mensagem enviada com sucesso! Retornarei em breve.",
-            )
-    except Exception:
-        # Se não for JSON ou falhar, continuamos com os dados validados
-        pass
+    # Bots often fill all available input fields automatically.
+    if requisicao.website or requisicao.fax:
+        logger.info(
+            "contact_blocked",
+            extra={
+                "classification": "HONEYPOT",
+                "action": "silent_drop",
+                "honeypot_fields": [
+                    field for field in ("website", "fax")
+                    if getattr(requisicao, field, None)
+                ],
+            },
+        )
+        return RespostaContato(
+            sucesso=True,
+            mensagem="Mensagem enviada com sucesso! Retornarei em breve.",
+        )
 
     # 2. Spam Scoring (Heuristic Filter)
     spam_score = calculate_spam_score(requisicao.mensagem, requisicao.email)
@@ -122,23 +120,47 @@ async def enviar_contato(
             },
         )
 
-    sucesso = await enviar_contato_uc.executar(
-        nome=requisicao.nome,
-        email=requisicao.email,
-        assunto=requisicao.assunto,
-        mensagem=requisicao.mensagem,
-        is_suspicious=is_suspicious,
-    )
-    
-    if sucesso:
-        # Registrar conteúdo para evitar duplicatas nos próximos 5 minutos
-        content_store.add(content_hash)
-    else:
-        raise ErroInfraestrutura(
-            mensagem="Falha ao enviar mensagem de contato",
-            codigo="ERRO_ENVIO_CONTATO",
-            origem="formspree",
+    try:
+        sucesso = await enviar_contato_uc.executar(
+            nome=requisicao.nome,
+            email=requisicao.email,
+            assunto=requisicao.assunto,
+            mensagem=requisicao.mensagem,
+            is_suspicious=is_suspicious,
         )
+        
+        if sucesso:
+            # Registrar conteúdo para evitar duplicatas nos próximos 5 minutos
+            content_store.add(content_hash)
+        elif not is_suspicious:
+            # Se falhar e NÃO for suspeito, lançamos erro real
+            raise ErroInfraestrutura(
+                mensagem="Falha ao enviar mensagem de contato",
+                codigo="ERRO_ENVIO_CONTATO",
+                origem="formspree",
+            )
+        else:
+            # Se falhar mas FOR suspeito, logamos mas retornamos sucesso pro usuário (silent failure)
+            logger.warning(
+                "suspect_delivery_failed_silently",
+                extra={"email": requisicao.email}
+            )
+    except Exception as e:
+        if not is_suspicious:
+            # Re-raise if not suspicious
+            if isinstance(e, ErroInfraestrutura):
+                raise e
+            raise ErroInfraestrutura(
+                mensagem=str(e),
+                codigo="ERRO_INTERNO_CONTATO",
+                origem="controller",
+            )
+        else:
+            # Silent success for suspicious users even on crash
+            logger.error(
+                "suspect_delivery_crash_silently",
+                extra={"error": str(e), "email": requisicao.email}
+            )
     
     resposta = RespostaContato(
         sucesso=True,

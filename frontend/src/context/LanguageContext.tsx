@@ -57,9 +57,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.success': 'Mensagem enviada com sucesso!',
       'contact.error': 'Erro ao enviar mensagem. Por favor, tente novamente.',
       'contact.whatsapp': 'Conversar no WhatsApp',
+      'contact.subject_default': 'Contato via Portfólio',
       'contact.placeholder.name': 'Seu nome',
       'contact.placeholder.email': 'exemplo@email.com',
       'contact.placeholder.message': 'Como posso te ajudar?',
+      'contact.subject': 'Assunto',
+      'contact.placeholder.subject': 'Assunto da mensagem',
       'contact.copy_email': 'Copiar E-mail',
       'contact.email_copied': 'E-mail copiado!',
       'contact.copy_whatsapp': 'Copiar WhatsApp',
@@ -67,9 +70,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.name_required': 'Por favor, insira seu nome.',
       'contact.error.email_required': 'Por favor, insira seu e-mail.',
       'contact.error.email_invalid': 'Por favor, insira um e-mail válido.',
+      'contact.error.subject_required': 'Por favor, insira o assunto.',
+      'contact.error.subject_too_short': 'O assunto deve ter pelo menos 5 caracteres.',
       'contact.error.message_required': 'Por favor, insira sua mensagem.',
       'contact.error.message_too_short': 'A mensagem deve ter pelo menos 10 caracteres.',
-      'contact.error.duplicate': 'Esta mensagem já foi enviada recentemente. Para evitar duplicados, o sistema não aceita envios idênticos num curto período de tempo.'
+      'contact.error.duplicate': 'Esta mensagem já foi enviada. Já recebemos sua consulta, obrigado!',
+      'contact.error.rate_limit': 'Muitas tentativas. Por favor, aguarde um momento antes de tentar novamente.'
     },
     en: {
       'nav.about': 'About',
@@ -91,9 +97,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.success': 'Message sent successfully!',
       'contact.error': 'Error sending message. Please try again.',
       'contact.whatsapp': 'Chat on WhatsApp',
+      'contact.subject_default': 'Contact from Portfolio',
       'contact.placeholder.name': 'Your name',
       'contact.placeholder.email': 'example@email.com',
       'contact.placeholder.message': 'How can I help you?',
+      'contact.subject': 'Subject',
+      'contact.placeholder.subject': 'Message subject',
       'contact.copy_email': 'Copy Email',
       'contact.email_copied': 'Email copied!',
       'contact.copy_whatsapp': 'Copy WhatsApp',
@@ -101,9 +110,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.name_required': 'Please enter your name.',
       'contact.error.email_required': 'Please enter your email.',
       'contact.error.email_invalid': 'Please enter a valid email address.',
+      'contact.error.subject_required': 'Please enter a subject.',
+      'contact.error.subject_too_short': 'Subject must be at least 5 characters long.',
       'contact.error.message_required': 'Please enter your message.',
       'contact.error.message_too_short': 'Message must be at least 10 characters long.',
-      'contact.error.duplicate': 'This message was already sent recently. To avoid duplicates, the system does not accept identical submissions in a short period of time.'
+      'contact.error.duplicate': 'This message has already been sent. We have already received your inquiry, thank you!',
+      'contact.error.rate_limit': 'Too many attempts. Please wait a moment before trying again.'
     },
     es: {
       'nav.about': 'Sobre',
@@ -125,9 +137,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.success': '¡Mensaje enviado con éxito!',
       'contact.error': 'Error al enviar el mensaje. Por favor, inténtelo de nuevo.',
       'contact.whatsapp': 'Chatear por WhatsApp',
+      'contact.subject_default': 'Contacto desde Portafolio',
       'contact.placeholder.name': 'Tu nombre',
       'contact.placeholder.email': 'ejemplo@correo.com',
       'contact.placeholder.message': '¿En qué puedo ayudarte?',
+      'contact.subject': 'Asunto',
+      'contact.placeholder.subject': 'Asunto del mensaje',
       'contact.copy_email': 'Copiar Correo',
       'contact.email_copied': '¡Correo copiado!',
       'contact.copy_whatsapp': 'Copiar WhatsApp',
@@ -135,9 +150,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.name_required': 'Por favor, ingresa tu nombre.',
       'contact.error.email_required': 'Por favor, ingresa tu correo.',
       'contact.error.email_invalid': 'Por favor, ingresa un correo válido.',
+      'contact.error.subject_required': 'Por favor, ingresa el asunto.',
+      'contact.error.subject_too_short': 'El asunto debe tener al menos 5 caracteres.',
       'contact.error.message_required': 'Por favor, ingresa tu mensaje.',
       'contact.error.message_too_short': 'El mensaje debe tener al menos 10 caracteres.',
-      'contact.error.duplicate': 'Este mensaje ya fue enviado recientemente. Para evitar duplicados, el sistema no acepta envíos idénticos en un corto periodo de tiempo.'
+      'contact.error.duplicate': 'Este mensaje ya ha sido enviado. ¡Ya recibimos tu consulta, gracias!',
+      'contact.error.rate_limit': 'Demasiados intentos. Por favor, espera un momento antes de intentarlo de nuevo.'
     }
   };
 

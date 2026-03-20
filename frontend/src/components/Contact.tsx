@@ -18,10 +18,8 @@ export default function Contact() {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
-    assunto: 'Contato via Portfólio',
+    assunto: '',
     mensagem: '',
-    website: '', // Honeypot 1
-    fax: '',     // Honeypot 2
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -88,6 +86,14 @@ export default function Contact() {
     setStatus('loading');
     
     try {
+      const dataToSend = {
+        ...formData,
+        assunto: formData.assunto.trim() || t('contact.subject_default') || 'Contato via Portfólio',
+        // Read honeypots directly from DOM to catch bots/manual edits
+        website: (document.getElementById('hp_website') as HTMLInputElement)?.value || '',
+        fax: (document.getElementById('hp_fax') as HTMLInputElement)?.value || ''
+      };
+      
       const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
       const response = await fetch(`${API_BASE_URL}/contato`, {
         method: 'POST',
@@ -95,7 +101,7 @@ export default function Contact() {
           'Content-Type': 'application/json',
           'Idempotency-Key': idempotencyKey
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(dataToSend)
       });
 
       if (response.ok) {
@@ -103,20 +109,21 @@ export default function Contact() {
         setFormData({
             nome: '',
             email: '',
-            assunto: 'Contato via Portfólio',
+            assunto: '',
             mensagem: '',
-            website: '',
-            fax: ''
         });
         setErrors({});
         generateNewKey();
+      } else if (response.status === 429) {
+        setErrors({ submit: 'contact.error.rate_limit' });
+        setStatus('error');
       } else {
         const errorData = await response.json().catch(() => ({}));
-        if (errorData.detail === 'DUPLICATE_CONTENT') {
+        if (errorData.erro?.codigo === 'CONTEUDO_DUPLICADO' || errorData.detail === 'DUPLICATE_CONTENT') {
           setErrors({ submit: 'contact.error.duplicate' });
         }
         setStatus('error');
-        generateNewKey(); // Generate new key so next attempt (even with same content) isn't 409
+        generateNewKey();
       }
     } catch {
       setStatus('error');
@@ -178,8 +185,7 @@ export default function Contact() {
               <input
                 type="text"
                 name="website"
-                value={formData.website}
-                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                id="hp_website"
                 style={{ position: 'absolute', left: '-5000px' }}
                 tabIndex={-1}
                 autoComplete="off"
@@ -187,8 +193,7 @@ export default function Contact() {
               <input
                 type="text"
                 name="fax"
-                value={formData.fax}
-                onChange={(e) => setFormData({ ...formData, fax: e.target.value })}
+                id="hp_fax"
                 style={{ position: 'absolute', left: '-5000px' }}
                 tabIndex={-1}
                 autoComplete="off"
@@ -248,6 +253,33 @@ export default function Contact() {
                   )}
                 </AnimatePresence>
               </div>
+            </div>
+
+            <div className="flex flex-col gap-2.5">
+              <label htmlFor="assunto" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">
+                {t('contact.subject')}
+              </label>
+              <input 
+                type="text" 
+                id="assunto" 
+                name="assunto"
+                placeholder={t('contact.placeholder.subject')}
+                value={formData.assunto}
+                onChange={handleChange}
+                className={`bg-app-surface/50 border ${errors.assunto ? 'border-red-500/50 focus:ring-red-500/20' : 'border-app-border focus:ring-app-primary/50'} rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 text-app-text transition-all duration-300 placeholder:text-app-muted/30`}
+              />
+              <AnimatePresence>
+                {errors.assunto && (
+                  <motion.p 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1"
+                  >
+                    <AlertCircle className="w-3 h-3" /> {t(`contact.error.${errors.assunto}`)}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
 
             <div className="flex flex-col gap-2.5">

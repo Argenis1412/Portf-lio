@@ -72,7 +72,7 @@ class EnviarContatoUseCase:
             ... )
         """
         # Marcar como suspeito no assunto se necessário
-        assunto_final = f"[SUSPECT] {assunto}" if is_suspicious else assunto
+        assunto_final = f"[FRAUDE SOSPECHOSO] {assunto}" if is_suspicious else assunto
 
         # Criar entidade de domínio
         mensagem_entidade = Mensagem(
