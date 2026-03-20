@@ -18,6 +18,8 @@ from app.core.excecoes import (
     ErroInfraestrutura,
     ErroRecursoNaoEncontrado,
 )
+from app.core.idempotencia import IdempotencyException
+from slowapi.errors import RateLimitExceeded
 
 logger = structlog.get_logger(__name__)
 
@@ -239,6 +241,46 @@ async def handler_generico(
     )
 
 
+async def handler_rate_limit(
+    request: Request,
+    exc: RateLimitExceeded,
+) -> JSONResponse:
+    """
+    Trata erros de rate limit excedido.
+    """
+    logger.warning(
+        "rate_limit_excedido",
+        path=request.url.path,
+        detalhes=str(exc),
+    )
+    
+    return criar_resposta_erro(
+        codigo="RATE_LIMIT_EXCEEDED",
+        mensagem=f"Rate limit exceeded. {str(exc)}",
+        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+    )
+
+
+async def handler_idempotencia(
+    request: Request,
+    exc: IdempotencyException,
+) -> JSONResponse:
+    """
+    Trata exceção de idempotência retornando a resposta cacheada.
+    """
+    logger.info(
+        "idempotencia_cache_hit",
+        path=request.url.path,
+        status_code=exc.record.status_code,
+    )
+    
+    return JSONResponse(
+        status_code=exc.record.status_code,
+        content=exc.record.content,
+        headers={"X-Cache-Idempotency": "HIT"}
+    )
+
+
 def registrar_handlers_excecao(app: FastAPI) -> None:
     """
     Registra todos os handlers de exceção na aplicação.
@@ -265,6 +307,8 @@ def registrar_handlers_excecao(app: FastAPI) -> None:
         RequestValidationError,
         handler_validacao_pydantic,
     )
+    app.add_exception_handler(IdempotencyException, handler_idempotencia)
+    app.add_exception_handler(RateLimitExceeded, handler_rate_limit)
     app.add_exception_handler(Exception, handler_generico)
     
     logger.info("Handlers de exceção registrados com sucesso")

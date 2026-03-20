@@ -5,8 +5,7 @@ Endpoint:
 - POST /api/contato
 """
 
-from typing import Annotated
-
+from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, Request
 
 from app.esquemas.contato import RequisicaoContato, RespostaContato
@@ -14,6 +13,7 @@ from app.casos_uso import EnviarContatoUseCase
 from app.controladores.dependencias import obter_enviar_contato_use_case
 from app.core.excecoes import ErroInfraestrutura
 from app.core.limite import limiter
+from app.core.idempotencia import verificar_idempotencia, store
 
 roteador = APIRouter(tags=["Contato"])
 
@@ -37,6 +37,7 @@ async def enviar_contato(
         EnviarContatoUseCase,
         Depends(obter_enviar_contato_use_case),
     ],
+    idempotency_key: Annotated[Optional[str], Depends(verificar_idempotencia)] = None,
 ) -> RespostaContato:
     """
     Envia mensagem de contato.
@@ -77,7 +78,13 @@ async def enviar_contato(
             origem="formspree",
         )
     
-    return RespostaContato(
+    resposta = RespostaContato(
         sucesso=True,
         mensagem="Mensagem enviada com sucesso! Retornarei em breve.",
     )
+
+    if idempotency_key:
+        # Cache da resposta de sucesso
+        store.set(idempotency_key, 200, resposta.model_dump())
+    
+    return resposta

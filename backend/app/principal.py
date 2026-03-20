@@ -187,7 +187,6 @@ def _registrar_limiter(aplicacao: FastAPI) -> None:
         aplicacao: Instância FastAPI.
     """
     aplicacao.state.limiter = limiter
-    aplicacao.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 def _registrar_rotas(aplicacao: FastAPI) -> None:

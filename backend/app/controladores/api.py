@@ -10,9 +10,8 @@ Endpoints:
 - GET /api/formacao
 """
 
-from typing import Annotated
-
-from fastapi import APIRouter, Depends
+from typing import Annotated, Optional
+from fastapi import APIRouter, Depends, Request
 
 from app.esquemas.sobre import RespostaSobre
 from app.esquemas.projetos import ProjetoResumo, ProjetoDetalhado, RespostaProjetos
@@ -36,6 +35,7 @@ from app.controladores.dependencias import (
     obter_obter_stack_use_case,
 )
 from app.core.excecoes import ErroRecursoNaoEncontrado
+from app.core.limite import limiter
 
 roteador = APIRouter(tags=["API"])
 
@@ -74,7 +74,9 @@ async def obter_sobre(
         200: {"description": "Projects list returned successfully"},
     },
 )
+@limiter.limit("20/minute")
 async def listar_projetos(
+    request: Request,
     obter_projetos_uc: Annotated[
         ObterProjetosUseCase,
         Depends(obter_obter_projetos_use_case),
@@ -152,7 +154,9 @@ async def listar_projetos(
         },
     },
 )
+@limiter.limit("20/minute")
 async def obter_projeto(
+    request: Request,
     projeto_id: str,
     obter_projeto_por_id_uc: Annotated[
         ObterProjetoPorIdUseCase,

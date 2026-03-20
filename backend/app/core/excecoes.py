@@ -79,9 +79,13 @@ class ErroRecursoNaoEncontrado(ErroDominio):
         )
     """
 
-    def __init__(
-        self,
-        mensagem: str = "Recurso não encontrado",
-        codigo: str | None = None,
-    ) -> None:
-        super().__init__(mensagem, codigo or "RECURSO_NAO_ENCONTRADO")
+
+class ErroChaveIdempotenciaAusente(ErroDominio):
+    """
+    Exceção para ausência de Idempotency-Key em rotas protegidas.
+
+    Mapeia para HTTP 400 Bad Request.
+    """
+
+    def __init__(self, mensagem: str = "Header 'Idempotency-Key' é obrigatório") -> None:
+        super().__init__(mensagem, codigo="CHAVE_IDEMPOTENCIA_AUSENTE")
