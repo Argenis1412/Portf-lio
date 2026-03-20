@@ -80,12 +80,14 @@ class FormspreeEmailAdaptador(EmailAdaptador):
             async with httpx.AsyncClient() as cliente:
                 resposta = await cliente.post(
                     self.url_endpoint,
-                    json={
+                    data={
                         "name": mensagem.nome,
                         "email": mensagem.email,
+                        "subject": mensagem.assunto,
                         "_subject": mensagem.assunto,
                         "message": mensagem.mensagem,
                     },
+                    headers={"Accept": "application/json"},
                     timeout=10.0,
                 )
                 sucesso = resposta.status_code in range(200, 300)

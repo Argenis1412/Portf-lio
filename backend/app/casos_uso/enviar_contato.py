@@ -71,15 +71,21 @@ class EnviarContatoUseCase:
             ...     "Mensagem de teste"
             ... )
         """
+        # Garantir que o assunto não esteja vazio para o Formspree
+        assunto_base = assunto.strip() if assunto and assunto.strip() else "Contacto vía Portafolio"
+        
         # Marcar como suspeito no assunto se necessário
-        assunto_final = f"[FRAUDE SOSPECHOSO] {assunto}" if is_suspicious else assunto
+        assunto_final = f"[FRAUDE SOSPECHOSO] {assunto_base}" if is_suspicious else assunto_base
+
+        # Adicionar aviso visual no corpo se for suspeito
+        mensaje_conteudo = f"⚠️ ADVERTENCIA: POSIBLE FRAUDE ⚠️\n\n{mensagem}" if is_suspicious else mensagem
 
         # Criar entidade de domínio
         mensagem_entidade = Mensagem(
             nome=nome,
             email=email,
             assunto=assunto_final,
-            mensagem=mensagem,
+            mensagem=mensaje_conteudo,
         )
 
         # Tentar enviar

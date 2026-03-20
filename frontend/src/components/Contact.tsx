@@ -119,10 +119,21 @@ export default function Contact() {
         setErrors({ submit: 'contact.error.rate_limit' });
         setStatus('error');
       } else {
-        const errorData = await response.json().catch(() => ({}));
-        if (errorData.erro?.codigo === 'CONTEUDO_DUPLICADO' || errorData.detail === 'DUPLICATE_CONTENT') {
+        let errorData: any = {};
+        try {
+          errorData = await response.json();
+        } catch {
+          // Fallback: if response isn't JSON, try text and check for known marker
+          const txt = await response.text().catch(() => '');
+          if (txt && txt.includes('DUPLICATE_CONTENT')) {
+            setErrors({ submit: 'contact.error.duplicate' });
+          }
+        }
+
+        if (errorData?.erro?.codigo === 'CONTEUDO_DUPLICADO' || errorData?.detail === 'DUPLICATE_CONTENT') {
           setErrors({ submit: 'contact.error.duplicate' });
         }
+
         setStatus('error');
         generateNewKey();
       }
