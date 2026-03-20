@@ -45,6 +45,7 @@ class EnviarContatoUseCase:
         email: str,
         assunto: str,
         mensagem: str,
+        is_suspicious: bool = False,
     ) -> bool:
         """
         Executa caso de uso de envio de mensagem.
@@ -54,6 +55,7 @@ class EnviarContatoUseCase:
             email: Email para resposta.
             assunto: Assunto da mensagem.
             mensagem: Conteúdo da mensagem.
+            is_suspicious: Se a mensagem é suspeita de spam.
 
         Returns:
             bool: True se enviado com sucesso, False caso contrário.
@@ -69,11 +71,14 @@ class EnviarContatoUseCase:
             ...     "Mensagem de teste"
             ... )
         """
+        # Marcar como suspeito no assunto se necessário
+        assunto_final = f"[SUSPECT] {assunto}" if is_suspicious else assunto
+
         # Criar entidade de domínio
         mensagem_entidade = Mensagem(
             nome=nome,
             email=email,
-            assunto=assunto,
+            assunto=assunto_final,
             mensagem=mensagem,
         )
 

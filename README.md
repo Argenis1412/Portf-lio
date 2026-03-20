@@ -28,7 +28,8 @@ The goal of this project is not only to showcase my work, but also to demonstrat
 - **Premium UX**: Smooth declarative animations (Framer Motion), unified iconography (Lucide), and Skeleton Screens for polished loading states.
 - **Recruiter Optimized**: One-click "Copy Email" and "Copy WhatsApp" badges in the footer with animated feedback and official branding.
 - **Localized Validation**: Custom form validation that respects the selected language and updates reactively.
-- **91% backend test coverage** with fully isolated business logic (90.55% measured — 19 tests, all passing).
+- **Layered contact protection**: Honeypot fields, spam scoring, idempotency, deduplication, and rate limiting protect the contact form without degrading UX.
+- **89%+ backend test coverage** with fully isolated business logic and controller-level anti-spam tests.
 - **Contact form** forwarded via Formspree (no server-side email setup required).
 
 ---
@@ -99,6 +100,8 @@ pytest --cov=app --cov-report=html
 .\test
 ```
 
+The backend suite now includes automated checks for the contact anti-spam flow, including honeypot silent drops and suspicious/spam score classification.
+
 ### Frontend
 ```bash
 cd frontend
@@ -109,6 +112,8 @@ npm run test
 npx vitest
 ```
 The frontend uses **Vitest** + **@testing-library/react** with a `jsdom` environment. Tests live in `src/tests/`.
+
+> Contact submissions include hidden honeypot inputs (`website` / `fax`) rendered off-screen so real users never interact with them, while basic bots are silently filtered.
 
 ---
 

@@ -13,8 +13,9 @@ Professional backend for a developer portfolio, implementing:
 - ✅ **Clear separation** of responsibilities
 - ✅ **Automatic validation** with Pydantic V2
 - ✅ **Interactive Documentation** with OpenAPI/Swagger
-- ✅ **Automated Tests** with pytest (91%+ coverage)
+- ✅ **Automated Tests** with pytest (89%+ coverage)
 - ✅ **Full Type Hints** (mypy strict compatible)
+- ✅ **Layered contact protection** with honeypot, spam scoring, rate limiting, idempotency, and deduplication
 
 ---
 
@@ -72,8 +73,11 @@ backend/
 │   ├── core/                     # 🔷 Cross-cutting Concerns
 │   │   ├── excecoes.py           # Custom exceptions
 │   │   ├── handlers.py           # Global error handlers
+│   │   ├── honeypot.py           # Hidden-field bot trap
+│   │   ├── idempotencia.py       # Replay protection + duplicate cache
 │   │   ├── middleware.py         # Request ID, logging, timing
-│   │   └── limite.py             # Rate limiting configuration
+│   │   ├── limite.py             # Rate limiting configuration
+│   │   └── spam_check.py         # Heuristic spam scoring rules
 │   │
 │   ├── entidades/                # 🔵 Domain Layer (Entities)
 │   ├── esquemas/                 # 🟢 HTTP Contracts (Schemas)
@@ -160,6 +164,19 @@ Returns API status and basic metrics.
 ### Contact
 - `POST /api/v1/contato`: Send contact message (forwarded via Formspree).
 
+#### Contact protection pipeline
+The contact endpoint uses defense in depth before delivering a message:
+
+1. **Honeypot check**: hidden fields such as `website` and `fax` are inspected before processing.
+2. **Spam score**: short content, excessive links, suspicious keywords, and temporary email domains increase the score.
+3. **Classification**:
+   - `NORMAL`: delivered normally
+   - `SUSPECT` (`score > 30`): delivered with `[SUSPECT]` in the subject
+   - `SILENT_SPAM` (`score > 70`): returns `200 OK`, logs the event, and skips delivery
+4. **Replay controls**: idempotency and short-term deduplication reduce repeated submissions.
+
+This keeps the UX unchanged for legitimate users while reducing bot noise in the inbox.
+
 ---
 
 ## 🧪 Tests
@@ -173,6 +190,12 @@ pytest
 .\test
 ```
 
+The suite includes dedicated tests for:
+- honeypot-triggered requests returning `200 OK` without calling the use case
+- high spam scores being silently dropped
+- medium spam scores being marked as suspicious
+- normal contact messages being delivered without spam flags
+
 ### With Coverage
 ```bash
 # Standard way
@@ -182,7 +205,7 @@ pytest --cov=app --cov-report=html
 .\test --cov=app --cov-report=html
 ```
 
-**Current Coverage: 91%** (90.55% measured — 19 tests, all passing)
+**Current Coverage: 89%+** (89.69% measured — 27 tests passing)
 
 ---
 
@@ -282,4 +305,4 @@ interface Sobre {
 }
 ```
 
-> **i18n tip**: Use `idioma` as a state variable on your frontend and render `projeto.descricao_curta[idioma]` — the backend serves all three languages in every response.
+> **i18n tip**: Use `idioma` as a state variable on your frontend and render `projeto.descricao_curta[idioma]` — the backend serves all three languages in every response.

@@ -14,7 +14,12 @@ from app.controladores.dependencias import obter_enviar_contato_use_case
 from app.core.excecoes import ErroInfraestrutura
 from app.core.limite import limiter
 from app.core.idempotencia import verificar_idempotencia, store, content_store
+from app.core.honeypot import is_honeypot_triggered
+from app.core.spam_check import calculate_spam_score
 import hashlib
+import logging
+
+logger = logging.getLogger(__name__)
 
 roteador = APIRouter(tags=["Contato"])
 
@@ -40,32 +45,50 @@ async def enviar_contato(
     ],
     idempotency_key: Annotated[Optional[str], Depends(verificar_idempotencia)] = None,
 ) -> RespostaContato:
-    """
-    Envia mensagem de contato.
+    # 1. Honeypot Check (Direct Bot Trap)
+    # Precisamos ler o corpo bruto para ver campos que não estão no esquema Pydantic
+    try:
+        raw_body = await request.json()
+        if is_honeypot_triggered(raw_body):
+            logger.info(
+                "contact_blocked",
+                extra={
+                    "classification": "HONEYPOT",
+                    "action": "silent_drop",
+                    "honeypot_fields": [
+                        field for field in ("website", "fax", "company", "middle_name")
+                        if raw_body.get(field)
+                    ],
+                },
+            )
+            return RespostaContato(
+                sucesso=True,
+                mensagem="Mensagem enviada com sucesso! Retornarei em breve.",
+            )
+    except Exception:
+        # Se não for JSON ou falhar, continuamos com os dados validados
+        pass
 
-    Args:
-        requisicao: Dados validados do formulário.
+    # 2. Spam Scoring (Heuristic Filter)
+    spam_score = calculate_spam_score(requisicao.mensagem, requisicao.email)
+    
+    # SILENT_SPAM (> 70)
+    if spam_score > 70:
+        logger.info(
+            "contact_classified",
+            extra={
+                "classification": "SILENT_SPAM",
+                "action": "silent_drop",
+                "spam_score": spam_score,
+                "email_domain": requisicao.email.split("@")[-1].lower(),
+            },
+        )
+        return RespostaContato(
+            sucesso=True,
+            mensagem="Mensagem enviada com sucesso! Retornarei em breve.",
+        )
 
-    Returns:
-        RespostaContato: Resultado do envio.
-
-    Raises:
-        ErroInfraestrutura: Se falha ao enviar.
-
-    Example:
-        POST /api/contato
-        {
-            "nome": "Maria Silva",
-            "email": "maria@example.com",
-            "assunto": "Contato",
-            "mensagem": "Olá!"
-        }
-        → {
-            "sucesso": true,
-            "mensagem": "Mensagem enviada com sucesso!"
-        }
-    """
-    # Verificação de conteúdo duplicado (Deduplicação de 5 minutos)
+    # 3. Verificação de conteúdo duplicado (Deduplicação de 5 minutos)
     content_str = f"{requisicao.email.lower()}:{requisicao.mensagem.strip()}"
     content_hash = hashlib.sha256(content_str.encode()).hexdigest()
     
@@ -76,11 +99,35 @@ async def enviar_contato(
             detail="DUPLICATE_CONTENT"
         )
 
+    # SUSPECT (> 30)
+    is_suspicious = spam_score > 30
+    if is_suspicious:
+        logger.info(
+            "contact_classified",
+            extra={
+                "classification": "SUSPECT",
+                "action": "deliver_with_flag",
+                "spam_score": spam_score,
+                "email_domain": requisicao.email.split("@")[-1].lower(),
+            },
+        )
+    else:
+        logger.info(
+            "contact_classified",
+            extra={
+                "classification": "NORMAL",
+                "action": "deliver",
+                "spam_score": spam_score,
+                "email_domain": requisicao.email.split("@")[-1].lower(),
+            },
+        )
+
     sucesso = await enviar_contato_uc.executar(
         nome=requisicao.nome,
         email=requisicao.email,
         assunto=requisicao.assunto,
         mensagem=requisicao.mensagem,
+        is_suspicious=is_suspicious,
     )
     
     if sucesso:
