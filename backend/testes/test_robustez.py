@@ -16,7 +16,9 @@ client = TestClient(app)
 @pytest.fixture(autouse=True)
 def clean_idempotency_store():
     """Limpa o store antes de cada teste."""
+    from app.core.idempotencia import store, content_store
     store._cache.clear()
+    content_store._cache.clear()
 
 def test_idempotencia_contato():
     """Testa se o envio duplicado com mesma chave retorna cache."""
@@ -83,6 +85,8 @@ def test_idempotencia_sem_chave_funciona_normalmente():
         resp1 = client.post("/api/v1/contato", json=payload)
         assert resp1.status_code == 200
         
+        # Mudar conteúdo para não cair na deduplicação de 5 min
+        payload["mensagem"] = "Different message for second call."
         resp2 = client.post("/api/v1/contato", json=payload)
         assert resp2.status_code == 200
         

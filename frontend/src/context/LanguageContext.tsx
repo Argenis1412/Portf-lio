@@ -69,7 +69,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.email_invalid': 'Por favor, insira um e-mail válido.',
       'contact.error.message_required': 'Por favor, insira sua mensagem.',
       'contact.error.message_too_short': 'A mensagem deve ter pelo menos 10 caracteres.',
-      'contact.error.duplicate': 'Você já enviou esta mensagem. Por favor, aguarde alguns minutos antes de tentar novamente.'
+      'contact.error.duplicate': 'Esta mensagem já foi enviada recentemente. Para evitar duplicados, o sistema não aceita envios idênticos num curto período de tempo.'
     },
     en: {
       'nav.about': 'About',
@@ -103,7 +103,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.email_invalid': 'Please enter a valid email address.',
       'contact.error.message_required': 'Please enter your message.',
       'contact.error.message_too_short': 'Message must be at least 10 characters long.',
-      'contact.error.duplicate': 'You already sent this message. Please wait a few minutes before trying again.'
+      'contact.error.duplicate': 'This message was already sent recently. To avoid duplicates, the system does not accept identical submissions in a short period of time.'
     },
     es: {
       'nav.about': 'Sobre',
@@ -137,7 +137,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.email_invalid': 'Por favor, ingresa un correo válido.',
       'contact.error.message_required': 'Por favor, ingresa tu mensaje.',
       'contact.error.message_too_short': 'El mensaje debe tener al menos 10 caracteres.',
-      'contact.error.duplicate': 'Ya has enviado este mensaje. Por favor, espera unos minutos antes de intentarlo de nuevo.'
+      'contact.error.duplicate': 'Este mensaje ya fue enviado recientemente. Para evitar duplicados, el sistema no acepta envíos idénticos en un corto periodo de tiempo.'
     }
   };
 
