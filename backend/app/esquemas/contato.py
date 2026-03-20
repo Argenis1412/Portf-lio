@@ -4,6 +4,7 @@ Schemas para endpoint POST /api/contato.
 Define contratos de requisição e resposta para envio de mensagens.
 """
 
+from typing import Optional
 from pydantic import BaseModel, Field, EmailStr
 
 
@@ -29,9 +30,9 @@ class RequisicaoContato(BaseModel):
         examples=["maria@empresa.com"],
         description="Email para resposta",
     )
-    assunto: str = Field(
-        ...,
-        min_length=5,
+    assunto: Optional[str] = Field(
+        default="Contato via Portfólio",
+        min_length=0,
         max_length=100,
         examples=["Oportunidade de trabalho"],
         description="Assunto da mensagem",
@@ -43,6 +44,9 @@ class RequisicaoContato(BaseModel):
         examples=["Olá, vi seu portfólio e gostaria de conversar..."],
         description="Conteúdo da mensagem",
     )
+    # Honeypot fields (should be empty)
+    website: Optional[str] = Field(None, description="Honeypot 1")
+    fax: Optional[str] = Field(None, description="Honeypot 2")
 
 
 class RespostaContato(BaseModel):

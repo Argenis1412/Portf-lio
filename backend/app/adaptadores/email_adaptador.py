@@ -81,10 +81,10 @@ class FormspreeEmailAdaptador(EmailAdaptador):
                 resposta = await cliente.post(
                     self.url_endpoint,
                     json={
-                        "nome": mensagem.nome,
+                        "name": mensagem.nome,
                         "email": mensagem.email,
-                        "assunto": mensagem.assunto,
-                        "mensagem": mensagem.mensagem,
+                        "_subject": mensagem.assunto,
+                        "message": mensagem.mensagem,
                     },
                     timeout=10.0,
                 )
