@@ -45,9 +45,6 @@ async def enviar_contato(
     ],
     idempotency_key: Annotated[Optional[str], Depends(verificar_idempotencia)] = None,
 ) -> RespostaContato:
-    # Debug log for honeypots
-    logger.debug("contact_request_data", extra={"data": requisicao.model_dump()})
-    
     # 1. Honeypot Check (Direct Bot Trap)
     # Bots often fill all available input fields automatically.
     if requisicao.website or requisicao.fax:

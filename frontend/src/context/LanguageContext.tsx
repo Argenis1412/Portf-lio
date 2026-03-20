@@ -75,7 +75,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.message_required': 'Por favor, insira sua mensagem.',
       'contact.error.message_too_short': 'A mensagem deve ter pelo menos 10 caracteres.',
       'contact.error.duplicate': 'Esta mensagem já foi enviada. Já recebemos sua consulta, obrigado!',
-      'contact.error.rate_limit': 'Muitas tentativas. Por favor, aguarde um momento antes de tentar novamente.'
+      'contact.error.rate_limit': 'Você atingiu o limite de mensagens permitidas por agora. Tente novamente mais tarde.'
     },
     en: {
       'nav.about': 'About',
@@ -115,7 +115,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.message_required': 'Please enter your message.',
       'contact.error.message_too_short': 'Message must be at least 10 characters long.',
       'contact.error.duplicate': 'This message has already been sent. We have already received your inquiry, thank you!',
-      'contact.error.rate_limit': 'Too many attempts. Please wait a moment before trying again.'
+      'contact.error.rate_limit': 'You have reached the limit of messages allowed for now. Please try again later.'
     },
     es: {
       'nav.about': 'Sobre',
@@ -155,7 +155,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       'contact.error.message_required': 'Por favor, ingresa tu mensaje.',
       'contact.error.message_too_short': 'El mensaje debe tener al menos 10 caracteres.',
       'contact.error.duplicate': 'Este mensaje ya ha sido enviado. ¡Ya recibimos tu consulta, gracias!',
-      'contact.error.rate_limit': 'Demasiados intentos. Por favor, espera un momento antes de intentarlo de nuevo.'
+      'contact.error.rate_limit': 'Has alcanzado el límite de mensajes permitidos por ahora. Inténtalo de nuevo más tarde.'
     }
   };
 

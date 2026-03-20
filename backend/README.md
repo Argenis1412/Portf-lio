@@ -167,13 +167,14 @@ Returns API status and basic metrics.
 #### Contact protection pipeline
 The contact endpoint uses defense in depth before delivering a message:
 
-1. **Honeypot check**: hidden fields such as `website` and `fax` are inspected before processing.
+1. **Honeypot check**: hidden fields such as `website` and `fax` are inspected before processing. These fields are read directly from the DOM in the frontend to capture automated bot submissions.
 2. **Spam score**: short content, excessive links, suspicious keywords, and temporary email domains increase the score.
 3. **Classification**:
-   - `NORMAL`: delivered normally
-   - `SUSPECT` (`score > 30`): delivered with `[SUSPECT]` in the subject
-   - `SILENT_SPAM` (`score > 70`): returns `200 OK`, logs the event, and skips delivery
-4. **Replay controls**: idempotency and short-term deduplication reduce repeated submissions.
+   - `NORMAL`: delivered normally.
+   - `SUSPECT` (`score > 30`): delivered with `[FRAUDE SOSPECHOSO]` in the subject line.
+   - `SILENT_SPAM` (`score > 70`): returns `200 OK` (success), logs the event internally, but skips delivery to avoid notifying the spammer.
+4. **Replay controls**: idempotency and short-term deduplication reduce repeated submissions. Returns `400 Bad Request` with a specific error message.
+5. **Rate Limiting**: Standard `429 Too Many Requests` response after 5 messages/hour, protecting the server.
 
 This keeps the UX unchanged for legitimate users while reducing bot noise in the inbox.
 
