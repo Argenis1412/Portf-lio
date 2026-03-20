@@ -83,6 +83,7 @@ export default function Contact() {
     
     if (!validateForm()) return;
     
+    setErrors({});
     setStatus('loading');
     
     try {

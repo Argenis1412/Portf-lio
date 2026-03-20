@@ -35,7 +35,7 @@ roteador = APIRouter(tags=["Contato"])
         500: {"description": "Failed to deliver message via external service"},
     },
 )
-@limiter.limit("5/minute; 5/hour")
+@limiter.limit("20/minute; 100/day")
 async def enviar_contato(
     request: Request,
     requisicao: RequisicaoContato,
