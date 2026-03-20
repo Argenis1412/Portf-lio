@@ -13,12 +13,6 @@ from app.core.idempotencia import store
 
 client = TestClient(app)
 
-@pytest.fixture(autouse=True)
-def clean_idempotency_store():
-    """Limpa o store antes de cada teste."""
-    from app.core.idempotencia import store, content_store
-    store._cache.clear()
-    content_store._cache.clear()
 
 def test_idempotencia_contato():
     """Testa se o envio duplicado com mesma chave retorna cache."""

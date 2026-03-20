@@ -151,3 +151,31 @@ def logger_mock() -> LoggerAdaptador:
     """
     mock = MagicMock(spec=LoggerAdaptador)
     return mock
+
+
+@pytest.fixture(autouse=True)
+def reset_global_state():
+    """
+    Reseta o estado global (Rate Limiter, Idempotency, Content Store) antes de cada teste.
+    Isso evita que testes acumulem limites ou cache uns dos outros.
+    """
+    from app.core.idempotencia import store, content_store
+    from app.core.limite import limiter
+    
+    # Limpar caches de idempotência e conteúdo
+    if hasattr(store, "_cache"):
+        store._cache.clear()
+    if hasattr(content_store, "_cache"):
+        content_store._cache.clear()
+        
+    # Limpar storage do rate limiter (slowapi)
+    if hasattr(limiter, "_storage") and hasattr(limiter._storage, "storage"):
+        # Para MemoryStorage do limits, que o slowapi usa
+        limiter._storage.storage.clear()
+    elif hasattr(limiter, "_storage"):
+        # Tentativa genérica caso a estrutura mude
+        try:
+            limiter._storage.clear()
+        except TypeError:
+            # Se clear() pedir argumentos, ignoramos ou tentamos outra forma
+            pass
