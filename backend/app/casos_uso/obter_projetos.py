@@ -32,24 +32,11 @@ class ObterProjetosUseCase:
 
     async def executar(self) -> list[Projeto]:
         """
-        Executa caso de uso.
-
-        Returns:
-            list[Projeto]: Lista de projetos ordenada (destacados primeiro).
-
-        Ordenação:
-            1. Projetos em destaque vêm primeiro
-            2. Dentro de cada grupo, ordem alfabética por nome
-
-        Example:
-            >>> repo = RepositorioJSON()
-            >>> uc = ObterProjetosUseCase(repo)
-            >>> projetos = await uc.executar()
-            >>> projetos[0].destaque
-            True
+        Executa caso de uso com ordenação.
         """
         projetos = await self.repositorio.obter_projetos()
         return sorted(projetos, key=lambda p: (not p.destaque, p.nome))
+
 
 
 class ObterProjetoPorIdUseCase:

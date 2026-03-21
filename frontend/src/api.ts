@@ -1,3 +1,7 @@
+// ===================================================
+// Tipos compartidos (sincronizados con backend FastAPI)
+// ===================================================
+
 export interface LocalizedString {
   pt: string;
   en: string;
@@ -60,70 +64,54 @@ export interface About {
   disponibilidade: LocalizedString;
 }
 
+// ===================================================
+// Cliente de API Centralizado
+// ===================================================
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1';
 
-export const fetchAbout = async (): Promise<About> => {
-  const res = await fetch(`${API_BASE_URL}/sobre`);
-  if (!res.ok) throw new Error('Failed to fetch about info');
-  return res.json();
-};
+class ApiError extends Error {
+  status: number;
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+    this.name = 'ApiError';
+  }
+}
+
+
+async function apiGet<T>(path: string): Promise<T> {
+  const res = await fetch(`${API_BASE_URL}${path}`);
+  if (!res.ok) {
+    throw new ApiError(res.status, `API request failed: ${res.status} ${res.statusText} (${path})`);
+  }
+  return res.json() as Promise<T>;
+}
+
+// ===================================================
+// Funciones de Fetch (usadas por los hooks de React Query)
+// ===================================================
+
+export const fetchAbout = (): Promise<About> =>
+  apiGet<About>('/sobre');
 
 export const fetchProjects = async (): Promise<Project[]> => {
-  if (import.meta.env.DEV) {
-    console.log(`Fetching projects from: ${API_BASE_URL}/projetos`);
-  }
-  try {
-    const res = await fetch(`${API_BASE_URL}/projetos`);
-    if (import.meta.env.DEV) {
-      console.log(`Response status: ${res.status}`);
-    }
-    
-    if (!res.ok) {
-      const errorText = await res.text();
-      if (import.meta.env.DEV) {
-        console.error(`Fetch failed: ${res.status} ${res.statusText}`, errorText);
-      }
-      throw new Error(`Failed to fetch projects: ${res.status}`);
-    }
-    
-    const data = await res.json();
-    if (import.meta.env.DEV) {
-      console.log('Projects data received:', data);
-    }
-    
-    if (!data.projetos || !Array.isArray(data.projetos)) {
-      if (import.meta.env.DEV) {
-        console.error('Unexpected data format:', data);
-      }
-      return [];
-    }
-    
-    return data.projetos;
-  } catch (err) {
-    if (import.meta.env.DEV) {
-      console.error('Error fetching projects:', err);
-    }
-    throw err;
-  }
+  const data = await apiGet<{ projetos: Project[] }>('/projetos');
+  if (!data.projetos || !Array.isArray(data.projetos)) return [];
+  return data.projetos;
 };
 
 export const fetchSkills = async (): Promise<Skill[]> => {
-  const res = await fetch(`${API_BASE_URL}/stack`);
-  if (!res.ok) throw new Error('Failed to fetch skills');
-  const data = await res.json();
+  const data = await apiGet<{ stack: Skill[] }>('/stack');
   return data.stack;
 };
 
 export const fetchExperience = async (): Promise<Experience[]> => {
-  const res = await fetch(`${API_BASE_URL}/experiencias`);
-  if (!res.ok) throw new Error('Failed to fetch experience');
-  const data = await res.json();
+  const data = await apiGet<{ experiencias: Experience[] }>('/experiencias');
   return data.experiencias;
 };
 
 export const fetchFormacao = async (): Promise<Formacao[]> => {
-  const res = await fetch(`${API_BASE_URL}/formacao`);
-  if (!res.ok) throw new Error('Failed to fetch formacao');
-  const data = await res.json();
+  const data = await apiGet<{ formacoes: Formacao[] }>('/formacao');
   return data.formacoes;
 };

@@ -75,7 +75,7 @@ describe('fetchAbout', () => {
 
   it('lança erro quando a resposta não é OK', async () => {
     mockFetchError(404);
-    await expect(fetchAbout()).rejects.toThrow('Failed to fetch about info');
+    await expect(fetchAbout()).rejects.toThrow(/API request failed: 404/);
   });
 
   it('chama a URL correta (/sobre)', async () => {
@@ -107,7 +107,7 @@ describe('fetchProjects', () => {
 
   it('lança erro quando a resposta não é OK', async () => {
     mockFetchError(500);
-    await expect(fetchProjects()).rejects.toThrow();
+    await expect(fetchProjects()).rejects.toThrow(/API request failed: 500/);
   });
 });
 
@@ -132,7 +132,7 @@ describe('fetchSkills', () => {
 
   it('lança erro quando o servidor retorna erro', async () => {
     mockFetchError(503);
-    await expect(fetchSkills()).rejects.toThrow('Failed to fetch skills');
+    await expect(fetchSkills()).rejects.toThrow(/API request failed: 503/);
   });
 });
 
@@ -167,7 +167,7 @@ describe('fetchExperience', () => {
 
   it('lança erro quando a resposta não é OK', async () => {
     mockFetchError(500);
-    await expect(fetchExperience()).rejects.toThrow('Failed to fetch experience');
+    await expect(fetchExperience()).rejects.toThrow(/API request failed: 500/);
   });
 });
 
@@ -200,6 +200,6 @@ describe('fetchFormacao', () => {
 
   it('lança erro quando a resposta não é OK', async () => {
     mockFetchError(500);
-    await expect(fetchFormacao()).rejects.toThrow('Failed to fetch formacao');
+    await expect(fetchFormacao()).rejects.toThrow(/API request failed: 500/);
   });
 });

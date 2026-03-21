@@ -1,30 +1,14 @@
 import { motion } from 'framer-motion';
 import Skeleton from './ui/Skeleton';
 import { Github, ExternalLink } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { fetchProjects } from '../api';
-import type { Project } from '../api';
+import { useProjects } from '../hooks/useApi';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Projects() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: projects, isLoading, isError, error } = useProjects();
   const { language, t } = useLanguage();
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchProjects()
-      .then(data => {
-        setProjects(data);
-      })
-      .catch(err => {
-        console.error('Projects fetch error:', err);
-        setError(err.message || 'Unknown error');
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <section id="projects" className="py-16 max-w-6xl mx-auto px-4">
         <div className="h-10 w-48 bg-app-surface-hover rounded-md mx-auto mb-12 animate-pulse" />
@@ -50,16 +34,16 @@ export default function Projects() {
     );
   }
 
-  if (error) {
+  if (isError) {
     return (
       <section id="projects" className="py-24 max-w-6xl mx-auto px-4 text-center text-red-500">
         <h2 className="text-2xl font-bold mb-4">{t('error.generic')}</h2>
-        <p>{error}</p>
+        <p>{(error as Error)?.message || 'Unknown error'}</p>
       </section>
     );
   }
 
-  if (projects.length === 0) {
+  if (!projects || projects.length === 0) {
     return (
       <section id="projects" className="py-24 max-w-6xl mx-auto px-4 text-center">
         <h2 className="text-3xl font-bold mb-8 text-app-text">{t('nav.projects')}</h2>
@@ -67,6 +51,7 @@ export default function Projects() {
       </section>
     );
   }
+
 
   return (
     <section id="projects" className="py-16 max-w-6xl mx-auto px-4 relative group overflow-hidden">
@@ -93,7 +78,18 @@ export default function Projects() {
             >
               <div className="absolute top-0 left-0 w-full h-1 bg-app-primary opacity-0 group-hover:opacity-100 transition-smooth z-10"></div>
               
+              {project.imagem && (
+                <div className="mb-6 rounded-lg overflow-hidden border border-app-border h-48">
+                  <img 
+                    src={project.imagem} 
+                    alt={project.nome} 
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                  />
+                </div>
+              )}
               <h3 className="text-2xl font-bold text-app-text mb-3">{project.nome}</h3>
+
               <p className="text-app-muted mb-6 leading-relaxed">
                 {project.descricao_curta[language as keyof typeof project.descricao_curta]}
               </p>

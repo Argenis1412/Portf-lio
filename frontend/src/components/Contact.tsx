@@ -2,8 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Loader2, AlertCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { fetchAbout } from '../api';
-import type { About } from '../api';
+import { useAbout } from '../hooks/useApi';
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -11,9 +10,17 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+interface ApiErrorResponse {
+  erro?: {
+    codigo?: string;
+  };
+  detail?: string;
+}
+
 export default function Contact() {
+
   const { t, language } = useLanguage();
-  const [about, setAbout] = useState<About | null>(null);
+  const { data: about } = useAbout();
   
   const [formData, setFormData] = useState({
     nome: '',
@@ -35,16 +42,6 @@ export default function Contact() {
   const generateNewKey = () => {
     setIdempotencyKey(getNewKey());
   };
-
-  useEffect(() => {
-    fetchAbout()
-      .then(setAbout)
-      .catch(err => {
-        if (import.meta.env.DEV) {
-          console.error('Error fetching about data for contact:', err);
-        }
-      });
-  }, []);
 
   useEffect(() => {
     if (status === 'success') {
@@ -119,7 +116,9 @@ export default function Contact() {
         setErrors({ submit: 'contact.error.rate_limit' });
         setStatus('error');
       } else {
-        let errorData: any = {};
+        let errorData: ApiErrorResponse = {};
+
+
         try {
           errorData = await response.json();
         } catch {
