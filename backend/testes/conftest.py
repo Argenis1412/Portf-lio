@@ -14,6 +14,8 @@ from app.entidades.formacao import FormacaoAcademica
 from app.adaptadores.repositorio import RepositorioPortfolio
 from app.adaptadores.email_adaptador import EmailAdaptador
 from app.adaptadores.logger_adaptador import LoggerAdaptador
+from app.principal import app
+from app.controladores.dependencias import obter_repositorio
 
 
 @pytest.fixture
@@ -38,6 +40,9 @@ def repositorio_mock() -> RepositorioPortfolio:
         "descricao": {"pt": "Descrição de teste", "en": "Test description", "es": "Descripción de prueba"},
         "disponibilidade": {"pt": "Remoto", "en": "Remote", "es": "Remoto"},
     }
+    
+    # Mock verificar_saude
+    mock.verificar_saude.return_value = {"status": "ok", "detalhes": "Banco de dados Mock conectado"}
     
     # Mock obter_projetos
     mock.obter_projetos.return_value = [
@@ -179,3 +184,13 @@ def reset_global_state():
         except TypeError:
             # Se clear() pedir argumentos, ignoramos ou tentamos outra forma
             pass
+
+
+@pytest.fixture(autouse=True)
+def override_dependencias(repositorio_mock):
+    """
+    Sobrescreve dependências do FastAPI para usar mocks durante os testes.
+    """
+    app.dependency_overrides[obter_repositorio] = lambda: repositorio_mock
+    yield
+    app.dependency_overrides.clear()
