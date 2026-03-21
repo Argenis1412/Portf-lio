@@ -71,11 +71,24 @@ class MiddlewareRequisicao(BaseHTTPMiddleware):
         # Timestamp de início
         inicio = time.time()
         
+        # Extrair identidade para rate limiting se for contato
+        if request.method == "POST" and "/v1/contato" in request.url.path:
+            try:
+                # Tentar ler o corpo sem consumir o stream de forma destrutiva
+                # Em Starlette, se lermos .json(), ele fica em cache no objeto request
+                body = await request.json()
+                email = body.get("email")
+                if email:
+                    request.state.identidade = f"email:{email.lower().strip()}"
+            except:
+                pass
+
         # Log da requisição recebida
         logger.info(
             "requisicao_recebida",
             query=str(request.url.query) if request.url.query else None,
             client_ip=request.client.host if request.client else None,
+            identidade=getattr(request.state, "identidade", "ip"),
         )
         
         # Processar requisição

@@ -12,7 +12,7 @@ from app.esquemas.contato import RequisicaoContato, RespostaContato
 from app.casos_uso import EnviarContatoUseCase
 from app.controladores.dependencias import obter_enviar_contato_use_case
 from app.core.excecoes import ErroInfraestrutura
-from app.core.limite import limiter
+from app.core.limite import limiter, get_email_or_ip_key
 from app.core.idempotencia import verificar_idempotencia, store, content_store
 from app.core.honeypot import is_honeypot_triggered
 from app.core.spam_check import calculate_spam_score
@@ -29,14 +29,14 @@ roteador = APIRouter(tags=["Contato"])
     "/contato",
     response_model=RespostaContato,
     summary="Send contact message",
-    description="Submits a contact form message via Formspree. Rate limited to 5 requests/minute.",
+    description="Submits a contact form message via Formspree. Rate limited to 10 messages/day per email.",
     responses={
         200: {"description": "Message sent successfully"},
         429: {"description": "Too many requests - rate limit exceeded"},
         500: {"description": "Failed to deliver message via external service"},
     },
 )
-@limiter.limit("20/minute; 100/day")
+@limiter.limit("20/minute; 10/day", key_func=get_email_or_ip_key)
 async def enviar_contato(
     request: Request,
     requisicao: RequisicaoContato,
