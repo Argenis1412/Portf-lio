@@ -6,7 +6,7 @@ Centraliza a composicao de adaptadores e casos de uso para usar com FastAPI Depe
 
 from functools import lru_cache
 
-from app.adaptadores import FormspreeEmailAdaptador, LoggerEstruturado, RepositorioJSON
+from app.adaptadores import FormspreeEmailAdaptador, LoggerEstruturado, RepositorioJSON, RepositorioSQL
 from app.adaptadores.repositorio import RepositorioPortfolio
 from app.casos_uso import (
     EnviarContatoUseCase,
@@ -23,7 +23,7 @@ from app.configuracao import configuracoes
 @lru_cache
 def obter_repositorio() -> RepositorioPortfolio:
     """Retorna repositorio de dados compartilhado para leitura de portfolio."""
-    return RepositorioJSON()
+    return RepositorioSQL()
 
 
 @lru_cache

@@ -47,6 +47,10 @@ class Configuracoes(BaseSettings):
         default="",
         alias="FORMSPREE_FORM_ID",
     )
+    database_url: str = Field(
+        default="sqlite+aiosqlite:///./portfolio.db",
+        alias="DATABASE_URL",
+    )
 
     def lista_origens_permitidas(self) -> list[str]:
         """

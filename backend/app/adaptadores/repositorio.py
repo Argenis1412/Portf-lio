@@ -54,6 +54,11 @@ class RepositorioPortfolio(ABC):
         """Retorna lista de formações acadêmicas."""
         pass
 
+    @abstractmethod
+    async def verificar_saude(self) -> dict:
+        """Verifica se o repositório está acessível."""
+        pass
+
 
 # Caminho relativo ao projeto para os dados JSON
 DEFAULT_DADOS_PATH = Path(__file__).parent.parent.parent / "dados"
@@ -77,6 +82,26 @@ class RepositorioJSON(RepositorioPortfolio):
             diretorio_dados: Caminho para pasta com dados JSON.
         """
         self.diretorio_dados = Path(diretorio_dados)
+
+    async def verificar_saude(self) -> dict:
+        """
+        Verifica se os arquivos JSON básicos existem e são legíveis.
+        """
+        arquivos = ["sobre.json", "projetos.json", "stack.json"]
+        detalhes = {}
+        tudo_ok = True
+
+        for arq in arquivos:
+            caminho = self.diretorio_dados / arq
+            existe = caminho.exists()
+            detalhes[arq] = "ok" if existe else "ausente"
+            if not existe:
+                tudo_ok = False
+        
+        return {
+            "status": "ok" if tudo_ok else "erro",
+            "detalhes": detalhes
+        }
 
     async def _ler_json(self, nome_arquivo: str) -> Any:
         """
