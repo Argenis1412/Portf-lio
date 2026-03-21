@@ -24,16 +24,14 @@ The goal of this project is not only to showcase my work, but also to demonstrat
 | **Data** | JSON files (no database needed) |
 | **Deployment** | Docker Compose · Railway / Render compatible |
 
-- **Architecture**: Clean Architecture on backend; React Query for declarative data fetching and caching on frontend.
-- **i18n**: Multilingual support (PT, EN, ES) with externalized JSON manifests for extreme maintainability.
-- **Performance**: Automatic caching, image lazy-loading, and LCP prioritization (fetchPriority).
-- **Quality**: Husky + lint-staged ensure no broken code is committed.
-- **Premium UX**: Smooth declarative animations (Framer Motion), unified iconography (Lucide), and Skeleton Screens for polished loading states.
-- **Recruiter Optimized**: One-click "Copy Email" and "Copy WhatsApp" badges in the footer with animated feedback and official branding.
-- **Localized Validation**: Custom form validation that respects the selected language and updates reactively.
-- **Layered contact protection**: Honeypot fields, spam scoring, idempotency, deduplication, and rate limiting protect the contact form without degrading UX.
-- **89%+ backend test coverage** with fully isolated business logic and controller-level anti-spam tests.
-- **Contact form** forwarded via Formspree (no server-side email setup required).
+- **💎 Architecture**: Clean Architecture on backend; React Query for declarative data fetching and globally managed state on frontend.
+- **🌍 Scalable i18n**: Multilingual support (PT, EN, ES) with externalized JSON manifests for zero-recompile maintenance.
+- **⚡ High-Performance UX**:
+    - **Predictive Prefetching**: Data is pre-loaded on link hover, making transitions instant.
+    - **Background Sync**: Data stays fresh silently without manual refresh.
+    - **Optimized Assets**: Lazy loading + LCP prioritization.
+- **🛡️ Multi-Layer Protection**: Honeypots, rate limiting, and idempotency protect the contact form.
+- **🏗️ Developer Experience**: Husky + Lint-Staged + Vitest + GitHub Actions enforce a "no broken code" policy.
 
 ---
 
@@ -120,7 +118,33 @@ The frontend uses **Vitest** + **@testing-library/react** with a `jsdom` environ
 
 ---
 
+## 💎 Engineering Highlights (The "Invisible" Engineering)
+
+This project is built with industry-standard patterns to demonstrate production-ready engineering:
+
+### 1. Advanced State Management & UX
+We use **TanStack Query** not just for fetching, but for a "snappy" feels-like-native experience:
+- **Zero-Latency Navigation**: We prefetch data when the user hovers over links. By the time they click, the data is already in cache.
+- **Background Synchronization**: Data is refetched silently when the window is focused, ensuring you always see the latest information without a loading spinner.
+- **Robust Mutations**: The contact form is managed via mutations, handling loading/success/error states declaratively.
+
+### 2. Scalable Internationalization (i18n)
+Instead of hardcoded strings, we use a **JSON-driven i18n strategy**. This allows non-developers to edit translations in `src/i18n/` without touching the component logic, following the same pattern used in large-scale enterprise apps.
+
+### 3. Automated Quality Gate
+- **Husky & lint-staged**: It's impossible to commit code that fails linting or tests. The project enforces quality at the source.
+- **CI/CD**: Every push to GitHub triggers a full suite of backend and frontend tests via GitHub Actions.
+
+### 4. Security & Anti-Spam Logic
+The contact form features a **multi-layered defense system**:
+- **Honeypots**: Hidden fields that catch automated bots.
+- **Idempotency**: Prevents double-submission via `X-Idempotency-Key` headers.
+- **Rate-Limiting**: Backend protection against brute-force spam.
+
+---
+
 ## 🏗️ Architecture Layout
+
 
 ```mermaid
 graph TD

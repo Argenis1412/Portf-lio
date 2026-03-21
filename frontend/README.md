@@ -5,15 +5,17 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss_v4-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-Frontend application for a professional portfolio. Featuring declarative data management, advanced caching, and a highly maintainable i18n system.
+Frontend application for a professional portfolio. Featuring declarative data management, predictive prefetching, and a highly maintainable i18n system.
 
 ## ✨ Key Features
 
-- **Declarative Data (React Query)**: Automatic caching (5-10 min stale time), background refetching, and built-in loading/error states.
-- **Externalized i18n**: Multi-language support (EN, PT, ES) managed via decoupled JSON files in `src/i18n/`.
-- **Responsive & Premium UI**: Mobile-first Tailwind CSS v4 with glassmorphism effects and Framer Motion orchestrations.
-- **Performance Optimized**: Image lazy-loading and `fetchPriority` for better LCP metrics.
-- **Git Hooks**: Husky + lint-staged prevent committing code with lint errors or failing tests.
+- **💎 TanStack Query (v5)**: 
+    - **Predictive Prefetching**: Data is pre-loaded on Link hover/focus.
+    - **Background Sync**: Silent revalidation on window focus.
+    - **Centralized Mutations**: Robust state management for the contact form.
+- **🌍 Scalable i18n**: Externalized JSON manifests in `src/i18n/` for true decoupling of content and code.
+- **🎨 Tailwind CSS v4**: Modern styling with native CSS variables and glassmorphism.
+- **🛡️ Automated QA**: Husky + lint-staged force 100% lint/test pass before every commit.
 
 ## 📂 Source Structure
 
@@ -21,13 +23,13 @@ Frontend application for a professional portfolio. Featuring declarative data ma
 src/
 ├── api.ts              # API Client & Shared Interfaces
 ├── hooks/
-│   └── useApi.ts       # React Query hooks for all endpoints
+│   └── useApi.ts       # Centralized query & mutation hooks
 ├── i18n/
 │   ├── en.json         # English translations
-│   ├── pt.json         # Portuguese (BR) translations
+│   ├── pt.json         # Portuguese translations
 │   └── es.json         # Spanish translations
 ├── context/
-│   ├── LanguageContext.tsx   # Language state + i18n loader
+│   ├── LanguageContext.tsx   # Language state + i18n logic
 │   └── ThemeContext.tsx      # Dark/light theme state
 ├── components/         # Atomic UI components
 └── App.tsx             # Main layout orchestrator
@@ -47,15 +49,12 @@ npm run dev
 |---|---|
 | `npm run build` | Production-ready build with type-checking |
 | `npm run lint` | ESLint static analysis |
-| `npm run test` | Unit tests with Vitest |
-| `npm run prepare`| Initialize Husky (automatically runs on install) |
+| `npm run test` | Unit tests with Vitest (watch mode) |
+| `npm run preview` | Preview production build locally |
 
-## 🧪 Testing Strategy
+## 🧪 Testing & Quality
 
-The project uses **Vitest** + **@testing-library/react**.
-- **Unit Tests**: Business logic and component rendering.
-- **Quality Gate**: Husky blocks commits if `npm run lint` or `npm run test` fail on staged files.
-ction |
-| `npm run lint` | Run ESLint |
-| `npm run preview` | Preview the production build locally |
-| `npm run test` | Run tests with Vitest |
+We use **Vitest** + **@testing-library/react** for unit and component testing.
+The project enforces a **Quality Gate**:
+1. **Local**: Husky runs tests/lint on staged files.
+2. **Remote**: GitHub Actions runs the full suite on every push.
