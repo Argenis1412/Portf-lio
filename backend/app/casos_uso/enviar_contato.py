@@ -75,10 +75,10 @@ class EnviarContatoUseCase:
         assunto_base = assunto.strip() if assunto and assunto.strip() else "Contacto vía Portafolio"
         
         # Marcar como suspeito no assunto se necessário
-        assunto_final = f"[FRAUDE SOSPECHOSO] {assunto_base}" if is_suspicious else assunto_base
+        assunto_final = f"[CONTACTO SOSPECHOSO] {assunto_base}" if is_suspicious else assunto_base
 
         # Adicionar aviso visual no corpo se for suspeito
-        mensaje_conteudo = f"⚠️ ADVERTENCIA: POSIBLE FRAUDE ⚠️\n\n{mensagem}" if is_suspicious else mensagem
+        mensaje_conteudo = f"⚠️ ADVERTENCIA: CONTENIDO SOSPECHOSO ⚠️\n\n{mensagem}" if is_suspicious else mensagem
 
         # Criar entidade de domínio
         mensagem_entidade = Mensagem(

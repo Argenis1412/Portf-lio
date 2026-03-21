@@ -35,6 +35,6 @@
   "contact.error.subject_too_short": "Subject must be at least 5 characters long.",
   "contact.error.message_required": "Please enter your message.",
   "contact.error.message_too_short": "Message must be at least 10 characters long.",
-  "contact.error.duplicate": "This message has already been sent. We have already received your inquiry, thank you!",
+    "contact.error.duplicate": "You already sent this message, please try again later or send a different message",
   "contact.error.rate_limit": "You have reached the limit of messages allowed for now. Please try again later."
 }

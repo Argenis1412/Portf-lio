@@ -42,40 +42,40 @@
   },
   {
     "id": "portfolio-api",
-    "nome": "Portfolio API",
+    "nome": "Full-Stack Portfolio",
     "descricao_curta": {
-      "pt": "API REST com FastAPI e Clean Architecture demonstrando boas práticas de desenvolvimento backend",
-      "en": "REST API with FastAPI and Clean Architecture demonstrating backend development best practices",
-      "es": "API REST con FastAPI y Clean Architecture demostrando buenas prácticas de desarrollo backend"
+      "pt": "Projeto de Portfolio Full-Stack com FastAPI e React 19, focado em Clean Architecture e UX premium",
+      "en": "Full-Stack Portfolio project with FastAPI and React 19, focused on Clean Architecture and premium UX",
+      "es": "Proyecto de Portafolio Full-Stack con FastAPI y React 19, enfocado en Clean Architecture y UX premium"
     },
     "descricao_completa": {
-      "pt": "API REST desenvolvida com FastAPI seguindo princípios de Clean Architecture. Implementa separação clara de responsabilidades com Controllers, Use Cases, Entities e Adapters. Inclui validação com Pydantic V2, documentação automática OpenAPI, testes automatizados com pytest e CI com GitHub Actions.",
-      "en": "REST API built with FastAPI following Clean Architecture principles. Implements clear separation of concerns with Controllers, Use Cases, Entities, and Adapters. Includes Pydantic V2 validation, automatic OpenAPI documentation, automated tests with pytest, and CI with GitHub Actions.",
-      "es": "API REST desarrollada con FastAPI siguiendo principios de Clean Architecture. Implementa separación clara de responsabilidades con Controllers, Use Cases, Entities y Adapters. Incluye validación con Pydantic V2, documentación automática OpenAPI, pruebas automatizadas con pytest y CI con GitHub Actions."
+      "pt": "Solução robusta Full-Stack demonstrando engenharia de software de alta qualidade. Backend em FastAPI com Clean Architecture, Pydantic V2 e segurança avançada (honeypots, rate limiting). Frontend em React 19 + TypeScript com Tailwind CSS v4, animações fluidas (Framer Motion) e gerenciamento de estado declarativo com TanStack Query. Suporte completo a internacionalização (i18n) em três idiomas.",
+      "en": "Robust Full-Stack solution demonstrating high-quality software engineering. FastAPI backend with Clean Architecture, Pydantic V2, and advanced security (honeypots, rate limiting). Frontend in React 19 + TypeScript with Tailwind CSS v4, fluid animations (Framer Motion), and declarative state management with TanStack Query. Full internationalization (i18n) support in three languages.",
+      "es": "Solución Full-Stack robusta que demuestra ingeniería de software de alta calidad. Backend en FastAPI con Clean Architecture, Pydantic V2 y seguridad avanzada (honeypots, limitación de tasa). Frontend en React 19 + TypeScript con Tailwind CSS v4, animaciones fluidas (Framer Motion) y gestión de estado declarativa con TanStack Query. Soporte completo de internacionalización (i18n) en tres idiomas."
     },
-    "tecnologias": ["Python", "FastAPI", "Pydantic", "Pytest", "Clean Architecture", "90% Test Coverage", "Versioned API", "CI/CD & GitHub Actions"],
+    "tecnologias": ["Python", "FastAPI", "Pydantic V2", "React 19", "TypeScript", "Tailwind CSS v4", "TanStack Query", "Framer Motion", "Pytest", "i18n (PT, EN, ES)", "GitHub Actions", "Docker"],
     "funcionalidades": [
-      "Personal and professional information endpoints",
-      "Project listing and detail",
-      "Tech stack organized by categories",
-      "Professional experience timeline",
-      "Contact form",
-      "Automatic data validation with Pydantic",
-      "Interactive documentation with Swagger/OpenAPI",
-      "Proper HTTP error handling"
+      "Multilingual support (PT, EN, ES) with dynamic switching",
+      "Advanced Contact Form security (Honeypots, Rate Limiting, Idempotency)",
+      "High-Performance UX (Predictive Prefetching, Background Sync)",
+      "Clean Architecture implementation (Backend & Frontend approach)",
+      "Automatic OpenAPI/Swagger documentation",
+      "Interactive Project and Experience showcases",
+      "Responsive and Animated UI with Dark/Light modes",
+      "CI/CD with automated quality gates (Tests & Linting)"
     ],
     "aprendizados": [
-      "Clean Architecture implementation in Python",
-      "Separation of business logic and frameworks",
-      "Manual dependency injection",
-      "Unit testing with mocks",
-      "Data validation with Pydantic V2",
-      "Complete technical documentation",
-      "CI with GitHub Actions"
+      "Full-Stack architecture and integration patterns",
+      "Scalable internationalization strategies",
+      "Advanced state management with TanStack Query",
+      "Multi-layered security for public forms",
+      "Modern CSS with Tailwind CSS v4 engine",
+      "Automated testing for complex business flows",
+      "CI/CD workflow orchestration"
     ],
     "repositorio": "https://github.com/Argenis1412/portfolio",
     "demo": null,
-    "destaque": false,
+    "destaque": true,
     "imagem": null
   }
 ]

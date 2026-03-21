@@ -35,6 +35,6 @@
   "contact.error.subject_too_short": "O assunto deve ter pelo menos 5 caracteres.",
   "contact.error.message_required": "Por favor, insira sua mensagem.",
   "contact.error.message_too_short": "A mensagem deve ter pelo menos 10 caracteres.",
-  "contact.error.duplicate": "Esta mensagem já foi enviada. Já recebemos sua consulta, obrigado!",
+    "contact.error.duplicate": "Você já enviou esta mensagem, por favor tente novamente mais tarde ou envie uma mensagem diferente",
   "contact.error.rate_limit": "Você atingiu o limite de mensagens permitidas por agora. Tente novamente mais tarde."
 }

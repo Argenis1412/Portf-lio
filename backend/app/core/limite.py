@@ -22,4 +22,25 @@ def get_email_or_ip_key(request: Request) -> str:
 
 
 # Inicializar limiter baseado no IP do cliente por padrão
-limiter = Limiter(key_func=get_remote_address)
+# Usamos strategy='fixed-window' para simplicidade
+limiter = Limiter(key_func=get_remote_address, strategy="fixed-window")
+
+
+def check_rate_limit(request: Request, limit_string: str, key_func=get_email_or_ip_key):
+    """
+    Realiza o hit no limiter de forma manual e levanta RateLimitExceeded se necessário.
+    """
+    from slowapi.errors import RateLimitExceeded
+    from limits import parse_many
+    
+    # Mock para satisfazer o construtor do RateLimitExceeded do slowapi
+    # que espera um objeto com o atributo 'error_message'
+    class MockLimit:
+        def __init__(self, msg):
+            self.error_message = msg
+
+    key = key_func(request)
+    # Parseamos la string de límite (ej: "10/day" -> [Limit(...)])
+    for limit in parse_many(limit_string):
+        if not limiter.limiter.hit(limit, key):
+            raise RateLimitExceeded(MockLimit(str(limit)))

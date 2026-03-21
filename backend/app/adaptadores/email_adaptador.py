@@ -95,11 +95,13 @@ class FormspreeEmailAdaptador(EmailAdaptador):
                     logger.info(
                         "formspree_envio_sucesso",
                         status_code=resposta.status_code,
+                        response_body=resposta.text[:200],  # Ver se tem algo como "needs capture"
                     )
                 else:
                     logger.warning(
                         "formspree_envio_falha_status",
                         status_code=resposta.status_code,
+                        response_body=resposta.text[:200],
                     )
                 return sucesso
         except httpx.TimeoutException:
