@@ -35,10 +35,10 @@ jobs:
           cd frontend
           npm ci
 
-      # - name: 🧪 Executar testes
-      #   run: |
-      #     cd frontend
-      #     npm run test
+      - name: 🧪 Executar testes
+        run: |
+          cd frontend
+          npm run test
 
       - name: 🏗️ Build produção
         run: |

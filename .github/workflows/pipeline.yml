@@ -2,7 +2,7 @@ name: Pipeline de Backend
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, 'feature/**' ]
     paths:
       - 'backend/**'
   pull_request:
