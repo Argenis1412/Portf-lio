@@ -13,7 +13,7 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 export default function Contact() {
   const { t, language } = useLanguage();
   const { data: about } = useAbout();
-  const { mutate, isPending: isMutating, isSuccess: mutationSuccess, error: mutationError } = useContactMutation();
+  const { mutate, isPending: isMutating, isSuccess: mutationSuccess, error: mutationError, reset } = useContactMutation();
   
   const [formData, setFormData] = useState({
     nome: '',
@@ -66,24 +66,27 @@ export default function Contact() {
       fax: (document.getElementById('hp_fax') as HTMLInputElement)?.value || ''
     };
     
-    mutate({ data: dataToSend, idempotencyKey }, {
-      onSuccess: () => {
-        setFormData({ nome: '', email: '', assunto: '', mensagem: '' });
-        generateNewKey();
-      },
-      onError: (error: unknown) => {
-        const err = error as { status?: number; message?: string };
-        if (err.status === 429) {
-          setErrors({ submit: 'contact.error.rate_limit' });
-        } else if (err.message?.includes('DUPLICATE') || err.status === 409) {
-           setErrors({ submit: 'contact.error.duplicate' });
-        } else {
-           setErrors({ submit: 'contact.error.generic' });
+    mutate(
+      { data: dataToSend, idempotencyKey },
+      {
+        onSuccess: () => {
+          setFormData({ nome: '', email: '', assunto: '', mensagem: '' });
+          generateNewKey();
+          setTimeout(() => reset(), 2500);
+        },
+        onError: (error: unknown) => {
+          const err = error as { status?: number; message?: string };
+          if (err.status === 429) {
+            setErrors({ submit: 'contact.error.rate_limit' });
+          } else if (err.message?.includes('DUPLICATE') || err.status === 409 || err.status === 400) {
+            setErrors({ submit: 'contact.error.duplicate' });
+          } else {
+            setErrors({ submit: 'contact.error.generic' });
+          }
+          generateNewKey();
         }
-        generateNewKey();
       }
-
-    });
+    );
   };
 
   const handleWhatsApp = () => {
@@ -211,7 +214,7 @@ export default function Contact() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
               <motion.button 
                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                type="submit" disabled={status === 'loading' || status === 'success'}
+                type="submit" disabled={status === 'loading'}
                 className="bg-app-primary hover:bg-app-primary-hover text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg shadow-app-primary/20 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest text-xs flex items-center justify-center gap-3"
               >
                 {status === 'loading' ? <Loader2 className="animate-spin h-4 w-4 text-white" /> : <Mail className="w-4 h-4" />}

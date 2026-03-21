@@ -16,6 +16,13 @@ from app.adaptadores.email_adaptador import EmailAdaptador
 from app.adaptadores.logger_adaptador import LoggerAdaptador
 from app.principal import app
 from app.controladores.dependencias import obter_repositorio
+from fastapi.testclient import TestClient
+
+@pytest.fixture
+def client():
+    """Fixture para fornecer um TestClient da aplicação."""
+    with TestClient(app) as c:
+        yield c
 
 
 @pytest.fixture

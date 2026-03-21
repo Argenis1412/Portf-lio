@@ -12,7 +12,7 @@ from app.esquemas.contato import RequisicaoContato, RespostaContato
 from app.casos_uso import EnviarContatoUseCase
 from app.controladores.dependencias import obter_enviar_contato_use_case
 from app.core.excecoes import ErroInfraestrutura
-from app.core.limite import limiter, get_email_or_ip_key
+from app.core.limite import limiter, get_email_or_ip_key, check_rate_limit
 from app.core.idempotencia import verificar_idempotencia, store, content_store
 from app.core.honeypot import is_honeypot_triggered
 from app.core.spam_check import calculate_spam_score
@@ -36,7 +36,6 @@ roteador = APIRouter(tags=["Contato"])
         500: {"description": "Failed to deliver message via external service"},
     },
 )
-@limiter.limit("20/minute; 10/day", key_func=get_email_or_ip_key)
 async def enviar_contato(
     request: Request,
     requisicao: RequisicaoContato,
@@ -66,8 +65,8 @@ async def enviar_contato(
     # 2. Spam Scoring (Heuristic Filter)
     spam_score = calculate_spam_score(requisicao.mensagem, requisicao.email)
     
-    # SILENT_SPAM (> 70)
-    if spam_score > 70:
+    # SILENT_SPAM (>= 70)
+    if spam_score >= 70:
         logger.info(
             "contact_classified",
             classification="SILENT_SPAM",
@@ -84,7 +83,7 @@ async def enviar_contato(
     # Normalizar mensagem: colapsar espaços, trim e lower para reduzir falsos negativos
     normalized_message = re.sub(r"\s+", " ", requisicao.mensagem or "").strip().lower()
     normalized_subject = re.sub(r"\s+", " ", (requisicao.assunto or "")).strip().lower()
-    content_str = f"{(requisicao.email or '').lower()}:{normalized_subject}:{normalized_message}"
+    content_str = f"{(requisicao.email or '').lower()}:{normalized_message}"
     content_hash = hashlib.sha256(content_str.encode()).hexdigest()
 
     if content_store.check_duplicate(content_hash):
@@ -99,6 +98,15 @@ async def enviar_contato(
             status_code=400,
             content={"erro": {"codigo": "CONTEUDO_DUPLICADO"}, "detail": "DUPLICATE_CONTENT"},
         )
+ 
+    # Registrar contenido inmediatamente para evitar colisiones en paralelo
+    content_store.add(content_hash)
+
+    # 5. Rate Limit (Manual)
+    # Solo contamos como "hit" si la mensaje llegó hasta aquí (no es bot, no es spam silencioso, no es duplicado)
+    # Esto evita que intentos repetidos de duplicados bloqueen al usuario por 429.
+    check_rate_limit(request, "10/day")
+    check_rate_limit(request, "20/minute")
 
     # SUSPECT (> 30)
     is_suspicious = spam_score > 30
@@ -158,9 +166,6 @@ async def enviar_contato(
         else:
             logger.error("suspect_delivery_crash_silently", error=str(e), email=requisicao.email)
     
-    # Registrar no content_store SEMPRE que vamos retornar sucesso ao usuário
-    # Isso garante que se ele reintentar, diremos "já recebemos" (feedback humano)
-    content_store.add(content_hash)
 
     resposta = RespostaContato(
         sucesso=True,
