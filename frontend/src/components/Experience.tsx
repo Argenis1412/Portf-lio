@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
 import Skeleton from './ui/Skeleton';
 import { GraduationCap, MapPin, Briefcase } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { fetchExperience, fetchFormacao } from '../api';
+import { useExperience, useFormacao } from '../hooks/useApi';
 import type { Experience as ExperienceType, Formacao, LocalizedString } from '../api';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -11,24 +10,20 @@ type TimelineEntry =
   | ({ kind: 'education' } & Formacao);
 
 export default function Experience() {
-  const [entries, setEntries] = useState<TimelineEntry[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: experiences = [], isLoading: loadingExp } = useExperience();
+  const { data: formacoes = [], isLoading: loadingFmc } = useFormacao();
   const { language, t } = useLanguage();
 
-  useEffect(() => {
-    Promise.all([fetchExperience(), fetchFormacao()])
-      .then(([exps, fmcs]) => {
-        const expEntries: TimelineEntry[] = exps.map(e => ({ kind: 'experience' as const, ...e }));
-        const fmcEntries: TimelineEntry[] = fmcs.map(f => ({ kind: 'education' as const, ...f }));
-        const merged = [...expEntries, ...fmcEntries].sort((a, b) => {
-          if (a.atual !== b.atual) return a.atual ? -1 : 1;
-          return b.data_inicio.localeCompare(a.data_inicio);
-        });
-        setEntries(merged);
-      })
-      .catch(err => console.error(err))
-      .finally(() => setLoading(false));
-  }, []);
+  const loading = loadingExp || loadingFmc;
+
+  const entries: TimelineEntry[] = [
+    ...experiences.map(e => ({ kind: 'experience' as const, ...e })),
+    ...formacoes.map(f => ({ kind: 'education' as const, ...f })),
+  ].sort((a, b) => {
+    if (a.atual !== b.atual) return a.atual ? -1 : 1;
+    return b.data_inicio.localeCompare(a.data_inicio);
+  });
+
 
   const formatDate = (date: string | null, isActual: boolean) => {
     if (!date) return isActual ? (language === 'pt' ? 'Presente' : language === 'es' ? 'Presente' : 'Present') : '?';

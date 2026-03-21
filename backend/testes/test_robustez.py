@@ -116,3 +116,34 @@ def test_idempotencia_em_progresso():
         assert "already in progress" in resp.json()["detail"].lower()
     finally:
         store._cache.pop("progress-key-456", None)
+
+
+def test_rate_limiting_contato_por_email():
+    """Testa se o limite de 10/dia por e-mail funciona."""
+    payload = {
+        "nome": "Test User",
+        "email": "limite@example.com",
+        "assunto": "Test",
+        "mensagem": "Some message"
+    }
+    
+    # Mock do Use Case para acelerar
+    mock_uc = AsyncMock()
+    mock_uc.executar.return_value = True
+    app.dependency_overrides[obter_enviar_contato_use_case] = lambda: mock_uc
+    
+    try:
+        # Fazer 10 requisições (mudar mensagem para evitar deduplicação de conteúdo)
+        for i in range(10):
+            payload["mensagem"] = f"Message number {i} for rate limiting test."
+            resp = client.post("/api/v1/contato", json=payload)
+            assert resp.status_code == 200, f"Error at request {i}: {resp.text}"
+            
+        # A 11ª deve falhar com 429
+        payload["mensagem"] = "Final message that should be blocked."
+        resp = client.post("/api/v1/contato", json=payload)
+        assert resp.status_code == 429
+        assert "rate limit exceeded" in resp.json()["erro"]["mensagem"].lower()
+        
+    finally:
+        app.dependency_overrides.pop(obter_enviar_contato_use_case, None)

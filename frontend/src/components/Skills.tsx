@@ -1,20 +1,16 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { fetchSkills } from '../api';
-import type { Skill } from '../api';
+import { useSkills } from '../hooks/useApi';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Skills() {
-  const [skills, setSkills] = useState<Skill[]>([]);
+  const { data: skills = [], isLoading } = useSkills();
   const { t } = useLanguage();
 
-  useEffect(() => {
-    fetchSkills()
-      .then(data => setSkills(data))
-      .catch(err => console.error(err));
-  }, []);
+  if (isLoading) return null; // Or a skeleton if we had one for skills
 
   const categories = Array.from(new Set(skills.map(s => s.categoria)));
+
+
 
   return (
     <section id="stack" className="py-16 bg-transparent section-alt transition-colors duration-300 relative group overflow-hidden">

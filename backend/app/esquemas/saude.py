@@ -4,6 +4,7 @@ Schemas Pydantic para endpoint de saúde.
 Define contratos de entrada/saída para validação automática.
 """
 
+from typing import Any, Optional
 from pydantic import BaseModel, Field
 
 
@@ -17,6 +18,7 @@ class RespostaSaude(BaseModel):
         versao_api: Versão da API.
         ambiente: Ambiente de execução.
         uptime_segundos: Tempo desde inicialização (opcional).
+        detalhes: Detalhes opcionais sobre componentes.
     """
 
     status: str = Field(
@@ -43,4 +45,8 @@ class RespostaSaude(BaseModel):
         default=None,
         examples=[3600],
         description="Tempo desde inicialização em segundos",
+    )
+    detalhes: Optional[dict[str, Any]] = Field(
+        default=None,
+        description="Detalhes sobre o status dos componentes",
     )

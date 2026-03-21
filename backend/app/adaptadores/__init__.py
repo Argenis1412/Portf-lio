@@ -11,6 +11,7 @@ Padrão: Interface (ABC) + Implementação concreta.
 
 from app.adaptadores.email_adaptador import EmailAdaptador, FormspreeEmailAdaptador
 from app.adaptadores.repositorio import RepositorioPortfolio, RepositorioJSON
+from app.adaptadores.repositorio_sql import RepositorioSQL
 from app.adaptadores.logger_adaptador import LoggerAdaptador, LoggerEstruturado
 
 __all__ = [
@@ -18,6 +19,7 @@ __all__ = [
     "FormspreeEmailAdaptador",
     "RepositorioPortfolio",
     "RepositorioJSON",
+    "RepositorioSQL",
     "LoggerAdaptador",
     "LoggerEstruturado",
 ]

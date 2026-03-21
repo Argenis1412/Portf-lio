@@ -1,9 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Loader2, AlertCircle } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { fetchAbout } from '../api';
-import type { About } from '../api';
+import { useAbout, useContactMutation } from '../hooks/useApi';
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -13,7 +12,8 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 
 export default function Contact() {
   const { t, language } = useLanguage();
-  const [about, setAbout] = useState<About | null>(null);
+  const { data: about } = useAbout();
+  const { mutate, isPending: isMutating, isSuccess: mutationSuccess, error: mutationError } = useContactMutation();
   
   const [formData, setFormData] = useState({
     nome: '',
@@ -23,144 +23,84 @@ export default function Contact() {
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  
   const getNewKey = () => {
     return typeof crypto !== 'undefined' && crypto.randomUUID 
       ? crypto.randomUUID() 
       : `key-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
   };
-
+ 
   const [idempotencyKey, setIdempotencyKey] = useState<string>(getNewKey);
-
+ 
   const generateNewKey = () => {
     setIdempotencyKey(getNewKey());
   };
-
-  useEffect(() => {
-    fetchAbout()
-      .then(setAbout)
-      .catch(err => {
-        if (import.meta.env.DEV) {
-          console.error('Error fetching about data for contact:', err);
-        }
-      });
-  }, []);
-
-  useEffect(() => {
-    if (status === 'success') {
-      const timer = setTimeout(() => {
-        setStatus('idle');
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [status]);
-
+ 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
-    if (!formData.nome.trim()) {
-      newErrors.nome = 'name_required';
-    }
-    
+    if (!formData.nome.trim()) newErrors.nome = 'name_required';
     if (!formData.email.trim()) {
       newErrors.email = 'email_required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'email_invalid';
     }
-    
     if (!formData.mensagem.trim()) {
       newErrors.mensagem = 'message_required';
     } else if (formData.mensagem.length < 10) {
       newErrors.mensagem = 'message_too_short';
     }
-    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) return;
     
     setErrors({});
-    setStatus('loading');
     
-    try {
-      const dataToSend = {
-        ...formData,
-        assunto: formData.assunto.trim() || t('contact.subject_default') || 'Contato via Portfólio',
-        // Read honeypots directly from DOM to catch bots/manual edits
-        website: (document.getElementById('hp_website') as HTMLInputElement)?.value || '',
-        fax: (document.getElementById('hp_fax') as HTMLInputElement)?.value || ''
-      };
-      
-      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
-      const response = await fetch(`${API_BASE_URL}/contato`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Idempotency-Key': idempotencyKey
-        },
-        body: JSON.stringify(dataToSend)
-      });
-
-      if (response.ok) {
-        setStatus('success');
-        setFormData({
-            nome: '',
-            email: '',
-            assunto: '',
-            mensagem: '',
-        });
-        setErrors({});
+    const dataToSend = {
+      ...formData,
+      assunto: formData.assunto.trim() || t('contact.subject_default') || 'Contato via Portfólio',
+      website: (document.getElementById('hp_website') as HTMLInputElement)?.value || '',
+      fax: (document.getElementById('hp_fax') as HTMLInputElement)?.value || ''
+    };
+    
+    mutate({ data: dataToSend, idempotencyKey }, {
+      onSuccess: () => {
+        setFormData({ nome: '', email: '', assunto: '', mensagem: '' });
         generateNewKey();
-      } else if (response.status === 429) {
-        setErrors({ submit: 'contact.error.rate_limit' });
-        setStatus('error');
-      } else {
-        let errorData: any = {};
-        try {
-          errorData = await response.json();
-        } catch {
-          // Fallback: if response isn't JSON, try text and check for known marker
-          const txt = await response.text().catch(() => '');
-          if (txt && txt.includes('DUPLICATE_CONTENT')) {
-            setErrors({ submit: 'contact.error.duplicate' });
-          }
+      },
+      onError: (error: unknown) => {
+        const err = error as { status?: number; message?: string };
+        if (err.status === 429) {
+          setErrors({ submit: 'contact.error.rate_limit' });
+        } else if (err.message?.includes('DUPLICATE') || err.status === 409) {
+           setErrors({ submit: 'contact.error.duplicate' });
+        } else {
+           setErrors({ submit: 'contact.error.generic' });
         }
-
-        if (errorData?.erro?.codigo === 'CONTEUDO_DUPLICADO' || errorData?.detail === 'DUPLICATE_CONTENT') {
-          setErrors({ submit: 'contact.error.duplicate' });
-        }
-
-        setStatus('error');
         generateNewKey();
       }
-    } catch {
-      setStatus('error');
-    }
+
+    });
   };
 
   const handleWhatsApp = () => {
     if (!about?.telefone) return;
-    
     const cleanNumber = about.telefone.replace(/\D/g, '');
     const finalNumber = cleanNumber.startsWith('55') ? cleanNumber : `55${cleanNumber}`;
-    
     const message = language === 'es' 
       ? '¡Hola Argenis! Vi tu portafolio y me gustaría hablar contigo.'
       : language === 'en'
       ? 'Hello Argenis! I saw your portfolio and would like to talk!'
       : 'Olá Argenis! Vi seu portfólio e gostaria de conversar!';
-      
     window.open(`https://wa.me/${finalNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
     if (errors[name]) {
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -168,9 +108,9 @@ export default function Contact() {
         return newErrors;
       });
     }
-    
-    if (status === 'error') setStatus('idle');
   };
+
+  const status = isMutating ? 'loading' : (mutationSuccess ? 'success' : (mutationError || errors.submit ? 'error' : 'idle'));
 
   return (
     <section id="contact" className="py-16 max-w-4xl mx-auto px-4 relative group overflow-hidden">
@@ -193,46 +133,20 @@ export default function Contact() {
           className="glass rounded-2xl p-8 md:p-12 border border-app-border hover:border-app-primary/50 hover:shadow-[0_0_40px_rgba(212,163,115,0.15)] transition-all duration-500"
         >
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-8">
-            {/* Honeypot fields - Hidden from humans, bait for bots */}
-              <input
-                type="text"
-                name="website"
-                id="hp_website"
-                style={{ position: 'absolute', left: '-5000px' }}
-                tabIndex={-1}
-                autoComplete="off"
-              />
-              <input
-                type="text"
-                name="fax"
-                id="hp_fax"
-                style={{ position: 'absolute', left: '-5000px' }}
-                tabIndex={-1}
-                autoComplete="off"
-              />
+            <input type="text" name="website" id="hp_website" style={{ position: 'absolute', left: '-5000px' }} tabIndex={-1} autoComplete="off" />
+            <input type="text" name="fax" id="hp_fax" style={{ position: 'absolute', left: '-5000px' }} tabIndex={-1} autoComplete="off" />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col gap-2.5">
-                <label htmlFor="nome" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">
-                  {t('contact.name')}
-                </label>
+                <label htmlFor="nome" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">{t('contact.name')}</label>
                 <input 
-                  type="text" 
-                  id="nome" 
-                  name="nome"
-                  placeholder={t('contact.placeholder.name')}
-                  value={formData.nome}
-                  onChange={handleChange}
+                  type="text" id="nome" name="nome" placeholder={t('contact.placeholder.name')}
+                  value={formData.nome} onChange={handleChange}
                   className={`bg-app-surface/50 border ${errors.nome ? 'border-red-500/50 focus:ring-red-500/20' : 'border-app-border focus:ring-app-primary/50'} rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 text-app-text transition-all duration-300 placeholder:text-app-muted/30`}
                 />
                 <AnimatePresence>
                   {errors.nome && (
-                    <motion.p 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1"
-                    >
+                    <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1">
                       <AlertCircle className="w-3 h-3" /> {t(`contact.error.${errors.nome}`)}
                     </motion.p>
                   )}
@@ -240,26 +154,15 @@ export default function Contact() {
               </div>
 
               <div className="flex flex-col gap-2.5">
-                <label htmlFor="email" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">
-                  {t('contact.email')}
-                </label>
+                <label htmlFor="email" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">{t('contact.email')}</label>
                 <input 
-                  type="email" 
-                  id="email" 
-                  name="email"
-                  placeholder={t('contact.placeholder.email')}
-                  value={formData.email}
-                  onChange={handleChange}
+                  type="email" id="email" name="email" placeholder={t('contact.placeholder.email')}
+                  value={formData.email} onChange={handleChange}
                   className={`bg-app-surface/50 border ${errors.email ? 'border-red-500/50 focus:ring-red-500/20' : 'border-app-border focus:ring-app-primary/50'} rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 text-app-text transition-all duration-300 placeholder:text-app-muted/30`}
                 />
                 <AnimatePresence>
                   {errors.email && (
-                    <motion.p 
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1"
-                    >
+                    <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1">
                       <AlertCircle className="w-3 h-3" /> {t(`contact.error.${errors.email}`)}
                     </motion.p>
                   )}
@@ -268,53 +171,24 @@ export default function Contact() {
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <label htmlFor="assunto" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">
-                {t('contact.subject')}
-              </label>
+              <label htmlFor="assunto" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">{t('contact.subject')}</label>
               <input 
-                type="text" 
-                id="assunto" 
-                name="assunto"
-                placeholder={t('contact.placeholder.subject')}
-                value={formData.assunto}
-                onChange={handleChange}
+                type="text" id="assunto" name="assunto" placeholder={t('contact.placeholder.subject')}
+                value={formData.assunto} onChange={handleChange}
                 className={`bg-app-surface/50 border ${errors.assunto ? 'border-red-500/50 focus:ring-red-500/20' : 'border-app-border focus:ring-app-primary/50'} rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 text-app-text transition-all duration-300 placeholder:text-app-muted/30`}
               />
-              <AnimatePresence>
-                {errors.assunto && (
-                  <motion.p 
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1"
-                  >
-                    <AlertCircle className="w-3 h-3" /> {t(`contact.error.${errors.assunto}`)}
-                  </motion.p>
-                )}
-              </AnimatePresence>
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <label htmlFor="mensagem" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">
-                {t('contact.message')}
-              </label>
+              <label htmlFor="mensagem" className="text-xs font-bold text-app-muted uppercase tracking-widest ml-1">{t('contact.message')}</label>
               <textarea 
-                id="mensagem" 
-                name="mensagem"
-                rows={5}
-                placeholder={t('contact.placeholder.message')}
-                value={formData.mensagem}
-                onChange={handleChange}
+                id="mensagem" name="mensagem" rows={5} placeholder={t('contact.placeholder.message')}
+                value={formData.mensagem} onChange={handleChange}
                 className={`bg-app-surface/50 border ${errors.mensagem ? 'border-red-500/50 focus:ring-red-500/20' : 'border-app-border focus:ring-app-primary/50'} rounded-xl px-5 py-3.5 focus:outline-none focus:ring-2 text-app-text transition-all duration-300 placeholder:text-app-muted/30 resize-none`}
               ></textarea>
               <AnimatePresence>
                 {errors.mensagem && (
-                  <motion.p 
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1"
-                  >
+                  <motion.p initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="text-red-500 text-[10px] font-bold mt-1 ml-1 flex items-center gap-1">
                     <AlertCircle className="w-3 h-3" /> {t(`contact.error.${errors.mensagem}`)}
                   </motion.p>
                 )}
@@ -323,56 +197,35 @@ export default function Contact() {
 
             <AnimatePresence>
               {status === 'success' && (
-                <motion.div 
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 p-4 rounded-xl text-center text-sm font-semibold"
-                >
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 p-4 rounded-xl text-center text-sm font-semibold">
                   {t('contact.success')}
                 </motion.div>
               )}
-              
               {status === 'error' && (
-                <motion.div 
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl text-center text-sm font-semibold"
-                >
-                  {errors.submit ? t(errors.submit) : t('contact.error')}
+                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl text-center text-sm font-semibold">
+                  {errors.submit ? t(errors.submit) : t('contact.error.generic')}
                 </motion.div>
               )}
             </AnimatePresence>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
               <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit" 
-                disabled={status === 'loading' || status === 'success'}
-                className="bg-app-primary hover:bg-app-primary-hover text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg shadow-app-primary/20 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest text-xs flex items-center justify-center gap-3 active:scale-95"
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                type="submit" disabled={status === 'loading' || status === 'success'}
+                className="bg-app-primary hover:bg-app-primary-hover text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg shadow-app-primary/20 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest text-xs flex items-center justify-center gap-3"
               >
-                {status === 'loading' ? (
-                  <Loader2 className="animate-spin h-4 w-4 text-white" />
-                ) : (
-                  <Mail className="w-4 h-4" />
-                )}
+                {status === 'loading' ? <Loader2 className="animate-spin h-4 w-4 text-white" /> : <Mail className="w-4 h-4" />}
                 {status === 'loading' ? t('contact.sending') : t('contact.send')}
               </motion.button>
-
               <motion.button 
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="button" 
-                onClick={handleWhatsApp}
-                className="bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg shadow-green-500/20 flex items-center justify-center gap-3 uppercase tracking-widest text-xs active:scale-95"
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                type="button" onClick={handleWhatsApp}
+                className="bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg shadow-green-500/20 flex items-center justify-center gap-3 uppercase tracking-widest text-xs"
               >
                 <WhatsAppIcon className="w-5 h-5 flex-shrink-0" />
                 {t('contact.whatsapp')}
               </motion.button>
             </div>
-
           </form>
         </motion.div>
       </motion.div>
