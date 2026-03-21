@@ -11,10 +11,15 @@ from fastapi.testclient import TestClient
 from app.principal import app
 from app.controladores.dependencias import obter_enviar_contato_use_case
 
-client = TestClient(app)
+
+@pytest.fixture
+def client():
+    """Fixture para fornecer um TestClient da aplicação."""
+    with TestClient(app) as c:
+        yield c
 
 
-def test_saude_retorna_ok():
+def test_saude_retorna_ok(client):
     """Testa endpoint GET /saude retorna status ok."""
     response = client.get("/saude")
     
@@ -24,7 +29,7 @@ def test_saude_retorna_ok():
     assert "mensagem" in data
 
 
-def test_obter_sobre_retorna_200():
+def test_obter_sobre_retorna_200(client):
     """Testa endpoint GET /api/v1/sobre retorna 200."""
     response = client.get("/api/v1/sobre")
     
@@ -35,8 +40,9 @@ def test_obter_sobre_retorna_200():
     assert "descricao" in data
 
 
-def test_listar_projetos_retorna_200():
+def test_listar_projetos_retorna_200(client):
     """Testa endpoint GET /api/v1/projetos retorna lista."""
+    # Como usamos mock no conftest, ele deve retornar os dados do mock
     response = client.get("/api/v1/projetos")
     
     assert response.status_code == 200
@@ -46,18 +52,19 @@ def test_listar_projetos_retorna_200():
     assert isinstance(data["projetos"], list)
 
 
-def test_obter_projeto_existente_retorna_200():
+def test_obter_projeto_existente_retorna_200(client):
     """Testa GET /api/v1/projetos/{id} com projeto existente."""
-    response = client.get("/api/v1/projetos/portfolio-api")
+    # O mock em conftest define 'projeto-1' como ID válido
+    response = client.get("/api/v1/projetos/projeto-1")
     
     assert response.status_code == 200
     data = response.json()
-    assert data["id"] == "portfolio-api"
+    assert data["id"] == "projeto-1"
     assert "nome" in data
     assert "tecnologias" in data
 
 
-def test_obter_projeto_inexistente_retorna_404():
+def test_obter_projeto_inexistente_retorna_404(client):
     """Testa GET /api/v1/projetos/{id} com projeto inexistente."""
     response = client.get("/api/v1/projetos/projeto-inexistente")
     
@@ -68,7 +75,7 @@ def test_obter_projeto_inexistente_retorna_404():
     assert "mensagem" in data["erro"]
 
 
-def test_obter_stack_retorna_200():
+def test_obter_stack_retorna_200(client):
     """Testa endpoint GET /api/v1/stack retorna tecnologias."""
     response = client.get("/api/v1/stack")
     
@@ -79,7 +86,7 @@ def test_obter_stack_retorna_200():
     assert isinstance(data["stack"], list)
 
 
-def test_listar_experiencias_retorna_200():
+def test_listar_experiencias_retorna_200(client):
     """Testa endpoint GET /api/v1/experiencias retorna lista."""
     response = client.get("/api/v1/experiencias")
     
@@ -90,7 +97,7 @@ def test_listar_experiencias_retorna_200():
     assert isinstance(data["experiencias"], list)
 
 
-def test_listar_formacao_retorna_200():
+def test_listar_formacao_retorna_200(client):
     """Testa endpoint GET /api/v1/formacao retorna lista."""
     response = client.get("/api/v1/formacao")
 
@@ -101,8 +108,8 @@ def test_listar_formacao_retorna_200():
     assert isinstance(data["formacoes"], list)
 
 
-def test_enviar_contato_com_dados_validos_retorna_200():
-    """Testa POST /api/contato com dados válidos usando Mock.
+def test_enviar_contato_com_dados_validos_retorna_200(client):
+    """Testa POST /api/contato com dados válidos usando Mock secundário.
     """
     payload = {
         "nome": "Maria Silva",
@@ -127,13 +134,13 @@ def test_enviar_contato_com_dados_validos_retorna_200():
     mock_uc.executar.assert_awaited_once()
 
 
-def test_enviar_contato_com_dados_invalidos_retorna_422():
+def test_enviar_contato_com_dados_invalidos_retorna_422(client):
     """Testa POST /api/contato com dados inválidos."""
     payload = {
         "nome": "M",  # Muito curto
         "email": "email-invalido",
         "assunto": "Abc",  # Muito curto
-        "mensagem": "123",  # Muito curta (agora o limite é 5)
+        "mensagem": "123",  # Muito curta
     }
     
     response = client.post("/api/v1/contato", json=payload)
@@ -142,4 +149,4 @@ def test_enviar_contato_com_dados_invalidos_retorna_422():
     data = response.json()
     assert "erro" in data
     assert data["erro"]["codigo"] == "ERRO_VALIDACAO_ENTRADA"
-    assert "detalhes" in data["erro"]  # Lista de erros de validação
+    assert "detalhes" in data["erro"]
