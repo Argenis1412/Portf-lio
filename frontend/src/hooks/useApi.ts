@@ -2,14 +2,16 @@
  * Hooks de React Query para todos los endpoints de la API.
  * Proveen caché automático, estados de carga/error y revalidación.
  */
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import {
   fetchAbout,
   fetchProjects,
   fetchSkills,
   fetchExperience,
   fetchFormacao,
+  postContact,
 } from '../api';
+
 
 // Claves de query centralizadas para evitar errores de tipeo
 export const queryKeys = {
@@ -59,3 +61,12 @@ export function useFormacao() {
     staleTime: 10 * 60 * 1000,
   });
 }
+
+export function useContactMutation() {
+  return useMutation({
+    mutationFn: ({ data, idempotencyKey }: { data: Parameters<typeof postContact>[0], idempotencyKey: string }) => 
+      postContact(data, idempotencyKey),
+  });
+}
+
+

@@ -115,3 +115,29 @@ export const fetchFormacao = async (): Promise<Formacao[]> => {
   const data = await apiGet<{ formacoes: Formacao[] }>('/formacao');
   return data.formacoes;
 };
+
+// ===================================================
+// Mutaciones (POST/PUT/DELETE)
+// ===================================================
+
+export async function postContact(data: {
+  nome: string;
+  email: string;
+  assunto: string;
+  mensagem: string;
+  website: string; // Honeypot
+  fax: string;     // Honeypot
+}, idempotencyKey: string): Promise<void> {
+  const res = await fetch(`${API_BASE_URL}/contato`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Idempotency-Key': idempotencyKey,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new ApiError(res.status, `Failed to submit contact form: ${res.status}`);
+  }
+}

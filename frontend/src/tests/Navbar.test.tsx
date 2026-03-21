@@ -10,15 +10,28 @@ import Navbar from '../components/Navbar';
 import { LanguageProvider } from '../context/LanguageContext';
 import { ThemeProvider } from '../context/ThemeContext';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
+
 // Helper para renderizar o Navbar com todos os contextos necessários
 const renderNavbar = () =>
   render(
-    <ThemeProvider>
-      <LanguageProvider>
-        <Navbar />
-      </LanguageProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <LanguageProvider>
+          <Navbar />
+        </LanguageProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
+
 
 // ─── Renderização ─────────────────────────────────────────────────────────────
 
