@@ -16,10 +16,11 @@ from app.core.limite import limiter
 from app.core.idempotencia import verificar_idempotencia, store, content_store
 from app.core.honeypot import is_honeypot_triggered
 from app.core.spam_check import calculate_spam_score
+import structlog
 import hashlib
-import logging
+import re
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 roteador = APIRouter(tags=["Contato"])
 
@@ -35,7 +36,7 @@ roteador = APIRouter(tags=["Contato"])
         500: {"description": "Failed to deliver message via external service"},
     },
 )
-@limiter.limit("5/minute; 5/hour")
+@limiter.limit("20/minute; 100/day")
 async def enviar_contato(
     request: Request,
     requisicao: RequisicaoContato,
@@ -50,14 +51,12 @@ async def enviar_contato(
     if requisicao.website or requisicao.fax:
         logger.info(
             "contact_blocked",
-            extra={
-                "classification": "HONEYPOT",
-                "action": "silent_drop",
-                "honeypot_fields": [
-                    field for field in ("website", "fax")
-                    if getattr(requisicao, field, None)
-                ],
-            },
+            classification="HONEYPOT",
+            action="silent_drop",
+            honeypot_fields=[
+                field for field in ("website", "fax")
+                if getattr(requisicao, field, None)
+            ],
         )
         return RespostaContato(
             sucesso=True,
@@ -71,12 +70,10 @@ async def enviar_contato(
     if spam_score > 70:
         logger.info(
             "contact_classified",
-            extra={
-                "classification": "SILENT_SPAM",
-                "action": "silent_drop",
-                "spam_score": spam_score,
-                "email_domain": requisicao.email.split("@")[-1].lower(),
-            },
+            classification="SILENT_SPAM",
+            action="silent_drop",
+            spam_score=spam_score,
+            email_domain=requisicao.email.split("@")[-1].lower(),
         )
         return RespostaContato(
             sucesso=True,
@@ -84,14 +81,23 @@ async def enviar_contato(
         )
 
     # 3. Verificação de conteúdo duplicado (Deduplicação de 5 minutos)
-    content_str = f"{requisicao.email.lower()}:{requisicao.mensagem.strip()}"
+    # Normalizar mensagem: colapsar espaços, trim e lower para reduzir falsos negativos
+    normalized_message = re.sub(r"\s+", " ", requisicao.mensagem or "").strip().lower()
+    normalized_subject = re.sub(r"\s+", " ", (requisicao.assunto or "")).strip().lower()
+    content_str = f"{(requisicao.email or '').lower()}:{normalized_subject}:{normalized_message}"
     content_hash = hashlib.sha256(content_str.encode()).hexdigest()
-    
+
     if content_store.check_duplicate(content_hash):
-        from fastapi import HTTPException, status
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="DUPLICATE_CONTENT"
+        from fastapi.responses import JSONResponse
+        logger.info(
+            "duplicate_content_detected",
+            content_hash=content_hash,
+            email=requisicao.email,
+            assunto=requisicao.assunto,
+        )
+        return JSONResponse(
+            status_code=400,
+            content={"erro": {"codigo": "CONTEUDO_DUPLICADO"}, "detail": "DUPLICATE_CONTENT"},
         )
 
     # SUSPECT (> 30)
@@ -99,22 +105,18 @@ async def enviar_contato(
     if is_suspicious:
         logger.info(
             "contact_classified",
-            extra={
-                "classification": "SUSPECT",
-                "action": "deliver_with_flag",
-                "spam_score": spam_score,
-                "email_domain": requisicao.email.split("@")[-1].lower(),
-            },
+            classification="SUSPECT",
+            action="deliver_with_flag",
+            spam_score=spam_score,
+            email_domain=requisicao.email.split("@")[-1].lower(),
         )
     else:
         logger.info(
             "contact_classified",
-            extra={
-                "classification": "NORMAL",
-                "action": "deliver",
-                "spam_score": spam_score,
-                "email_domain": requisicao.email.split("@")[-1].lower(),
-            },
+            classification="NORMAL",
+            action="deliver",
+            spam_score=spam_score,
+            email_domain=requisicao.email.split("@")[-1].lower(),
         )
 
     try:
@@ -126,39 +128,40 @@ async def enviar_contato(
             is_suspicious=is_suspicious,
         )
         
+        # Registrar conteúdo para evitar duplicatas nos próximos 5 minutos
+        # Fazemos isso se teve sucesso REAL ou se é SUSPEITO (pois para o usuário foi "sucesso")
         if sucesso:
-            # Registrar conteúdo para evitar duplicatas nos próximos 5 minutos
-            content_store.add(content_hash)
-        elif not is_suspicious:
-            # Se falhar e NÃO for suspeito, lançamos erro real
-            raise ErroInfraestrutura(
-                mensagem="Falha ao enviar mensagem de contato",
-                codigo="ERRO_ENVIO_CONTATO",
-                origem="formspree",
+            logger.info(
+                "Mensagem de contato processada",
+                is_suspicious=is_suspicious,
+                email=requisicao.email
             )
         else:
-            # Se falhar mas FOR suspeito, logamos mas retornamos sucesso pro usuário (silent failure)
-            logger.warning(
-                "suspect_delivery_failed_silently",
-                extra={"email": requisicao.email}
-            )
+            # Falhou o envio interno
+            if not is_suspicious:
+                # Se falhar e NÃO for suspeito, lançamos erro real
+                raise ErroInfraestrutura(
+                    mensagem="Falha ao enviar mensagem de contato",
+                    codigo="ERRO_ENVIO_CONTATO",
+                    origem="formspree",
+                )
+            else:
+                # Se falhar mas FOR suspeito... logamos mas o fluxo continua para o 200 OK final
+                logger.warning(
+                    "suspect_delivery_failed_silently",
+                    email=requisicao.email
+                )
     except Exception as e:
         if not is_suspicious:
-            # Re-raise if not suspicious
-            if isinstance(e, ErroInfraestrutura):
-                raise e
-            raise ErroInfraestrutura(
-                mensagem=str(e),
-                codigo="ERRO_INTERNO_CONTATO",
-                origem="controller",
-            )
+            if isinstance(e, ErroInfraestrutura): raise e
+            raise ErroInfraestrutura(mensagem=str(e), codigo="ERRO_INTERNO_CONTATO", origem="controller")
         else:
-            # Silent success for suspicious users even on crash
-            logger.error(
-                "suspect_delivery_crash_silently",
-                extra={"error": str(e), "email": requisicao.email}
-            )
+            logger.error("suspect_delivery_crash_silently", error=str(e), email=requisicao.email)
     
+    # Registrar no content_store SEMPRE que vamos retornar sucesso ao usuário
+    # Isso garante que se ele reintentar, diremos "já recebemos" (feedback humano)
+    content_store.add(content_hash)
+
     resposta = RespostaContato(
         sucesso=True,
         mensagem="Mensagem enviada com sucesso! Retornarei em breve.",
