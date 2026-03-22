@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // ===================================================
-// Esclquemas de Validación (Sincronizados con Backend)
+// Esquemas de Validación (Sincronizados con Backend)
 // ===================================================
 
 export const LocalizedStringSchema = z.object({
@@ -12,21 +12,28 @@ export const LocalizedStringSchema = z.object({
 
 export type LocalizedString = z.infer<typeof LocalizedStringSchema>;
 
+// Esquema para listagem (Resumo)
 export const ProjectSchema = z.object({
   id: z.string(),
   nome: z.string(),
   descricao_curta: LocalizedStringSchema,
-  descricao_completa: LocalizedStringSchema,
   tecnologias: z.array(z.string()),
-  funcionalidades: z.array(z.string()),
-  aprendizados: z.array(z.string()),
+  destaque: z.boolean(),
   repositorio: z.string().nullable(),
   demo: z.string().nullable(),
-  destaque: z.boolean(),
   imagem: z.string().nullable(),
 });
 
 export type Project = z.infer<typeof ProjectSchema>;
+
+// Esquema para detalhes (Detalhado)
+export const ProjectDetailedSchema = ProjectSchema.extend({
+  descricao_completa: LocalizedStringSchema,
+  funcionalidades: z.array(z.string()),
+  aprendizados: z.array(z.string()),
+});
+
+export type ProjectDetailed = z.infer<typeof ProjectDetailedSchema>;
 
 export const SkillSchema = z.object({
   nome: z.string(),
@@ -100,45 +107,61 @@ async function apiGet<T>(path: string, schema: z.ZodSchema<T>): Promise<T> {
   }
   const rawData = await res.json();
   
-  // Validación estricta en la frontera
+  // Validación con Zod
   const result = schema.safeParse(rawData);
+  
   if (!result.success) {
-    console.error(`[Zod Error] Contract violation in ${path}:`, result.error.format());
+    console.error(`[Zod Error] Critical contract violation in ${path}:`, result.error.format());
     throw new Error(`Schema validation failed for ${path}`);
   }
+
+  // Si hubo un error pero Zod lo capturó (vía .catch()), result.success es true.
+  // Podríamos registrar un aviso aquí si quisiéramos ser ultra-estrictos en logs, 
+  // pero por ahora el .catch() silencia el error y devuelve el default.
   
   return result.data;
 }
 
 // ===================================================
-// Funciones de Fetch (Consumidor Estricto)
+// Funciones de Fetch (Consumidor Estricto y Resiliente)
 // ===================================================
 
 export const fetchAbout = (): Promise<About> =>
   apiGet<About>('/sobre', AboutSchema);
 
 export const fetchProjects = async (): Promise<Project[]> => {
-  const schema = z.object({ projetos: z.array(ProjectSchema) });
-  const data = await apiGet( '/projetos', schema);
-  return data.projetos;
+  const schema = z.object({ 
+    projetos: z.array(ProjectSchema).nullable().catch([]) 
+  });
+  const data = await apiGet('/projetos', schema);
+  return data.projetos || [];
 };
 
+export const fetchProject = (id: string): Promise<ProjectDetailed> =>
+  apiGet<ProjectDetailed>(`/projetos/${id}`, ProjectDetailedSchema);
+
 export const fetchSkills = async (): Promise<Skill[]> => {
-  const schema = z.object({ stack: z.array(SkillSchema) });
+  const schema = z.object({ 
+    stack: z.array(SkillSchema).nullable().catch([]) 
+  });
   const data = await apiGet('/stack', schema);
-  return data.stack;
+  return data.stack || [];
 };
 
 export const fetchExperience = async (): Promise<Experience[]> => {
-  const schema = z.object({ experiencias: z.array(ExperienceSchema) });
+  const schema = z.object({ 
+    experiencias: z.array(ExperienceSchema).nullable().catch([]) 
+  });
   const data = await apiGet('/experiencias', schema);
-  return data.experiencias;
+  return data.experiencias || [];
 };
 
 export const fetchFormacao = async (): Promise<Formacao[]> => {
-  const schema = z.object({ formacoes: z.array(FormacaoSchema) });
+  const schema = z.object({ 
+    formacoes: z.array(FormacaoSchema).nullable().catch([]) 
+  });
   const data = await apiGet('/formacao', schema);
-  return data.formacoes;
+  return data.formacoes || [];
 };
 
 // ===================================================
