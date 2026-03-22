@@ -110,9 +110,9 @@ coverage/
 # ===========================
 # BANCOS DE DADOS
 # ===========================
-*.db
-*.sqlite
-*.sqlite3
+# *.db
+# *.sqlite
+# *.sqlite3
 *.sql
 *.dump
 data/db/
