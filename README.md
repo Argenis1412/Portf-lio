@@ -24,9 +24,9 @@ The system is architected as a **decoupled client-server ecosystem**:
 | **Frontend** | React 19 · TypeScript · Vite · TanStack Query · Tailwind CSS v4 · Framer Motion · Lucide |
 
 | **Testing** | Pytest (backend) · Vitest + Testing Library (frontend) |
-| **CI/CD** | GitHub Actions (lint + test on every push) |
-| **Data** | JSON files (no database needed) |
-| **Deployment** | Docker Compose · Railway / Render compatible |
+| **CI/CD** | GitHub Actions (Lint + Test + **Docker Build** on every push) |
+| **Data** | SQLite with **SQLModel** & **Alembic** migrations |
+| **Deployment** | Docker Compose · Koyeb (Backend) · Vercel (Frontend) |
 
 - **💎 Architecture**: Clean Architecture on backend; React Query for declarative data fetching and globally managed state on frontend.
 - **🌍 Scalable i18n**: Multilingual support (PT, EN, ES) with externalized JSON manifests for zero-recompile maintenance.
@@ -143,7 +143,8 @@ Instead of hardcoded strings, we use a **JSON-driven i18n strategy**. This allow
 
 ### 3. Automated Quality Gate
 - **Husky & lint-staged**: It's impossible to commit code that fails linting or tests. The project enforces quality at the source.
-- **CI/CD**: Every push to GitHub triggers a full suite of backend and frontend tests via GitHub Actions.
+- **CI/CD quality gate**: Every push to GitHub triggers a full suite of backend and frontend tests via GitHub Actions. **The pipeline enforces a 70% test coverage threshold** — any code that lowers this metric is automatically rejected.
+- **Dockerized Builds**: The system is automatically built and verified into Docker images during the CI process, ensuring "it works on my machine" translates perfectly to production.
 - **Rate-Limiting & Anti-Spam**: Backend protection against brute-force and **30-minute message deduplication** (database-backed).
 
 ### 5. Future-Ready Architecture (Language Agnostic Core)
@@ -179,6 +180,20 @@ graph TD
         Pages --> Services
     end
 ```
+
+---
+
+## 🗺️ Roadmap: The Next Big Step
+
+Currently, this project demonstrates high-quality **Portfolio Management**. The next phase of evolution will focus on **Complex Business Logic**:
+
+- **🚀 Transactional Core**: Implementing a high-integrity financial module (ledger system) with logic for payments, interest calculation, and history tracking.
+- **🔐 Advanced Auth**: Moving from stateless public data to protected user-specific dashboards with JWT/OAuth2.
+- **📊 Real-time Analytics**: Integration with WebSockets for live portfolio views.
+
+This roadmap demonstrates the vision to evolve from a static showcase to a **mission-critical transactional system**.
+
+---
 
 ---
 
