@@ -1,6 +1,6 @@
 # 🎯 Portfolio Backend API
 
-REST API developed with **FastAPI** following **Clean Architecture** to demonstrate backend development best practices in Python. Engineered to serve as a robust, versioned backbone for **strict consumers** like modern web applications.
+REST API developed with **FastAPI** following **Clean Architecture** to demonstrate backend development best practices in Python. Engineered with a **language-agnostic core**, ensuring the system is portable, scalable, and ready for future technological shifts.
 
 ## 📝 Description
 
@@ -131,6 +131,11 @@ pytest --cov=app --cov-report=html
 - **Robustness**: Typing consistency between database models and Pydantic schemas.
 - **Evolution**: **Alembic** allows managed schema changes.
 - **Scalability**: Easy migration from SQLite to PostgreSQL by changing the `DATABASE_URL`.
+
+### Future-Ready & Language Agnostic
+The **Domain Logic (Use Cases)** is strictly isolated from the framework (FastAPI) and external libraries. This means:
+- **Portability**: The business rules could be migrated to another Python framework (like Starlette or Litestar) or even serve as a blueprint for a rewrite in a high-performance language (like Go or Rust) with minimal logic re-engineering.
+- **Stability**: Changes in infrastructure (DB, Email, Cloud Provider) only require new **Adapters**, leaving the core logic untouched.
 
 ### Why Manual JSON Serialization (SQLite Compatibility)?
 - SQLite doesn't always have native JSON support in all environments.

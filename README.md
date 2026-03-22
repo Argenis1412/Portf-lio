@@ -144,12 +144,12 @@ Instead of hardcoded strings, we use a **JSON-driven i18n strategy**. This allow
 ### 3. Automated Quality Gate
 - **Husky & lint-staged**: It's impossible to commit code that fails linting or tests. The project enforces quality at the source.
 - **CI/CD**: Every push to GitHub triggers a full suite of backend and frontend tests via GitHub Actions.
-
-### 4. Security & Anti-Spam Logic
-The contact form features a **multi-layered defense system**:
-- **Honeypots**: Hidden fields that catch automated bots.
-- **Idempotency**: Prevents double-submission via `X-Idempotency-Key` headers.
 - **Rate-Limiting**: Backend protection against brute-force spam.
+
+### 5. Future-Ready Architecture (Language Agnostic Core)
+The backend follows **Clean Architecture** principles, isolating business logic (Use Cases) from infrastructure (Adapters). This design is inherently **language-agnostic**:
+- **Framework Independence**: The core logic doesn't depend on FastAPI; it's pure Python.
+- **Scalability Path**: This isolation makes it trivial to split the system into microservices or migrate performance-critical paths to languages like **Go** or **Rust** if needed, as the domain boundaries are already strictly defined.
 
 ---
 
