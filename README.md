@@ -8,7 +8,11 @@
 
 > **A personal portfolio built as a full-stack engineering project — featuring a FastAPI (Python) backend and a React 19 (TypeScript) frontend, organized with Clean Architecture and a refined "Graphite & Bronze" aesthetic.**
 
-The goal of this project is not only to showcase my work, but also to demonstrate how I think and build software: with clean structure, automated tests, and attention to the user experience. The backend serves all portfolio data (projects, experience, stack, about me) through a versioned REST API, while the frontend consumes it and presents it with smooth animations and full i18n support (PT, EN, ES).
+The goal of this project is not only to showcase my work, but also to demonstrate how I think and build software: with clean structure, automated tests, and attention to the user experience. 
+
+The system is architected as a **decoupled client-server ecosystem**:
+- **Backend**: Serves all portfolio data through a versioned REST API.
+- **Frontend**: Acts as a **strict consumer** of the API, demonstrating production-ready integration patterns, CORS compliance, and clear separation of concerns.
 
 ---
 
@@ -122,7 +126,13 @@ The frontend uses **Vitest** + **@testing-library/react** with a `jsdom` environ
 
 This project is built with industry-standard patterns to demonstrate production-ready engineering:
 
-### 1. Advanced State Management & UX
+### 1. System Decoupling (Strict Consumer)
+The frontend and backend are completely independent systems. The React application treats the FastAPI backend as a **black-box API**, interacting only via well-defined contracts. This architecture ensures:
+- **Scalability**: Either layer can be scaled or rewritten (e.g., migrating to a different backend language) without affecting the other.
+- **Security**: Strict CORS policies and payload validation at the boundary.
+- **Clean Integration**: Using TanStack Query for declarative data fetching and state synchronization.
+
+### 2. Advanced State Management & UX
 We use **TanStack Query** not just for fetching, but for a "snappy" feels-like-native experience:
 - **Zero-Latency Navigation**: We prefetch data when the user hovers over links. By the time they click, the data is already in cache.
 - **Background Synchronization**: Data is refetched silently when the window is focused, ensuring you always see the latest information without a loading spinner.

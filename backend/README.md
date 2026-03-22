@@ -1,6 +1,6 @@
 # 🎯 Portfolio Backend API
 
-REST API developed with **FastAPI** following **Clean Architecture** to demonstrate backend development best practices in Python.
+REST API developed with **FastAPI** following **Clean Architecture** to demonstrate backend development best practices in Python. Engineered to serve as a robust, versioned backbone for **strict consumers** like modern web applications.
 
 ## 📝 Description
 
