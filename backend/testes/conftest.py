@@ -148,7 +148,7 @@ def setup_database():
     import tempfile
     import os
     from sqlmodel import SQLModel, create_engine, Session
-    from app.adaptadores.modelos_sql import SobreModelo, ProjetoModelo, ExperienciaModelo, FormacaoModelo, StackModelo
+    from app.adaptadores.modelos_sql import SobreModelo, ProjetoModelo, ExperienciaModelo, FormacaoModelo, StackModelo, SpamFilterModelo
     import json
 
     fd, db_path = tempfile.mkstemp(suffix=".db")
@@ -251,17 +251,15 @@ def logger_mock() -> LoggerAdaptador:
 @pytest.fixture(autouse=True)
 def reset_global_state():
     """
-    Reseta o estado global (Rate Limiter, Idempotency, Content Store) antes de cada teste.
+    Reseta o estado global (Rate Limiter, Idempotency) antes de cada teste.
     Isso evita que testes acumulem limites ou cache uns dos outros.
     """
-    from app.core.idempotencia import store, content_store
+    from app.core.idempotencia import store
     from app.core.limite import limiter
     
-    # Limpar caches de idempotência e conteúdo
+    # Limpar caches de idempotência
     if hasattr(store, "_cache"):
         store._cache.clear()
-    if hasattr(content_store, "_cache"):
-        content_store._cache.clear()
         
     # Limpar storage do rate limiter (slowapi)
     if hasattr(limiter, "_storage") and hasattr(limiter._storage, "storage"):
@@ -277,7 +275,7 @@ def reset_global_state():
 
 
 @pytest.fixture(autouse=True)
-def override_dependencias(setup_database):
+async def override_dependencias(setup_database):
     """
     Sobrescreve dependências do FastAPI para usar o banco temporário real.
     Limpa o cache dos providers para garantir que o novo RepoSQL seja usado.
@@ -288,8 +286,14 @@ def override_dependencias(setup_database):
         ObterSobreUseCase, ObterProjetosUseCase, ObterProjetoPorIdUseCase,
         ObterStackUseCase, ObterExperienciasUseCase, ObterFormacaoUseCase
     )
+    from sqlalchemy import text
     
     repo_real_test = RepositorioSQL(database_url=setup_database)
+    
+    # Limpar tabela de spam para cada teste para garantir isolamento
+    async with repo_real_test.session_factory() as session:
+        await session.execute(text("DELETE FROM spam_filter"))
+        await session.commit()
     
     # Sobrescrever providers individuais
     app.dependency_overrides[dependencias.obter_repositorio] = lambda: repo_real_test

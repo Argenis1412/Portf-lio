@@ -8,7 +8,33 @@ os campos complexos são armazenados como TEXT e convertidos manualmente no repo
 
 from typing import Optional, List, Dict, Any
 from datetime import date
+import json
 from sqlmodel import SQLModel, Field
+from sqlalchemy import TypeDecorator, Text
+
+
+class JSONEncoded(TypeDecorator):
+    """
+    Tipo customizado para armazenar JSON como TEXT no SQLite.
+    Necessário para compatibilidade com migrações existentes.
+    """
+    impl = Text
+    cache_ok = True
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return None
+        if isinstance(value, str):
+            return value
+        return json.dumps(value)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return None
+        try:
+            return json.loads(value)
+        except (ValueError, TypeError):
+            return value
 
 
 class SobreModelo(SQLModel, table=True):
@@ -87,3 +113,11 @@ class StackModelo(SQLModel, table=True):
     categoria: str
     nivel: int
     icone: Optional[str] = None
+
+
+class SpamFilterModelo(SQLModel, table=True):
+    """Modelo para persistência de hashes de mensagens (deduplicação)."""
+    __tablename__ = "spam_filter"
+
+    content_hash: str = Field(primary_key=True)
+    timestamp: float = Field(index=True)

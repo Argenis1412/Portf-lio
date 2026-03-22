@@ -34,7 +34,7 @@ The system is architected as a **decoupled client-server ecosystem**:
     - **Predictive Prefetching**: Data is pre-loaded on link hover, making transitions instant.
     - **Background Sync**: Data stays fresh silently without manual refresh.
     - **Optimized Assets**: Lazy loading + LCP prioritization.
-- **🛡️ Multi-Layer Protection**: Honeypots, rate limiting, and idempotency protect the contact form.
+- **🛡️ Multi-Layer Protection**: Honeypots, rate limiting, and **30-minute persistent deduplication** protect the contact form.
 - **🏗️ Developer Experience**: Husky + Lint-Staged + Vitest + GitHub Actions enforce a "no broken code" policy.
 
 ---
@@ -144,7 +144,7 @@ Instead of hardcoded strings, we use a **JSON-driven i18n strategy**. This allow
 ### 3. Automated Quality Gate
 - **Husky & lint-staged**: It's impossible to commit code that fails linting or tests. The project enforces quality at the source.
 - **CI/CD**: Every push to GitHub triggers a full suite of backend and frontend tests via GitHub Actions.
-- **Rate-Limiting**: Backend protection against brute-force spam.
+- **Rate-Limiting & Anti-Spam**: Backend protection against brute-force and **30-minute message deduplication** (database-backed).
 
 ### 5. Future-Ready Architecture (Language Agnostic Core)
 The backend follows **Clean Architecture** principles, isolating business logic (Use Cases) from infrastructure (Adapters). This design is inherently **language-agnostic**:

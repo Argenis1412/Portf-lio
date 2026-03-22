@@ -55,8 +55,8 @@ def criar_aplicacao() -> FastAPI:
         openapi_tags=_obter_tags_openapi(),
     )
 
-    _configurar_cors(aplicacao)
     _configurar_middleware(aplicacao)
+    _configurar_cors(aplicacao)
     _registrar_handlers(aplicacao)
     _registrar_limiter(aplicacao)
     _registrar_rotas(aplicacao)

@@ -16,7 +16,8 @@ Professional backend for a developer portfolio, implementing:
 - ✅ **Automatic validation** with Pydantic V2
 - ✅ **Interactive Documentation** with OpenAPI/Swagger
 - ✅ **Automated Tests** with pytest
-- ✅ **Layered contact protection**: Includes a honeypot, spam scoring, and a **10 messages/day per email address** rate limit via custom identity extraction middleware.
+- ✅ **Layered contact protection**: Includes a honeypot, spam scoring, and a **30-minute persistent deduplication** (database-backed) to prevent duplicate submissions across server restarts.
+- ✅ **Rate Limiting**: 10 messages/day per email address via custom identity extraction middleware.
 
 ---
 

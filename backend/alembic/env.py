@@ -19,6 +19,7 @@ from app.adaptadores.modelos_sql import (
     ExperienciaModelo,
     FormacaoModelo,
     StackModelo,
+    SpamFilterModelo,
 )
 from app.configuracao import configuracoes
 
