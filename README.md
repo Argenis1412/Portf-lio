@@ -8,7 +8,11 @@
 
 > **A personal portfolio built as a full-stack engineering project — featuring a FastAPI (Python) backend and a React 19 (TypeScript) frontend, organized with Clean Architecture and a refined "Graphite & Bronze" aesthetic.**
 
-The goal of this project is not only to showcase my work, but also to demonstrate how I think and build software: with clean structure, automated tests, and attention to the user experience. The backend serves all portfolio data (projects, experience, stack, about me) through a versioned REST API, while the frontend consumes it and presents it with smooth animations and full i18n support (PT, EN, ES).
+The goal of this project is not only to showcase my work, but also to demonstrate how I think and build software: with clean structure, automated tests, and attention to the user experience. 
+
+The system is architected as a **decoupled client-server ecosystem**:
+- **Backend**: Serves all portfolio data through a versioned REST API.
+- **Frontend**: Acts as a **strict consumer** of the API, demonstrating production-ready integration patterns, CORS compliance, and clear separation of concerns.
 
 ---
 
@@ -20,9 +24,9 @@ The goal of this project is not only to showcase my work, but also to demonstrat
 | **Frontend** | React 19 · TypeScript · Vite · TanStack Query · Tailwind CSS v4 · Framer Motion · Lucide |
 
 | **Testing** | Pytest (backend) · Vitest + Testing Library (frontend) |
-| **CI/CD** | GitHub Actions (lint + test on every push) |
-| **Data** | JSON files (no database needed) |
-| **Deployment** | Docker Compose · Railway / Render compatible |
+| **CI/CD** | GitHub Actions (Lint + Test + **Docker Build** on every push) |
+| **Data** | SQLite with **SQLModel** & **Alembic** migrations |
+| **Deployment** | Docker Compose · Koyeb (Backend) · Vercel (Frontend) |
 
 - **💎 Architecture**: Clean Architecture on backend; React Query for declarative data fetching and globally managed state on frontend.
 - **🌍 Scalable i18n**: Multilingual support (PT, EN, ES) with externalized JSON manifests for zero-recompile maintenance.
@@ -30,7 +34,7 @@ The goal of this project is not only to showcase my work, but also to demonstrat
     - **Predictive Prefetching**: Data is pre-loaded on link hover, making transitions instant.
     - **Background Sync**: Data stays fresh silently without manual refresh.
     - **Optimized Assets**: Lazy loading + LCP prioritization.
-- **🛡️ Multi-Layer Protection**: Honeypots, rate limiting, and idempotency protect the contact form.
+- **🛡️ Multi-Layer Protection**: Honeypots, rate limiting, and **30-minute persistent deduplication** protect the contact form.
 - **🏗️ Developer Experience**: Husky + Lint-Staged + Vitest + GitHub Actions enforce a "no broken code" policy.
 
 ---
@@ -122,7 +126,13 @@ The frontend uses **Vitest** + **@testing-library/react** with a `jsdom` environ
 
 This project is built with industry-standard patterns to demonstrate production-ready engineering:
 
-### 1. Advanced State Management & UX
+### 1. System Decoupling (Strict Consumer)
+The frontend and backend are completely independent systems. The React application treats the FastAPI backend as a **black-box API**, interacting only via well-defined contracts. This architecture ensures:
+- **Scalability**: Either layer can be scaled or rewritten (e.g., migrating to a different backend language) without affecting the other.
+- **Security**: Strict CORS policies and payload validation at the boundary.
+- **Clean Integration**: Using TanStack Query for declarative data fetching and state synchronization.
+
+### 2. Advanced State Management & UX
 We use **TanStack Query** not just for fetching, but for a "snappy" feels-like-native experience:
 - **Zero-Latency Navigation**: We prefetch data when the user hovers over links. By the time they click, the data is already in cache.
 - **Background Synchronization**: Data is refetched silently when the window is focused, ensuring you always see the latest information without a loading spinner.
@@ -133,13 +143,14 @@ Instead of hardcoded strings, we use a **JSON-driven i18n strategy**. This allow
 
 ### 3. Automated Quality Gate
 - **Husky & lint-staged**: It's impossible to commit code that fails linting or tests. The project enforces quality at the source.
-- **CI/CD**: Every push to GitHub triggers a full suite of backend and frontend tests via GitHub Actions.
+- **CI/CD quality gate**: Every push to GitHub triggers a full suite of backend and frontend tests via GitHub Actions. **The pipeline enforces a 70% test coverage threshold** — any code that lowers this metric is automatically rejected.
+- **Dockerized Builds**: The system is automatically built and verified into Docker images during the CI process, ensuring "it works on my machine" translates perfectly to production.
+- **Rate-Limiting & Anti-Spam**: Backend protection against brute-force and **30-minute message deduplication** (database-backed).
 
-### 4. Security & Anti-Spam Logic
-The contact form features a **multi-layered defense system**:
-- **Honeypots**: Hidden fields that catch automated bots.
-- **Idempotency**: Prevents double-submission via `X-Idempotency-Key` headers.
-- **Rate-Limiting**: Backend protection against brute-force spam.
+### 5. Future-Ready Architecture (Language Agnostic Core)
+The backend follows **Clean Architecture** principles, isolating business logic (Use Cases) from infrastructure (Adapters). This design is inherently **language-agnostic**:
+- **Framework Independence**: The core logic doesn't depend on FastAPI; it's pure Python.
+- **Scalability Path**: This isolation makes it trivial to split the system into microservices or migrate performance-critical paths to languages like **Go** or **Rust** if needed, as the domain boundaries are already strictly defined.
 
 ---
 
@@ -169,6 +180,20 @@ graph TD
         Pages --> Services
     end
 ```
+
+---
+
+## 🗺️ Roadmap: The Next Big Step
+
+Currently, this project demonstrates high-quality **Portfolio Management**. The next phase of evolution will focus on **Complex Business Logic**:
+
+- **🚀 Transactional Core**: Implementing a high-integrity financial module (ledger system) with logic for payments, interest calculation, and history tracking.
+- **🔐 Advanced Auth**: Moving from stateless public data to protected user-specific dashboards with JWT/OAuth2.
+- **📊 Real-time Analytics**: Integration with WebSockets for live portfolio views.
+
+This roadmap demonstrates the vision to evolve from a static showcase to a **mission-critical transactional system**.
+
+---
 
 ---
 

@@ -1,6 +1,6 @@
 # 🎯 Portfolio Backend API
 
-REST API developed with **FastAPI** following **Clean Architecture** to demonstrate backend development best practices in Python.
+REST API developed with **FastAPI** following **Clean Architecture** to demonstrate backend development best practices in Python. Engineered with a **language-agnostic core**, ensuring the system is portable, scalable, and ready for future technological shifts.
 
 ## 📝 Description
 
@@ -16,7 +16,9 @@ Professional backend for a developer portfolio, implementing:
 - ✅ **Automatic validation** with Pydantic V2
 - ✅ **Interactive Documentation** with OpenAPI/Swagger
 - ✅ **Automated Tests** with pytest
-- ✅ **Layered contact protection**: Includes a honeypot, spam scoring, and a **10 messages/day per email address** rate limit via custom identity extraction middleware.
+- ✅ **Quality Gate**: GitHub Actions enforces a **70% minimum coverage** threshold and verified Docker builds on every push.
+- ✅ **Layered contact protection**: Includes a honeypot, spam scoring, and a **30-minute persistent deduplication** (database-backed) to prevent duplicate submissions across server restarts.
+- ✅ **Rate Limiting**: 10 messages/day per email address via custom identity extraction middleware.
 
 ---
 
@@ -120,6 +122,9 @@ pytest
 
 # With coverage
 pytest --cov=app --cov-report=html
+
+# CI/CD Quality Gate (Local simulation)
+pytest --cov=app --cov-fail-under=70
 ```
 
 ---
@@ -131,6 +136,20 @@ pytest --cov=app --cov-report=html
 - **Robustness**: Typing consistency between database models and Pydantic schemas.
 - **Evolution**: **Alembic** allows managed schema changes.
 - **Scalability**: Easy migration from SQLite to PostgreSQL by changing the `DATABASE_URL`.
+
+### Future-Ready & Language Agnostic
+The **Domain Logic (Use Cases)** is strictly isolated from the framework (FastAPI) and external libraries. This means:
+- **Portability**: The business rules could be migrated to another Python framework (like Starlette or Litestar) or even serve as a blueprint for a rewrite in a high-performance language (like Go or Rust) with minimal logic re-engineering.
+- **Stability**: Changes in infrastructure (DB, Email, Cloud Provider) only require new **Adapters**, leaving the core logic untouched.
+
+---
+
+## 🗺️ Future Roadmap
+
+This backend is designed to evolve into a full-scale enterprise system:
+- **🚀 Transactional Ledger**: Robust financial logic with ACID compliance.
+- **🔐 Advanced Authentication**: Migration to OAuth2/OpenID Connect.
+- **📈 API Observability**: Full integration with OpenTelemetry and Prometheus.
 
 ### Why Manual JSON Serialization (SQLite Compatibility)?
 - SQLite doesn't always have native JSON support in all environments.

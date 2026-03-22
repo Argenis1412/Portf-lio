@@ -11,10 +11,10 @@ from app.principal import app
 from app.controladores.dependencias import obter_enviar_contato_use_case
 from app.core.idempotencia import store
 
-client = TestClient(app)
+# client = TestClient(app) # Removido para usar a fixture
 
 
-def test_idempotencia_contato():
+def test_idempotencia_contato(client):
     """Testa se o envio duplicado com mesma chave retorna cache."""
     payload = {
         "nome": "Test User",
@@ -48,10 +48,10 @@ def test_idempotencia_contato():
     finally:
         app.dependency_overrides.pop(obter_enviar_contato_use_case, None)
 
-def test_rate_limiting_projetos():
+def test_rate_limiting_projetos(client):
     """Testa se o limite de 20/minuto funciona para projetos."""
     # Fazer 20 requisições rápidas (limite é 20/min)
-    for _ in range(20):
+    for i in range(20):
         resp = client.get("/api/v1/projetos")
         assert resp.status_code == 200
     
@@ -62,7 +62,7 @@ def test_rate_limiting_projetos():
     assert "erro" in data, f"Key 'erro' not in response: {data}"
     assert "rate limit exceeded" in data["erro"]["mensagem"].lower()
 
-def test_idempotencia_sem_chave_funciona_normalmente():
+def test_idempotencia_sem_chave_funciona_normalmente(client):
     """Testa se funciona sem a chave (sem cache)."""
     payload = {
         "nome": "Test User",
@@ -90,7 +90,7 @@ def test_idempotencia_sem_chave_funciona_normalmente():
     finally:
         app.dependency_overrides.pop(obter_enviar_contato_use_case, None)
 
-def test_idempotencia_em_progresso():
+def test_idempotencia_em_progresso(client):
     """Testa se requisições simultâneas com mesma chave retornam 409."""
     payload = {
         "nome": "Test User",
@@ -118,7 +118,7 @@ def test_idempotencia_em_progresso():
         store._cache.pop("progress-key-456", None)
 
 
-def test_rate_limiting_contato_por_email():
+def test_rate_limiting_contato_por_email(client):
     """Testa se o limite de 10/dia por e-mail funciona."""
     payload = {
         "nome": "Test User",

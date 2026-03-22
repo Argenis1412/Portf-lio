@@ -10,15 +10,17 @@ from fastapi import APIRouter, Depends, Request
 
 from app.esquemas.contato import RequisicaoContato, RespostaContato
 from app.casos_uso import EnviarContatoUseCase
-from app.controladores.dependencias import obter_enviar_contato_use_case
+from app.controladores.dependencias import obter_enviar_contato_use_case, obter_repositorio
+from app.adaptadores.repositorio import RepositorioPortfolio
 from app.core.excecoes import ErroInfraestrutura
 from app.core.limite import limiter, get_email_or_ip_key, check_rate_limit
-from app.core.idempotencia import verificar_idempotencia, store, content_store
+from app.core.idempotencia import verificar_idempotencia, store
 from app.core.honeypot import is_honeypot_triggered
 from app.core.spam_check import calculate_spam_score
 import structlog
 import hashlib
 import re
+import time
 
 logger = structlog.get_logger(__name__)
 
@@ -42,6 +44,10 @@ async def enviar_contato(
     enviar_contato_uc: Annotated[
         EnviarContatoUseCase,
         Depends(obter_enviar_contato_use_case),
+    ],
+    repositorio: Annotated[
+        RepositorioPortfolio,
+        Depends(obter_repositorio),
     ],
     idempotency_key: Annotated[Optional[str], Depends(verificar_idempotencia)] = None,
 ) -> RespostaContato:
@@ -79,20 +85,20 @@ async def enviar_contato(
             mensagem="Mensagem enviada com sucesso! Retornarei em breve.",
         )
 
-    # 3. Verificação de conteúdo duplicado (Deduplicação de 5 minutos)
+    # 3. Verificação de conteúdo duplicado (Deduplicação Persistente de 30 minutos)
     # Normalizar mensagem: colapsar espaços, trim e lower para reduzir falsos negativos
     normalized_message = re.sub(r"\s+", " ", requisicao.mensagem or "").strip().lower()
-    normalized_subject = re.sub(r"\s+", " ", (requisicao.assunto or "")).strip().lower()
     content_str = f"{(requisicao.email or '').lower()}:{normalized_message}"
     content_hash = hashlib.sha256(content_str.encode()).hexdigest()
 
-    if content_store.check_duplicate(content_hash):
+    # TTL de 30 minutos (1800 segundos) para deduplicação persistente no DB
+    if await repositorio.verificar_duplicata_spam(content_hash, ttl_seconds=1800):
         from fastapi.responses import JSONResponse
         logger.info(
             "duplicate_content_detected",
             content_hash=content_hash,
             email=requisicao.email,
-            assunto=requisicao.assunto,
+            context="persistent_db_filter",
         )
         return JSONResponse(
             status_code=400,
@@ -100,7 +106,7 @@ async def enviar_contato(
         )
  
     # Registrar contenido inmediatamente para evitar colisiones en paralelo
-    content_store.add(content_hash)
+    await repositorio.registrar_spam(content_hash, time.time())
 
     # 5. Rate Limit (Manual)
     # Solo contamos como "hit" si la mensaje llegó hasta aquí (no es bot, no es spam silencioso, no es duplicado)

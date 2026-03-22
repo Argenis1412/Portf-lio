@@ -5,7 +5,7 @@
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss_v4-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-Frontend application for a professional portfolio. Featuring declarative data management, predictive prefetching, and a highly maintainable i18n system.
+Frontend application for a professional portfolio. Engineered as a **strict consumer** of a versioned REST API, featuring declarative data management, predictive prefetching, and a highly maintainable i18n system.
 
 ## ✨ Key Features
 

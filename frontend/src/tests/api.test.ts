@@ -99,8 +99,9 @@ describe('fetchProjects', () => {
     expect(projects[0].id).toBe('proj-1');
   });
 
-  it('retorna lista vazia se projetos não é array', async () => {
+  it('retorna lista vazia se projetos não é array (Resiliência / Hardening)', async () => {
     mockFetchOk({ projetos: null, total: 0 });
+    // Agora o sistema é robusto: detecta o erro mas falha para [] para não quebrar o site
     const projects = await fetchProjects();
     expect(projects).toEqual([]);
   });

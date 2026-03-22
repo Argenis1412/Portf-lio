@@ -67,36 +67,8 @@ class IdempotencyStore:
                 in_progress=False
             )
 
-class ContentStore:
-    """
-    Armazenamento para evitar duplicidade de conteúdo num curto período.
-    """
-    def __init__(self, ttl_seconds: int = 300): # 5 minutos por padrão
-        self._cache: Dict[str, float] = {}
-        self.ttl_seconds = ttl_seconds
-        self._lock = threading.Lock()
-
-    def check_duplicate(self, content_hash: str) -> bool:
-        """Retorna True se o conteúdo já foi enviado recentemente."""
-        with self._lock:
-            last_sent = self._cache.get(content_hash)
-            if not last_sent:
-                return False
-            
-            if time.time() - last_sent > self.ttl_seconds:
-                self._cache.pop(content_hash, None)
-                return False
-                
-            return True
-
-    def add(self, content_hash: str):
-        """Registra o envio de um conteúdo."""
-        with self._lock:
-            self._cache[content_hash] = time.time()
-
-# Instâncias globais simplificadas
+# Instância global simplificada
 store = IdempotencyStore()
-content_store = ContentStore()
 
 class IdempotencyException(Exception):
     """Exceção interna para sinalizar que resposta cacheada deve ser retornada."""
