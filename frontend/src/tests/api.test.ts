@@ -99,10 +99,10 @@ describe('fetchProjects', () => {
     expect(projects[0].id).toBe('proj-1');
   });
 
-  it('retorna lista vazia se projetos não é array', async () => {
+  it('lança erro de contrato se projetos não é array (Strict Consumer)', async () => {
     mockFetchOk({ projetos: null, total: 0 });
-    const projects = await fetchProjects();
-    expect(projects).toEqual([]);
+    // Agora o sistema falha explicitamente se o contrato for violado
+    await expect(fetchProjects()).rejects.toThrow(/Schema validation failed/);
   });
 
   it('lança erro quando a resposta não é OK', async () => {
