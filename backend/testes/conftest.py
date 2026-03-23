@@ -316,6 +316,14 @@ async def override_dependencias(setup_database):
     app.dependency_overrides[dependencias.obter_obter_formacao_use_case] = \
         lambda: ObterFormacaoUseCase(repo_real_test)
     
+    # Mock para envio de email para evitar chamadas reais (Formspree) nos testes
+    from app.casos_uso.enviar_contato import EnviarContatoUseCase
+    mock_email = AsyncMock(spec=EmailAdaptador)
+    mock_email.enviar_mensagem.return_value = True
+    mock_logger = MagicMock(spec=LoggerAdaptador)
+    app.dependency_overrides[dependencias.obter_enviar_contato_use_case] = \
+        lambda: EnviarContatoUseCase(mock_email, mock_logger)
+    
     # Limpar caches por segurança (embora overrides devam prevalecer no FastAPI)
     dependencias.obter_repositorio.cache_clear()
     dependencias.obter_obter_sobre_use_case.cache_clear()

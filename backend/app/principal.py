@@ -150,8 +150,9 @@ def _configurar_cors(aplicacao: FastAPI) -> None:
     aplicacao.add_middleware(
         CORSMiddleware,
         allow_origins=configuracoes.lista_origens_permitidas(),
-        allow_credentials=False,
-        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allow_origin_regex=configuracoes.regex_origens_permitidas,
+        allow_credentials=True,
+        allow_methods=["*"],
         allow_headers=["*"],
     )
 
