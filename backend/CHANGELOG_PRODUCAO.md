@@ -1,5 +1,29 @@
 # 🚀 Production-Ready Backend - Changes Summary
 
+## 🆕 Version 2.1 - Robust CORS & Test Reliability (March 2026)
+
+### ✅ New Features
+
+#### 1. Regex-Based CORS Origins
+- **Modified files**:
+  - **`app/configuracao.py`**: Added `regex_origens_permitidas` with default support for `*.vercel.app`.
+  - **`app/principal.py`**: Configured `CORSMiddleware` to use `allow_origin_regex` and `allow_credentials=True`.
+- **Benefits**:
+  - ✅ Support for dynamic Vercel preview/branch deployments.
+  - ✅ Zero-maintenance origin allow-list.
+  - ✅ Secure credential handling.
+
+#### 2. Architectural Documentation
+- **Created files**:
+  - **`docs/architecture/cors-policy.md`**: Detailed explanation of the CORS strategy, security trade-offs, and regex precision.
+
+#### 3. Improved Test Suite
+- **Modified files**:
+  - **`testes/test_cors_regex.py`** [NEW]: Comprehensive tests for CORS matching and preflight (OPTIONS) requests.
+  - **`testes/conftest.py`**: Implemented `EnviarContatoUseCase` mock to prevent real external API calls (Formspree) during tests, fixing potential 500 errors in CI/CD.
+
+---
+
 ## 🆕 Version 2.0 - Structured Logs, CI/CD and Deploy (February 2026)
 
 ### ✅ New Features

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/en/2.0.0/).
 
 ---
 
+## [1.1.0] - 2026-03-22
+
+### ✅ Added
+
+**Backend:**
+- ✅ **Regex-based CORS Support**: Automatically allows any `.vercel.app` domain, avoiding "Blocked by CORS" errors during deployments.
+- ✅ **CORS Preflight Tests**: New automated tests for `OPTIONS` requests to ensure secure and functional cross-origin communication.
+- ✅ **Idempotency Fix**: Improved test reliability by mocking external email services in the test suite.
+
+**Documentation:**
+- ✅ **CORS Policy ADR**: New architectural documentation explaining the security and infrastructure decisions behind the CORS regex implementation.
+
+---
+
 ## [1.0.0] - 2025-01-XX
 
 ### 🎉 Initial Version
